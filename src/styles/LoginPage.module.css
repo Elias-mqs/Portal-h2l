@@ -1,0 +1,13 @@
+.bgLogin {
+    background-image: url('../../public/img/bgLogin.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* .PainelLogin {
+
+} */

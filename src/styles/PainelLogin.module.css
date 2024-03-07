@@ -1,0 +1,54 @@
+
+
+.painel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 448px;
+    height: 528px;
+    background-color: #EDF2FF;
+    transform: translate(-50%, -50%);
+    align-items: center;
+    flex-direction: column;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+.logo {
+    position: relative;
+    top: 0;
+    transform: translate(0, 40%);
+    width: 176px;
+    height: 80px;
+    background-image: url('/public/img/LOGO-H2L.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.boxLogin {
+    position: relative;
+    width: 336px;
+    height: 320px;
+    bottom: 0;
+    transform: translate(0,20%);
+}
+
+
+@media (max-width: 768px) {
+    .painel {
+        width: 90%;
+        max-width: 448px;
+    }
+
+    .boxLogin {
+        width: 90%;
+        max-width: 336px;
+    }
+
+    .logo {
+        width: 90%;
+        max-width: 176px;
+    }
+}
+
