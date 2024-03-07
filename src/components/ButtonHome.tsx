@@ -16,13 +16,13 @@ export default function ButtonHome() {
     }
 
     const stylesButtonOne = {
-        background: 'linear-gradient(to bottom, #96C6F5, #FFF)',
+        background: 'linear-gradient(to bottom, #96C6F5, #EDF2FF)',
         width: '220px',
         height: '50px',
         display: 'flex',
         justifyContent: 'flex-start',
-        fontSize: '20px',
-        boxShadow: '0px 1px 4px 1px rgba(0, 0, 0, 0.2)'
+        fontSize: '16px',
+        boxShadow: '0px 0px 2px 1px rgba(0, 0, 0, 0.4)'
     }
     const stylesButtonTwo = {
         background: 'transparent',
@@ -30,14 +30,15 @@ export default function ButtonHome() {
         height: '50px',
         display: 'flex',
         justifyContent: 'flex-start',
-        fontSize: '20px'
+        fontSize: '16px'
     }
 
 
     return (
         <Box
             _hover={{
-                bgGradient: 'linear(to-b, #96C6F5, #FFF)'
+                bgGradient: 'linear(to-b, #96C6F5, #EDF2FF)',
+                transitionDelay: '0.5s',
             }}
             borderRadius='0.375rem'
 

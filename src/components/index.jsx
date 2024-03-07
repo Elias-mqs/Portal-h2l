@@ -5,6 +5,8 @@ import Header from './Header';
 import ContainerMain from './ContainerMain';
 import PainelLogin from './PainelLogin';
 import SideBar from './SideBar';
+import MenuChamados from './MenuChamados'
+
 
 // Exporte os componentes diretamente
 export {
@@ -15,4 +17,5 @@ export {
     ContainerMain,
     PainelLogin,
     SideBar,
+    MenuChamados,
 };
