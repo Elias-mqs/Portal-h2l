@@ -22,7 +22,8 @@ export default function ButtonHome() {
         display: 'flex',
         justifyContent: 'flex-start',
         fontSize: '16px',
-        boxShadow: '0px 0px 2px 1px rgba(0, 0, 0, 0.4)'
+        boxShadow: 'inset 0px 0px 2px 1px rgba(0, 0, 0, 0.4), 0px 0px 2px 1px rgba(0, 0, 0, 0.1)',
+
     }
     const stylesButtonTwo = {
         background: 'transparent',

@@ -1,0 +1,38 @@
+import { HStack, VStack, Flex, Text, Container } from "@chakra-ui/react";
+import { SideBar, PageChamados, Header } from "@/components";
+import styles from "@/styles/Home.module.css";
+
+
+export default function chamados() {
+    return (
+        <HStack w="full" h="100vh" bg="#F0F2F5" padding={8}>
+            <SideBar />
+            <VStack w='100%' h='100%'>
+                <Header />
+                <Flex 
+                as="main"
+                w='100%'
+                h='100%'
+                display='block'
+                bg='#FFF'
+                position='relative'
+                borderRadius='1.1rem'
+                boxShadow='0px 1px 4px 1px rgba(0, 0, 0, 0.2)'
+                >
+                    <PageChamados />
+                </Flex>
+            </VStack>
+        </HStack>
+    )
+}
+
+// display: flex;
+// width: 100 %;
+// height: 100 %;
+// background - color: white;
+// align - items: center;
+// justify - content: center;
+// flex - direction: column;
+// position: relative;
+// border - radius: 1.1rem;
+// box - shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.2);

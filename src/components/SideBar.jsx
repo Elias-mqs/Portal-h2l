@@ -1,7 +1,7 @@
 
 import { Box, Flex, Image } from "@chakra-ui/react";
 import ButtonHome from "./ButtonHome";
-import MenuChamados from "./MenuChamados";
+import { MenuPedidos, MenuChamados } from ".";
 
 
 
@@ -46,7 +46,18 @@ export default function SideBar() {
 
             <Flex p='25px 0px 20px 0px' >
                 <MenuChamados />
+                {/* Barra de divisão com gradient */}
             </Flex>
+            <Box
+                w='100%'
+                h='1px'
+                bgGradient={['linear(to-l, #EDF2FF, blue.500, #EDF2FF)']}
+            />
+            <Flex p='25px 0px 20px 0px' >
+                <MenuPedidos />
+                {/* Barra de divisão com gradient */}
+            </Flex>
+
 
 
 

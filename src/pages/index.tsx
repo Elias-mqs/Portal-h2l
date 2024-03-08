@@ -1,6 +1,6 @@
 
 import styles from "@/styles/Home.module.css";
-import { SideBar, Header, } from "@/components";
+import { SideBar, Header, HomePage } from "@/components";
 import { Flex, Text, HStack, VStack } from "@chakra-ui/react"
 
 
@@ -12,11 +12,9 @@ export default function Home() {
       <SideBar />
       <VStack w='100%' h='100%'>
         <Header />
-          <Flex as="main" className={styles.FlexDashboard}>
-            <Text fontSize={100} color="gray.300">
-              Main
-            </Text>
-          </Flex>
+        <Flex as="main" className={styles.FlexDashboard}>
+          <HomePage />
+        </Flex>
       </VStack>
     </HStack>
   )

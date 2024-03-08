@@ -16,7 +16,7 @@ import SupportAgentOutlinedIcon from '@mui/icons-material/SupportAgentOutlined';
 import { useState } from "react";
 
 
-export default function MenuChamados() {
+export default function MenuPedidos() {
 
 
     // Constantes para alterar a cor quando o botão estiver on ou off
@@ -42,6 +42,7 @@ export default function MenuChamados() {
     }
 
 
+    // Constantes para mudar o background dos subitens do menu
     const [novoChamado, setNovoChamado] = useState(false)
     const novoChamadoBg = () => { setNovoChamado(!novoChamado); }
     const [chamadoEmAndamento, setChamadoEmAndamento] = useState(false)
@@ -95,7 +96,7 @@ export default function MenuChamados() {
                                         }}
                                     />
                                 </Box>
-                                Chamados
+                                Pedidos
                             </Flex>
                         </MenuButton>
 
@@ -134,7 +135,7 @@ export default function MenuChamados() {
                                         <Box p='0 10px 0 20px' >
                                             <IconPointFilled width='20px' />
                                         </Box>
-                                        Novo Chamado
+                                        Novo Pedido
                                     </Flex>
 
 
@@ -162,11 +163,11 @@ export default function MenuChamados() {
                                     }
                                 >
                                     <Flex alignItems='center' fontSize='16px'>
-                                        <Box p='0 0px 0 20px' >
+                                        <Box p='0 13px 0 20px' >
                                             <IconPointFilled width='20px' />
                                         </Box>
-                                        <Text textAlign='center' >
-                                            Chamados em andamento
+                                        <Text textAlign='start' >
+                                            Pedidos em andamento
                                         </Text>
                                     </Flex>
                                 </MenuItem>                                        
