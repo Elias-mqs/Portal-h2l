@@ -4,7 +4,9 @@ import { ButtonHamburger } from '.'
 import CaminhoHeader from './CaminhoHeader'
 import SettingsIcon from '@mui/icons-material/Settings'
 import NotificationsIcon from '@mui/icons-material/Notifications'
-export default function Header() {
+
+
+export default function HeaderHome() {
     return (
         <VStack
             bg='transparent'
@@ -49,6 +51,7 @@ export default function Header() {
                 >
                     Home
                 </Text>
+             
             </Flex>
         </VStack >
     )
