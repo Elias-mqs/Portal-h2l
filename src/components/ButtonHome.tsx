@@ -39,7 +39,7 @@ export default function ButtonHome() {
         <Box
             _hover={{
                 bgGradient: 'linear(to-b, #96C6F5, #EDF2FF)',
-                transitionDelay: '0.5s',
+                transition: '1.5s',
             }}
             borderRadius='0.375rem'
 

@@ -9,7 +9,9 @@ export default function InputUsername() {
             <InputLeftElement >
                 <PersonOutlineOutlinedIcon sx={{ color: `#003366` }} />
             </InputLeftElement>
-            <Input fontSize={17}
+            <Input
+                type='text'
+                fontSize={17}
                 variant='flushed'
                 placeholder='Username'
                 color='#003366'

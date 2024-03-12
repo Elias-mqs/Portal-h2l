@@ -12,7 +12,8 @@ export default function InputPassword() {
             <InputLeftElement>
                 <IconLock color='#003366' />
             </InputLeftElement>
-            <Input fontSize={17}
+            <Input
+                fontSize={17}
                 variant='flushed'
                 borderBottom='1px solid rgb(0, 51, 102, 0.5)'
                 type={show ? 'text' : 'password'}
@@ -21,7 +22,7 @@ export default function InputPassword() {
             <InputRightElement>
                 <Box as='button' onClick={handleClick}>
                     {show ? <IconEye color='#003366' />
-                     : <IconEyeClosed color='#003366' />}
+                        : <IconEyeClosed color='#003366' />}
                 </Box>
             </InputRightElement>
         </InputGroup>
