@@ -23,18 +23,9 @@ export default function PainelLogin() {
                  />
 
 
-            <Stack className={styles.boxLogin} spacing='30px'>
-                <Text fontSize={20}
-                    fontWeight='600'
-                    color='#003366'
-                    width='fit-content'
-                    height='fit-content'
-                    borderBottom='2px solid #6699CC'
-                    p='0 5px'
-                >
-                    Login
-                </Text>
-                <Stack spacing='10px'>
+            <Stack className={styles.boxLogin} spacing='35px' top='20px'>
+                
+                <Stack spacing='30px'>
                     <Box >
                         <Text color='#003366'
                             p='0 3px'
