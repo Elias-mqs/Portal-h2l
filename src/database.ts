@@ -5,9 +5,9 @@ import { Kysely, MysqlDialect } from 'kysely';
 const pool = createPool({
         database: 'portal-h2l',
         host: 'localhost',
-        user: 'admin',
-        password:'testeteste',
-        port: 3000,
+        user: 'root',
+        password:'',
+        port: 3306,
         connectionLimit: 10,
 })
 
@@ -17,4 +17,4 @@ const dialect = new MysqlDialect({
 
 export const db = new Kysely({
     dialect,
-})
+}) 
