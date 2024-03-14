@@ -11,6 +11,7 @@ export default function InputUsername() {
             </InputLeftElement>
             <Input
                 type='text'
+                name='username'
                 fontSize={17}
                 variant='flushed'
                 placeholder='Username'

@@ -13,6 +13,7 @@ export default function InputPassword() {
                 <IconLock color='#003366' />
             </InputLeftElement>
             <Input
+                name='password'
                 fontSize={17}
                 variant='flushed'
                 borderBottom='1px solid rgb(0, 51, 102, 0.5)'

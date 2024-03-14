@@ -72,4 +72,6 @@ export default function PainelLogin() {
     )
 }
 
-// estou criando o form para o envio dos dados
+// meu banco de dados se chama: portal-h2l
+// tem 1 tabela chamada usuarios e 5 colunas: id_user, name, username, password e sit
+// a parte do sit é referente a situação do usuario.

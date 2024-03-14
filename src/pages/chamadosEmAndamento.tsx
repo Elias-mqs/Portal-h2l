@@ -8,7 +8,7 @@ export default function chamados() {
             <SideBar />
             <VStack w='100%' h='100%'>
                 <HeaderChamados />
-                
+
                 <Flex
                     as="main"
                     w='100%'
