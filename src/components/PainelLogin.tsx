@@ -1,15 +1,25 @@
 
-import { Flex, Box, Button, Stack, VStack, Text, Image, FormControl, textDecoration } from "@chakra-ui/react"
+import {
+    Flex,
+    Box,
+    Button,
+    Stack,
+    VStack,
+    Text,
+    Image,
+    FormControl,
+    useToast
+} from "@chakra-ui/react"
 import styles from '../styles/PainelLogin.module.css'
 import { InputPassword, InputUsername } from './index'
 import Link from "next/link"
 import axios from "axios"
-import { useToast } from '@chakra-ui/react'
 
 
 
 
 export default function PainelLogin() {
+
 
     const toast = useToast()
 
@@ -18,13 +28,14 @@ export default function PainelLogin() {
         e.preventDefault()
         console.log(e)
         try {
-            const formulario = { username: "admin", password: "admin" }
+            const formulario = { username: "", password: "" }
             const result: any = axios.post('/api/login', formulario)
 
             toast({
+                title: "success",
                 description: result?.data?.message,
                 status: 'success',
-                duration: 9000,
+                duration: 2000,
                 isClosable: true,
             })
 
@@ -32,9 +43,10 @@ export default function PainelLogin() {
         } catch (error: any) {
             console.log(error)
             toast({
+                title: "error",
                 description: error?.response?.data?.message,
                 status: 'success',
-                duration: 9000,
+                duration: 2000,
                 isClosable: true,
             })
 
@@ -57,8 +69,8 @@ export default function PainelLogin() {
             />
 
             <form onSubmit={handleLogin}>
-                <FormControl>
-                    <Stack className={styles.boxLogin} spacing='35px' top='30px' left='12.5%'>
+                <FormControl top='30%' >
+                    <Stack  spacing='35px' top='30px' left='12.5%'>
                         <Stack spacing='30px'>
                             <Box >
                                 <Text color='#003366'
