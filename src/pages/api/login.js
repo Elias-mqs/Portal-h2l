@@ -50,7 +50,6 @@ export default async function handler(req, res) {
                 // Talvez crypto gera hash que pode ser usada como token
                 res.status(200).json({ token: 'token_de_autenticacao' });
             } else {
-
                 // Se as credenciais não são válidas, retorna um erro de autenticação
                 res.status(401).json({ message: 'Credenciais inválidas' });
             }
@@ -66,7 +65,7 @@ export default async function handler(req, res) {
 
         //Faltou ao logar , gerar o token de autenticação da api e salvar na tabela
         //
-       
+
     } else {
         // Se o método HTTP não for POST, retorna um erro de método não permitido
         res.status(405).json({ message: 'Método não permitido' });

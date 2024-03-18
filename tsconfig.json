@@ -17,6 +17,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/InputPassword.tsx", "src/components/SideBar.jsx", "src/pages/_app.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/InputPassword.tsx", "src/components/SideBar.jsx", "src/pages/_app.tsx", "src/utils/api.js"],
   "exclude": ["node_modules"]
 }

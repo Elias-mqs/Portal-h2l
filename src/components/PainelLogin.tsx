@@ -8,12 +8,19 @@ import {
     Text,
     Image,
     FormControl,
-    useToast
+    useToast,
+    Input,
+    Alert,
+    AlertIcon,
+    AlertTitle,
+    AlertDescription,
 } from "@chakra-ui/react"
 import styles from '../styles/PainelLogin.module.css'
-import { InputPassword, InputUsername } from './index'
+// import { InputPassword, InputUsername } from './index'
 import Link from "next/link"
 import axios from "axios"
+import { useRouter } from 'next/router'
+import { useState } from "react"
 
 
 
@@ -22,14 +29,21 @@ export default function PainelLogin() {
 
 
     const toast = useToast()
+    const router = useRouter()
+    const [formulario, setFormulario] = useState({
+        username: '',
+        password: ''
+    })
 
 
-    const handleLogin = (e) => {
+
+
+    const handleLogin = async (e: any) => {
         e.preventDefault()
         console.log(e)
         try {
-            const formulario = { username: "", password: "" }
-            const result: any = axios.post('/api/login', formulario)
+            const result: any = await axios.post('/api/login', formulario)
+            setFormulario({ username: ``, password: `` })
 
             toast({
                 title: "success",
@@ -42,16 +56,39 @@ export default function PainelLogin() {
             console.log(result)
         } catch (error: any) {
             console.log(error)
+
             toast({
                 title: "error",
                 description: error?.response?.data?.message,
-                status: 'success',
+                status: 'error',
                 duration: 2000,
                 isClosable: true,
             })
 
+
         }
     }
+
+
+    
+
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // Cria uma cópia do estado atual usando spread operator
+        let novosDados: any = { ...formulario };
+
+        // Atualiza o valor correspondente ao nome do campo do evento
+        novosDados[e.target.name] = e.target.value;
+
+        // Define o novo estado com os dados atualizados
+        setFormulario(novosDados);
+
+        // Exibe os novos dados no console
+        console.log(novosDados);
+    }
+
+
+
 
     return (
 
@@ -70,21 +107,30 @@ export default function PainelLogin() {
 
             <form onSubmit={handleLogin}>
                 <FormControl top='30%' >
-                    <Stack  spacing='35px' top='30px' left='12.5%'>
+                    <Stack spacing='35px' top='30px' left='12.5%'>
                         <Stack spacing='30px'>
                             <Box >
-                                <Text color='#003366'
-                                    p='0 3px'
-                                    fontSize={14}
-                                    fontWeight={500}
-                                >
-                                    Username
-                                </Text>
-                                <InputUsername />
+                                <Text color='#003366' p='0 3px' fontSize={14} fontWeight={500}>Username</Text>
+                                <Input
+                                    variant='flushed'
+                                    placeholder='Username'
+                                    name='username'
+                                    value={formulario.username}
+                                    onChange={handleInputChange}
+
+                                />
+
                             </Box>
                             <Box >
                                 <Text color='#003366' p='0 3px' fontSize={14} fontWeight={500}>Password</Text>
-                                <InputPassword />
+                                <Input
+                                    type='password'
+                                    name='password'
+                                    variant='flushed'
+                                    placeholder='Password'
+                                    value={formulario.password}
+                                    onChange={handleInputChange}
+                                />
                             </Box>
                         </Stack>
                         <VStack spacing={3}>
@@ -104,7 +150,17 @@ export default function PainelLogin() {
                             </Button>
 
                             <Link href='./recuperarSenha'>
-                                <Button bg='transparent' fontWeight='500' color='#003366' fontSize={15} cursor='pointer' _hover={{ textDecoration: 'underline' }} >
+                                <Button
+                                    bg='transparent'
+                                    fontWeight='500'
+                                    color='#003366'
+                                    fontSize={15}
+                                    cursor='pointer'
+                                    _hover={{ textDecoration: 'underline' }}
+                                    onClick={() => {
+                                        router.push('/')
+                                    }}
+                                >
                                     Esqueceu a senha?
                                 </Button>
                             </Link>
@@ -118,7 +174,6 @@ export default function PainelLogin() {
         // meu banco de dados se chama: portal-h2l
         // tem 1 tabela chamada usuarios e 5 colunas: id_user, name, username, password e sit
         // a parte do sit é referente a situação do usuario.
-
 
 
     )
