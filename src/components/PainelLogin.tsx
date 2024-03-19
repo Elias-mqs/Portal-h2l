@@ -53,6 +53,9 @@ export default function PainelLogin() {
                 isClosable: true,
             })
 
+            router.push('/');
+            
+
             console.log(result)
         } catch (error: any) {
             console.log(error)
@@ -157,9 +160,6 @@ export default function PainelLogin() {
                                     fontSize={15}
                                     cursor='pointer'
                                     _hover={{ textDecoration: 'underline' }}
-                                    onClick={() => {
-                                        router.push('/')
-                                    }}
                                 >
                                     Esqueceu a senha?
                                 </Button>

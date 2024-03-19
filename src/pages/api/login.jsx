@@ -1,6 +1,5 @@
 // importar o db configurado
 import { db } from '@/utils/database'
-import { useRouter } from 'next/router';
 const jwt = require('jsonwebtoken')
 
 
@@ -53,9 +52,6 @@ export default async function handler(req, res) {
                 //Enviar resposta de autenticado com sucesso 
                 res.status(200).json({ token });
 
-                // Redirecionar para a página inicial após o login bem-sucedido
-                const router = useRouter();
-                router.push('/');
             } else {
                 // Se as credenciais não são válidas, retorna um erro de autenticação
                 res.status(401).json({ message: 'Credenciais inválidas' });
