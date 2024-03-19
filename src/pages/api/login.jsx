@@ -1,9 +1,10 @@
 // importar o db configurado
-import { db } from '@/database'
+import { db } from '@/utils/database'
+import { useRouter } from 'next/router';
+const jwt = require('jsonwebtoken')
 
 
 export default async function handler(req, res) {
-
 
     // verificar se a requisição é do tipo POST do
     // protocolo HTTP (GET,POST, PUT/PATCH OU DELETE)
@@ -11,6 +12,7 @@ export default async function handler(req, res) {
 
         // Criar a const req.body usando o username e password
         const { username, password } = req.body;
+
 
         // Validar se foi inserido o usuario e/ou a senha
         if (!username || !password) {
@@ -45,10 +47,15 @@ export default async function handler(req, res) {
             // Erick falou que se for usar o Crypto, não precisa converter em hash
             if (password === usuario.password_hash) {
 
-                // Se as credenciais são válidas, retorna um 
-                // token de autenticação (da para usar JWT para isso? qual a melhor forma?)
-                // Talvez crypto gera hash que pode ser usada como token
-                res.status(200).json({ token: 'token_de_autenticacao' });
+                // Gerar token para o login com sucesso
+                const token = jwt.sign({ username: usuario.username, id: usuario.id }, 'chave segura', { expiresIn: '1h' })
+
+                //Enviar resposta de autenticado com sucesso 
+                res.status(200).json({ token });
+
+                // Redirecionar para a página inicial após o login bem-sucedido
+                const router = useRouter();
+                router.push('/');
             } else {
                 // Se as credenciais não são válidas, retorna um erro de autenticação
                 res.status(401).json({ message: 'Credenciais inválidas' });

@@ -20,9 +20,6 @@ axios.interceptors.request.use(
 );
 
 
-
-
-
 // Interceptador de resposta: lida com erros
 //  de autenticação (401 não autorizado)
 axios.interceptors.response.use(
@@ -41,6 +38,13 @@ axios.interceptors.response.use(
 
 export default api;
 
+
+
+// Essa parte do projeto não gera o token, ele espera que o token JWT 
+// seja gerado e armazenado no localStorage do navegador e adiciona 
+// o token às solicitações HTTP
+
+
 // Agora, sempre que você fizer uma solicitação usando axios, 
 // o interceptador de solicitação
 // adicionará automaticamente um cabeçalho 'Authorization' com o token JWT,
@@ -52,24 +56,3 @@ export default api;
 
 
 
-
-        // import axios from "axios";
-        
-        
-        // const requisicoes = requis({
-        //     api = axios.create({
-        //         baseURL: `/`
-        //     });
-        
-        //     api?.interceptors?.request.use(function (config)) {
-        //         const cookies = parseCookies()
-        //         config.headers['Authorization'] = `Bearer ${cookies.authToken || 'empty'}`
-        //         return config;
-        //     }, function (error) {
-        //         console.error('Request interceptor error:', error);
-        //         return Promisse.reject(error);
-        //     });
-        
-        
-        
-        // });
