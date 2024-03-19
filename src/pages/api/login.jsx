@@ -1,6 +1,7 @@
 // importar o db configurado
 import { db } from '@/utils/database'
 const jwt = require('jsonwebtoken')
+import bcrypt from 'bcrypt'
 
 
 export default async function handler(req, res) {
@@ -33,7 +34,7 @@ export default async function handler(req, res) {
                 .select('password_hash')
                 .where('username', '=', username)
                 .executeTakeFirst()
-            console.log(usuario)
+            // console.log(usuario)
 
             // Tratamentos: //
             // Se for informado um usuario diferente do banco
@@ -44,10 +45,14 @@ export default async function handler(req, res) {
             // Comparar senha informada com a senha do banco
             // Ver com Erick se é aqui que eu tenho que converter a senha em hash
             // Erick falou que se for usar o Crypto, não precisa converter em hash
+            // const passwordMatch = await bcrypt.compare(password, usuario.password_hash);
+
             if (password === usuario.password_hash) {
 
                 // Gerar token para o login com sucesso
-                const token = jwt.sign({ username: usuario.username, id: usuario.id }, 'chave segura', { expiresIn: '1h' })
+                const token = jwt.sign({ username: usuario.username, id: usuario.id }, 'chave segura',{ expiresIn: '1h' })
+                // Salvar o token no banco de dados
+                await db.insertInto('usuarios').values({ user_id: usuario.id, token }).execute();
 
                 //Enviar resposta de autenticado com sucesso 
                 res.status(200).json({ token });

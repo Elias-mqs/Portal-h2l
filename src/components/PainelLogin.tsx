@@ -10,10 +10,6 @@ import {
     FormControl,
     useToast,
     Input,
-    Alert,
-    AlertIcon,
-    AlertTitle,
-    AlertDescription,
 } from "@chakra-ui/react"
 import styles from '../styles/PainelLogin.module.css'
 // import { InputPassword, InputUsername } from './index'
@@ -81,7 +77,10 @@ export default function PainelLogin() {
         let novosDados: any = { ...formulario };
 
         // Atualiza o valor correspondente ao nome do campo do evento
-        novosDados[e.target.name] = e.target.value;
+        novosDados[e.target.name] = e.target.value
+        if(e.target.name == 'username') {
+            novosDados.username = e.target.value.toLowerCase()
+        }
 
         // Define o novo estado com os dados atualizados
         setFormulario(novosDados);
