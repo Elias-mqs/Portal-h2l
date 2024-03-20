@@ -1,10 +1,14 @@
-// importar o db configurado
-import { db } from '@/utils/database'
-const jwt = require('jsonwebtoken')
-import bcrypt from 'bcrypt'
+import { db } from '@/utils/database';
+import { criandotoken, generateToken, isTokenExpired } from '../../utils/index';
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 
 export default async function handler(req, res) {
+
+    // criar consts de acesso das chaves para os hashs e tokens
+    const dbPassword = process.env.DB_PASSWORD;
+    const apiKey = process.env.API_KEY;
 
     // verificar se a requisição é do tipo POST do
     // protocolo HTTP (GET,POST, PUT/PATCH OU DELETE)
@@ -34,7 +38,12 @@ export default async function handler(req, res) {
                 .select('password_hash')
                 .where('username', '=', username)
                 .executeTakeFirst()
-            // console.log(usuario)
+            // console.log(username)
+
+            const userid = await db.selectFrom('usuarios')
+                .select('usr_id')
+                .where('username', '=', username)
+                .executeTakeFirst()
 
             // Tratamentos: //
             // Se for informado um usuario diferente do banco
@@ -45,17 +54,57 @@ export default async function handler(req, res) {
             // Comparar senha informada com a senha do banco
             // Ver com Erick se é aqui que eu tenho que converter a senha em hash
             // Erick falou que se for usar o Crypto, não precisa converter em hash
-            // const passwordMatch = await bcrypt.compare(password, usuario.password_hash);
+            const passwordHash = hashPassword(password);
 
-            if (password === usuario.password_hash) {
 
+            if (passwordHash === hashPassword(usuario.password_hash)) {
+
+
+// esta gerando o token e o tempo, preciso dar um jeito de salvar no banco
+                const token = await generateToken()
+
+                db.updateTable('usuarios')
+                    .set({ token: token })
+                    .where('usr_id', '=', userid.usr_id)
+                    .execute();
+
+                // generateToken();
+
+                // isTokenExpired();
+
+                // if (isTokenExpired(createdAt)) {
+                //     console.log('Token expirou');
+                // } else {
+                //     console.log('Token ainda é válido');
+                // }
+
+
+
+
+
+                //////////////////////////////////////////////////////////////////////
+                ////////////////// ANTIGO FUNCIONANDO //////////////////////////////////////////////////
+                //////////////////////////////////////////////////////////
                 // Gerar token para o login com sucesso
-                const token = jwt.sign({ username: usuario.username, id: usuario.id }, 'chave segura',{ expiresIn: '1h' })
-                // Salvar o token no banco de dados
-                await db.insertInto('usuarios').values({ user_id: usuario.id, token }).execute();
+                // const token = jwt.sign({ username: usuario.username, id: usuario.usr_id }, 'chave segura', { expiresIn: '1h' })
+
+                // // Salvar o token no banco de dados
+                // await db.updateTable('usuarios')
+                //     .set({ token: token })
+                //     .where('usr_id', '=', userid.usr_id)
+                //     .execute();
+                /////////////////////////////////////////////////////////////////////////////////
+
+                // Buscar o usuário atualizado do banco de dados
+                const usuarioAtualizado = await db.selectFrom('usuarios')
+                    .select('token')
+                    .where('usr_id', '=', userid.usr_id)
+                    .executeTakeFirst()
+
 
                 //Enviar resposta de autenticado com sucesso 
                 res.status(200).json({ token });
+                console.log(usuarioAtualizado.token)
 
             } else {
                 // Se as credenciais não são válidas, retorna um erro de autenticação
@@ -77,5 +126,14 @@ export default async function handler(req, res) {
     } else {
         // Se o método HTTP não for POST, retorna um erro de método não permitido
         res.status(405).json({ message: 'Método não permitido' });
+    }
+}
+
+function hashPassword(password) {
+    try {
+        const hashedPassword = crypto.createHash('sha256').update(password).digest('hex');
+        return hashedPassword;
+    } catch (error) {
+        throw new Error('Erro ao gerar o hash da senha');
     }
 }
