@@ -1,5 +1,5 @@
 import { db } from '@/utils/database';
-import { criandotoken, generateToken, isTokenExpired } from '../../utils/index';
+import { generateToken, authenticate } from '../../utils/index';
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
@@ -59,52 +59,25 @@ export default async function handler(req, res) {
 
             if (passwordHash === hashPassword(usuario.password_hash)) {
 
-
-// esta gerando o token e o tempo, preciso dar um jeito de salvar no banco
-                const token = await generateToken()
+                const { token, createdAt } = await generateToken()
+                console.log(token)
+                console.log(createdAt)
 
                 db.updateTable('usuarios')
-                    .set({ token: token })
+                    .set({ token: token, prazo: createdAt })
                     .where('usr_id', '=', userid.usr_id)
                     .execute();
 
-                // generateToken();
-
-                // isTokenExpired();
-
-                // if (isTokenExpired(createdAt)) {
-                //     console.log('Token expirou');
-                // } else {
-                //     console.log('Token ainda é válido');
-                // }
-
-
-
-
-
-                //////////////////////////////////////////////////////////////////////
-                ////////////////// ANTIGO FUNCIONANDO //////////////////////////////////////////////////
-                //////////////////////////////////////////////////////////
-                // Gerar token para o login com sucesso
-                // const token = jwt.sign({ username: usuario.username, id: usuario.usr_id }, 'chave segura', { expiresIn: '1h' })
-
-                // // Salvar o token no banco de dados
-                // await db.updateTable('usuarios')
-                //     .set({ token: token })
-                //     .where('usr_id', '=', userid.usr_id)
-                //     .execute();
-                /////////////////////////////////////////////////////////////////////////////////
-
                 // Buscar o usuário atualizado do banco de dados
-                const usuarioAtualizado = await db.selectFrom('usuarios')
-                    .select('token')
-                    .where('usr_id', '=', userid.usr_id)
-                    .executeTakeFirst()
+                // const usuarioAtualizado = await db.selectFrom('usuarios')
+                //     .select('token')
+                //     .where('usr_id', '=', userid.usr_id)
+                //     .executeTakeFirst()
 
 
                 //Enviar resposta de autenticado com sucesso 
                 res.status(200).json({ token });
-                console.log(usuarioAtualizado.token)
+                // console.log(usuarioAtualizado.token)
 
             } else {
                 // Se as credenciais não são válidas, retorna um erro de autenticação

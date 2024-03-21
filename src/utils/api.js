@@ -6,15 +6,14 @@ const  api = axios.create({
 });
 // Interceptador de solicitação: 
 // adiciona um cabeçalho 'Authorization' com o token JWT
-axios.interceptors.request.use(
-  (config) => {
+axios.interceptors.request.use((config) => {
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
-  },
-  (error) => {
+  }, function (error){
+    console.error('Request interceptor error:', error);
     return Promise.reject(error);
   }
 );
@@ -22,8 +21,7 @@ axios.interceptors.request.use(
 
 // Interceptador de resposta: lida com erros
 //  de autenticação (401 não autorizado)
-axios.interceptors.response.use(
-  (response) => {
+axios.interceptors.response.use((response) => {
     return response;
   },
   (error) => {

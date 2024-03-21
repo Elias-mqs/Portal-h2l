@@ -49,7 +49,7 @@ export default function PainelLogin() {
                 isClosable: true,
             })
 
-            router.push('/');
+            router.push('/users');
             
 
             console.log(result)
