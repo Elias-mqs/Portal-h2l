@@ -19,7 +19,7 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 
 
-export default function HeaderChamados() {
+export default function HeaderChamados({ children, onSubmit }) {
     return (
         <VStack
             bg='transparent'
@@ -91,9 +91,12 @@ export default function HeaderChamados() {
                 </HStack>
                 <Flex alignItems='center' gap={3}>
                     <Text fontWeight={500} fontSize='14'>Cancelar</Text>
-                    <Button bgGradient='linear(to-r, #6F84F3, #cdd5fd)' color='white' w='80px' h='28px' borderRadius='20px' fontSize='15px'>
+                    <Button onClick={onSubmit} bgGradient='linear(to-r, #4863ec, #cdd5fd)' color='white' w='80px' h='28px' borderRadius='20px' fontSize='15px'>
                         Salvar
                     </Button>
+                    <form onSubmit={onSubmit}>
+                        {children}
+                    </form>
                 </Flex>
             </HStack>
 

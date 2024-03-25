@@ -69,9 +69,6 @@ export default function PainelLogin() {
     }
 
 
-    
-
-
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         // Cria uma cópia do estado atual usando spread operator
         let novosDados: any = { ...formulario };
