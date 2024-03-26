@@ -1,5 +1,8 @@
 
+//src/utils/api.js
 import axios from 'axios';
+import dayjs from 'dayjs';
+import db from './database';
 
 const api = axios.create({
   baseURL: '/api/'
@@ -9,7 +12,7 @@ const api = axios.create({
 
 
 
-axios.interceptors.request.use((config) => {
+api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -25,7 +28,7 @@ axios.interceptors.request.use((config) => {
 
 // Interceptador de resposta: lida com erros
 //  de autenticação (401 não autorizado)
-axios.interceptors.response.use((response) => {
+api.interceptors.response.use((response) => {
   return response;
 },
   (error) => {
@@ -52,18 +55,6 @@ async function authenticate(token) {
 
 export { api, authenticate };
 
-
-
-// Essa parte do projeto não gera o token, ele espera que o token JWT
-// seja gerado e armazenado no localStorage do navegador e adiciona
-// o token às solicitações HTTP
-
-
-// Agora, sempre que você fizer uma solicitação usando axios,
-// o interceptador de solicitação
-// adicionará automaticamente um cabeçalho 'Authorization' com o token JWT,
-//  e o interceptador de
-// resposta lidará com erros de autenticação.
 
 
 

@@ -1,14 +1,10 @@
 import { db } from '@/utils/database';
-import { generateToken, authenticate } from '../../utils/index';
-const jwt = require('jsonwebtoken');
+import { generateToken } from '../../utils/index';
 const crypto = require('crypto');
 
 
 export default async function handler(req, res) {
 
-    // criar consts de acesso das chaves para os hashs e tokens
-    const dbPassword = process.env.DB_PASSWORD;
-    const apiKey = process.env.API_KEY;
 
     // verificar se a requisição é do tipo POST do
     // protocolo HTTP (GET,POST, PUT/PATCH OU DELETE)

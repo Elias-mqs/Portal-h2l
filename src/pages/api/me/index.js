@@ -1,17 +1,20 @@
 
+//src/pages/api/me/index.js
 import { authenticate } from "@/utils/api"
 
 export default async function me(req, res) {
     
-    const token = req.headers.Authorization
-    const usuario = await authenticate(token)
+    const token = req.headers.Authorization;
+    const usuario = await authenticate(token);
   
     if (!usuario) {
       res.status(401).json({ message: 'Usuário não autenticado' })
     }
     res.status(200).json(usuario)
+
   }
 
+ 
   
   
   ////////////////// FUNÇÃO DE AUTENTICAÇÃO DO TOKEN //////////////////

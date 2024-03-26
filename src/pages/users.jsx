@@ -1,6 +1,7 @@
+
 import { Flex, Text, Input } from "@chakra-ui/react";
 import { useEffect, useState } from 'react';
-import { api } from '@/utils/api'
+import api from '@/utils/api'
 
 
 export default function users() {
@@ -11,6 +12,7 @@ export default function users() {
             try {
                 const res = await api.get('me');
                 setDados(res.data);
+                console.log(res)
                 
             } catch (error) {
                 console.log(error);
