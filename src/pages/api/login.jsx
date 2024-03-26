@@ -47,9 +47,6 @@ export default async function handler(req, res) {
                 return res.status(404).json({ message: 'usuário não encontrado' })
             }
 
-            // Comparar senha informada com a senha do banco
-            // Ver com Erick se é aqui que eu tenho que converter a senha em hash
-            // Erick falou que se for usar o Crypto, não precisa converter em hash
             const passwordHash = hashPassword(password);
 
 
@@ -63,13 +60,6 @@ export default async function handler(req, res) {
                     .set({ token: token, prazo: createdAt })
                     .where('usr_id', '=', userid.usr_id)
                     .execute();
-
-                // Buscar o usuário atualizado do banco de dados
-                // const usuarioAtualizado = await db.selectFrom('usuarios')
-                //     .select('token')
-                //     .where('usr_id', '=', userid.usr_id)
-                //     .executeTakeFirst()
-
 
                 //Enviar resposta de autenticado com sucesso 
                 res.status(200).json({ token });
@@ -87,10 +77,6 @@ export default async function handler(req, res) {
             res.status(400).json({ message: 'não foi possivel autenticar' })
             return
         }
-
-
-        //Faltou ao logar , gerar o token de autenticação da api e salvar na tabela
-        //
 
     } else {
         // Se o método HTTP não for POST, retorna um erro de método não permitido

@@ -94,9 +94,6 @@ export default function HeaderChamados({ children, onSubmit }) {
                     <Button onClick={onSubmit} bgGradient='linear(to-r, #4863ec, #cdd5fd)' color='white' w='80px' h='28px' borderRadius='20px' fontSize='15px'>
                         Salvar
                     </Button>
-                    <form onSubmit={onSubmit}>
-                        {children}
-                    </form>
                 </Flex>
             </HStack>
 
@@ -105,33 +102,3 @@ export default function HeaderChamados({ children, onSubmit }) {
         </VStack >
     )
 }
-
-// tabs que eu criei
-{/* <Flex >
-                        <Text
-                            marginLeft='95px'
-                            p='0 30px'
-                            color='#004B96'
-                            borderBottom='1px solid #004B96'
-                            fontWeight='500'
-                            position='relative'
-                            bottom='-1px'
-                            zIndex='1'
-                        >
-                            Novo chamado
-                        </Text>
-                        <Text
-                            marginLeft='95px'
-                            p='0 30px'
-                            color='#004B96'
-                            borderBottom='1px solid #004B96'
-                            fontWeight='500'
-                            position='relative'
-                            bottom='-1px'
-                            zIndex='1'
-                        >
-                            Chamados em andamento
-                        </Text>
-
-
-                    </Flex> */}

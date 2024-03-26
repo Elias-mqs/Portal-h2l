@@ -12,7 +12,6 @@ import {
     Input,
 } from "@chakra-ui/react"
 import styles from '../styles/PainelLogin.module.css'
-// import { InputPassword, InputUsername } from './index'
 import Link from "next/link"
 import axios from "axios"
 import { useRouter } from 'next/router'
@@ -36,7 +35,6 @@ export default function PainelLogin() {
 
     const handleLogin = async (e) => {
         e.preventDefault()
-        console.log(e)
         try {
             const result = await axios.post('/api/login', formulario)
             const token = result?.data?.token;
@@ -57,7 +55,6 @@ export default function PainelLogin() {
 
             
 
-            console.log(result)
         } catch (error) {
             console.log(error)
 
@@ -86,9 +83,6 @@ export default function PainelLogin() {
 
         // Define o novo estado com os dados atualizados
         setFormulario(novosDados);
-
-        // Exibe os novos dados no console
-        // console.log(novosDados);
     }
 
 

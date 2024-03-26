@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 
 
 
+///////// GERAR TOKEN E DATA /////////
 export function generateToken() {
     return new Promise((resolve, reject) => {
         crypto.randomBytes(64, (err, buffer) => {
@@ -21,16 +22,7 @@ export function generateToken() {
 }
 
 
-
-const TOKEN_EXPIRATION_TIME = 60 * 1000; // 1 minuto em milissegundos
-
-export function validateToken(createdAt) {
-    const currentTime = Date.now();
-    const elapsedTime = currentTime - createdAt;
-    return elapsedTime > TOKEN_EXPIRATION_TIME;
-}
-
-// src/utils/index.js
+///////// AUTENTICAR TOKEN /////////
 async function authenticate(token) {
     token = token.replace('Bearer ', '')
     const now = dayjs().unix()
@@ -41,5 +33,24 @@ async function authenticate(token) {
         .where('prazo', '>', now)
         .executeTakeFirst()
 }
+
+
+
+
+
+///////// VALIDADE TOKEN ///////// PRECISA TERMINAR***
+const TOKEN_EXPIRATION_TIME = 60 * 1000; // 1 minuto em milissegundos
+
+export function validateToken(createdAt) {
+    const currentTime = Date.now();
+    const elapsedTime = currentTime - createdAt;
+    return elapsedTime > TOKEN_EXPIRATION_TIME;
+}
+
+
+
+
+
+
 
 export { authenticate }

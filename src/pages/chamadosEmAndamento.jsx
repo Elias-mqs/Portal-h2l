@@ -1,4 +1,4 @@
-import { HStack, VStack, Flex, Text, Container } from "@chakra-ui/react";
+import { HStack, VStack, Flex } from "@chakra-ui/react";
 import { SideBar, HeaderChamados, PageChamadosAndamento } from "@/components";
 
 
@@ -25,14 +25,3 @@ export default function chamados() {
         </HStack>
     )
 }
-
-// display: flex;
-// width: 100 %;
-// height: 100 %;
-// background - color: white;
-// align - items: center;
-// justify - content: center;
-// flex - direction: column;
-// position: relative;
-// border - radius: 1.1rem;
-// box - shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.2);

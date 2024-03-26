@@ -31,7 +31,7 @@ export default function users() {
                 <Flex gap={2} direction='column' justify='center' alignItems='center' >
                     <Text>Nome:</Text>
                     <Flex w='200px' h='35px' justify='center' alignItems='center' border='2px solid #000' borderRadius='5px'>
-                        <Input value={dados.nome} isReadOnly />
+                        <Input textAlign='center' value={dados.nome} isReadOnly />
                     </Flex>
                 </Flex>
 
@@ -40,7 +40,7 @@ export default function users() {
                 <Flex gap={2} direction='column' justify='center' alignItems='center' >
                     <Text>Username</Text>
                     <Flex w='200px' h='35px' border='2px solid #000' justify='center' alignItems='center' borderRadius='5px'>
-                        <Input value={dados.username} isReadOnly />
+                        <Input textAlign='center' value={dados.username} isReadOnly />
                     </Flex>
                 </Flex>
             </Flex>
