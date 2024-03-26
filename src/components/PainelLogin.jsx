@@ -34,11 +34,11 @@ export default function PainelLogin() {
 
 
 
-    const handleLogin = async (e: any) => {
+    const handleLogin = async (e) => {
         e.preventDefault()
         console.log(e)
         try {
-            const result: any = await axios.post('/api/login', formulario)
+            const result = await axios.post('/api/login', formulario)
             const token = result?.data?.token;
 
             localStorage.setItem('token', token);
@@ -58,7 +58,7 @@ export default function PainelLogin() {
             
 
             console.log(result)
-        } catch (error: any) {
+        } catch (error) {
             console.log(error)
 
             toast({
@@ -74,9 +74,9 @@ export default function PainelLogin() {
     }
 
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (e) => {
         // Cria uma cópia do estado atual usando spread operator
-        let novosDados: any = { ...formulario };
+        let novosDados = { ...formulario };
 
         // Atualiza o valor correspondente ao nome do campo do evento
         novosDados[e.target.name] = e.target.value
