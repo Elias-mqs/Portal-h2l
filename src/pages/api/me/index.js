@@ -5,10 +5,8 @@ import { authenticate } from "@/utils/index"
 
 export default async function me(req, res) {
     
-    const token = req.headers.Authorization;
+    const token = req.headers.authorization;
     const usuario = await authenticate(token);
-    console.log(token)
-    console.log(usuario)
 
 
     if (!usuario) {

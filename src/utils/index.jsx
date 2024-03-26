@@ -32,6 +32,7 @@ export function validateToken(createdAt) {
 
 // src/utils/index.js
 async function authenticate(token) {
+    token = token.replace('Bearer ', '')
     const now = dayjs().unix()
     return await db
         .selectFrom('usuarios')

@@ -39,6 +39,10 @@ export default function PainelLogin() {
         console.log(e)
         try {
             const result: any = await axios.post('/api/login', formulario)
+            const token = result?.data?.token;
+
+            localStorage.setItem('token', token);
+
             setFormulario({ username: ``, password: `` })
 
             toast({
@@ -50,6 +54,7 @@ export default function PainelLogin() {
             })
 
             router.push('/users');
+
             
 
             console.log(result)
@@ -83,7 +88,7 @@ export default function PainelLogin() {
         setFormulario(novosDados);
 
         // Exibe os novos dados no console
-        console.log(novosDados);
+        // console.log(novosDados);
     }
 
 

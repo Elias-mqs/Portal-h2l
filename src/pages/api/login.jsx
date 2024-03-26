@@ -56,8 +56,8 @@ export default async function handler(req, res) {
             if (passwordHash === hashPassword(usuario.password_hash)) {
 
                 const { token, createdAt } = await generateToken()
-                console.log(token)
-                console.log(createdAt)
+                // console.log(token)
+                // console.log(createdAt)
 
                 db.updateTable('usuarios')
                     .set({ token: token, prazo: createdAt })
