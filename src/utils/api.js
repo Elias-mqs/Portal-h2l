@@ -1,8 +1,8 @@
 
 //src/utils/api.js
 import axios from 'axios';
-import dayjs from 'dayjs';
-import db from './database';
+// import dayjs from 'dayjs';
+// import db from './database';
 
 const api = axios.create({
   baseURL: '/api/'
@@ -43,17 +43,17 @@ api.interceptors.response.use((response) => {
 
 
 
-async function authenticate(token) {
-  const now = dayjs().unix()
-  return await db
-    .selectFrom('usuarios')
-    .select(['usr_id', 'nome', 'username'])
-    .where('token', token)
-    .where('prazo', '>', now)
-    .executeTakeFirst()
-}
+// async function authenticate(token) {
+//   const now = dayjs().unix()
+//   return await db
+//     .selectFrom('usuarios')
+//     .select(['usr_id', 'nome', 'username'])
+//     .where('token', token)
+//     .where('prazo', '>', now)
+//     .executeTakeFirst()
+// }
 
-export { api, authenticate };
+export { api };
 
 
 

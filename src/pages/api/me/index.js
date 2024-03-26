@@ -1,6 +1,6 @@
 
 //src/pages/api/me/index.js
-import { authenticate } from "@/utils/api"
+import { authenticate } from "../../../utils/index"
 
 export default async function me(req, res) {
     
