@@ -1,11 +1,13 @@
 
-
+/* src/styles/PainelLogin.module.css */
 .painel {
     position: absolute;
     top: 50%;
     left: 50%;
     width: 448px;
-    height: 528px;
+    max-width: 28%;
+    height: 500px;
+    /* max-height: 27%; */
     background-color: #EDF2FF;
     transform: translate(-50%, -50%);
     align-items: center;
@@ -16,6 +18,7 @@
 
 .painel form {
     width: 320px;
+    max-width: 80%;
 }
 
 .logo {
@@ -38,10 +41,16 @@
     transform: translate(0,20%);
 }
 
+/* Ajustar a resposividade aqui abaixo */
 
 @media (max-width: 768px) {
     .painel {
         width: 90%;
+        max-width: 448px;
+        height: 90%;
+    }
+    .painel form {
+        width: 75%;
         max-width: 448px;
     }
 

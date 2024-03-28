@@ -8,7 +8,6 @@ export default async function me(req, res) {
     const token = req.headers.authorization;
     const usuario = await authenticate(token);
 
-
     if (!usuario) {
       res.status(401).json({ message: 'Usuário não autenticado' })
     }

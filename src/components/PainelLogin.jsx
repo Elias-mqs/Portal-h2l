@@ -1,6 +1,5 @@
 
 import {
-    Flex,
     Box,
     Button,
     Stack,
@@ -41,7 +40,7 @@ import { useState, useRef } from "react"
 
 export default function PainelLogin() {
 
-    
+
     const [show, setShow] = useState(false) ///// CONTROLE DE ESTADO BUTTON EYES
     const [isLoading, setIsLoading] = useState(false); ///// CONTROLE DE ESTADO SPINNER LOADING
     const [formulario, setFormulario] = useState({ ///// CONTROLE DE ESTADO FORMULARIO PARA RECEBER DADOS DO USER
@@ -58,7 +57,7 @@ export default function PainelLogin() {
     };
 
 
-/////////////////// CONST RESPONSAVEL POR MANIPULAR O EVENTO SUBMIT
+    /////////////////// CONST RESPONSAVEL POR MANIPULAR O EVENTO SUBMIT
     const handleLogin = async (e) => {
         e.preventDefault()
         setIsLoading(true); // INICIA O SPINNER ANTES DA VALIDAÇÃO
@@ -67,6 +66,7 @@ export default function PainelLogin() {
             return;
         }
 
+        // TRY/CATCH VALIDAÇÃO DO USUARIO
         try {
             const result = await axios.post('/api/login', formulario)
             const token = result?.data?.token;
@@ -132,7 +132,8 @@ export default function PainelLogin() {
 
     return (
 
-        <Flex className={styles.painel} >
+        //src/components/PainelLogin.jsx
+        <Stack className={styles.painel} >
             <Image
                 src='img/LOGO-H2L.png'
                 w='176px'
@@ -146,19 +147,21 @@ export default function PainelLogin() {
             />
 
             <form onSubmit={handleLogin}>
-                <FormControl top='40%' >
+                <FormControl top='35%'>
                     <Stack spacing='35px' top='30px' left='12.5%'>
                         <Stack spacing='30px'>
+
                             <Box >
-                                <Text color='#003366' p='0 3px' fontSize={14} fontWeight={500}>Username</Text>
+                                <Text color='#003366' p='0 3px' fontSize={14} fontWeight={500}>Usuário</Text>
                                 <InputGroup>
                                     <InputLeftElement >
                                         <PersonOutlineOutlinedIcon sx={{ color: `#003366` }} />
                                     </InputLeftElement>
                                     <Input
                                         variant='flushed'
-                                        placeholder='Username'
+                                        placeholder='Nome de usuário'
                                         name='username'
+                                        fontSize='18px'
                                         value={formulario.username}
                                         onChange={handleInputChange}
 
@@ -167,7 +170,7 @@ export default function PainelLogin() {
                             </Box>
 
                             <Box >
-                                <Text color='#003366' p='0 3px' fontSize={14} fontWeight={500}>Password</Text>
+                                <Text color='#003366' p='0 3px' fontSize={14} fontWeight={500}>Senha</Text>
                                 <InputGroup>
                                     <InputLeftElement>
                                         <IconLock color='#003366' />
@@ -175,8 +178,9 @@ export default function PainelLogin() {
                                     <Input
                                         type={show ? 'text' : 'password'}
                                         name='password'
+                                        fontSize='18px'
                                         variant='flushed'
-                                        placeholder='Password'
+                                        placeholder='Senha'
                                         value={formulario.password}
                                         onChange={handleInputChange}
                                     />
@@ -213,7 +217,7 @@ export default function PainelLogin() {
                                         position="absolute"
                                     />
                                 ) : (
-                                    'Login'
+                                    'Entrar'
                                 )}
                             </Button>
                         </VStack>
@@ -229,7 +233,7 @@ export default function PainelLogin() {
             {/* ////////////// MODAL RECUPERAÇÃO DE SENHA ////////////// */}
 
 
-            <Button color='#003366' top='20%' bg='' _hover={{ bg: `none`, textDecoration: `underline` }} onClick={onOpen}>Esqueceu sua senha?</Button>
+            <Button color='#003366' top='16%' bg='' _hover={{ bg: `none`, textDecoration: `underline` }} onClick={onOpen}>Esqueceu sua senha?</Button>
 
             <Modal
                 initialFocusRef={initialRef}
@@ -250,7 +254,7 @@ export default function PainelLogin() {
                             <Button colorScheme='blue' mr={3}>
                                 Recuperar senha
                             </Button>
-                            <Button onClick={onClose}>Cancel</Button>
+                            <Button onClick={onClose}>Cancelar</Button>
                         </ModalFooter>
                     </FormControl>
                 </ModalContent>
@@ -265,7 +269,7 @@ export default function PainelLogin() {
 
 
 
-        </Flex >
+        </Stack >
 
 
     )
