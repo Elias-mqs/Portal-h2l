@@ -7,7 +7,7 @@
     width: 448px;
     max-width: 28%;
     height: 500px;
-    /* max-height: 27%; */
+    max-height: 70vh;
     background-color: #EDF2FF;
     transform: translate(-50%, -50%);
     align-items: center;

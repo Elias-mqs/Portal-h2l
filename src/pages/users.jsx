@@ -1,6 +1,6 @@
 
 // src/pages/users.js
-import { Flex, Text, Input, Button } from "@chakra-ui/react";
+import { Flex, Text, Input, Button, VStack } from "@chakra-ui/react";
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import api from '@/utils/api';
@@ -26,7 +26,17 @@ export default function users() {
 
     return (
 
-        <Flex w='100%' h='100vh' gap={3} justify='center' alignItems='center' bg='#f0f0f0' >
+        <VStack w='100%' h='100vh' gap={3} justify='center' alignItems='center' bg='#f0f0f0' >
+            <Flex direction='row'>
+                <Flex gap='15px'>
+                    <Button colorScheme='teal' size='lg' onClick={() => router.push('/login')}>
+                        Login
+                    </Button>
+                    <Button colorScheme='teal' size='lg' onClick={() => router.push('/cadastro')}>
+                        Cadastro
+                    </Button>
+                </Flex>
+            </Flex>
             <Flex bg='#FFF' w='300px' h='400px' justify='center' alignItems='center' direction='column' gap='50px' border='2px solid #000' borderRadius='20px' >
                 <Flex gap={2} direction='column' justify='center' alignItems='center' >
                     <Text>Nome:</Text>
@@ -44,12 +54,7 @@ export default function users() {
                     </Flex>
                 </Flex>
             </Flex>
-            <Flex>
-                <Button colorScheme='teal' size='lg' onClick={() => router.push('/login')}>
-                    Login
-                </Button>
-            </Flex>
-        </Flex>
+        </VStack>
 
     )
 }

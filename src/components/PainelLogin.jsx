@@ -56,6 +56,12 @@ export default function PainelLogin() {
         setShow(!show);
     };
 
+    const handleKeyDown = (event) => { //EVITA SUBMIT AO TECLAR ENTER NO EYES DO PASSWORD
+        if (event.key === 'Enter') {
+          event.preventDefault();
+        }
+      };
+
 
     /////////////////// CONST RESPONSAVEL POR MANIPULAR O EVENTO SUBMIT
     const handleLogin = async (e) => {
@@ -75,19 +81,19 @@ export default function PainelLogin() {
             setFormulario({ username: ``, password: `` })
 
             toast({
-                title: "Success",
+                title: "Sucesso!",
                 description: result?.data?.message,
                 status: 'success',
                 duration: 2000,
                 isClosable: true,
             })
-
+e
             router.push('/users');
 
 
         } catch (error) {
             toast({
-                title: "Error",
+                title: "Erro!",
                 description: error?.response?.data?.message,
                 status: 'error',
                 duration: 2000,
@@ -164,7 +170,7 @@ export default function PainelLogin() {
                                         fontSize='18px'
                                         value={formulario.username}
                                         onChange={handleInputChange}
-
+                                        onKeyDown={handleKeyDown}
                                     />
                                 </InputGroup>
                             </Box>
@@ -183,6 +189,7 @@ export default function PainelLogin() {
                                         placeholder='Senha'
                                         value={formulario.password}
                                         onChange={handleInputChange}
+                                        onKeyDown={handleKeyDown}
                                     />
                                     <InputRightElement>
                                         <Box as='button' onClick={handleClickEyes}>
