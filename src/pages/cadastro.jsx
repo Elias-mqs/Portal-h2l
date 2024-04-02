@@ -2,7 +2,7 @@ import { Box, Button, Flex, FormLabel, Input, VStack, useToast } from "@chakra-u
 import { FormGroup } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import axios from "axios";
+import api from '../utils/api'
 
 export default function cadastro() {
 
@@ -17,30 +17,38 @@ export default function cadastro() {
     })
 
     const handleFormEdit = (event, name) => {
+        let value = event.target.value;
+        if (name === 'username') {
+            value = value.toLowerCase();
+        }
         setFormData({
             ...formData,
-            [name]: event.target.value
-        })
-
-        let novosDados = { ...formData };
-        novosDados[event.target.name] = event.target.value
-
-        if (event.target.name == 'username') {
-            novosDados.username = event.target.value.toLowerCase()
-        }
-        setFormData(novosDados)
-    }
+            [name]: value
+        });
+    };
 
     const handleForm = async (event) => {
         event.preventDefault()
 
+        const isInvalid = Object.values(formData).some(value => value.trim() === '');
+
+        if (isInvalid) {
+            toast({
+                title: "Erro!",
+                description: "Por favor, preencha todos os campos corretamente.",
+                status: 'error',
+                duration: 2000,
+                isClosable: true,
+            });
+            return;
+        }
+
         try {
 
-            const result = await axios.post('/api/cadastro', formData)
+            const result = await api.post('cadastro', formData)
             // const token = result?.data?.token;
-
             // localStorage.setItem('token', token);
-            // setFormData({ username: ``, password: `` })
+            setFormData({ name: ``, username: ``, email: ``, password: `` })
 
             toast({
                 title: "Sucesso!",
@@ -53,6 +61,7 @@ export default function cadastro() {
             // router.push('/login');
 
         } catch (error) {
+            console.log(error)
             toast({
                 title: "Erro!",
                 description: error?.response?.data?.message,
