@@ -1,5 +1,4 @@
 import { db } from '@/utils/database';
-import axios from 'axios';
 const crypto = require('crypto');
 
 
@@ -7,11 +6,11 @@ export default async function handler(req, res) {
 
     if (req.method === 'POST') {
 
-        const { name, username, email, password } = req.body;
+        const { name, username, email, setor, password } = req.body;
 
 
         // Validar se foi inserido o usuario e/ou a senha
-        if (!name || !username || !email || !password) {
+        if (!name || !username || !email || !setor || !password) {
             return res.status(401).json({ message: 'Necessario informar todos os dados' })
         }
 
@@ -45,6 +44,7 @@ export default async function handler(req, res) {
                     nome: name,
                     username: username,
                     email: email,
+                    setor: setor,
                     password_hash: passwordHash
                 })
                 .execute();

@@ -4,6 +4,7 @@ import {
     Button,
     Stack,
     VStack,
+    Container,
     Text,
     Image,
     FormControl,
@@ -58,9 +59,9 @@ export default function PainelLogin() {
 
     const handleKeyDown = (event) => { //EVITA SUBMIT AO TECLAR ENTER NO EYES DO PASSWORD
         if (event.key === 'Enter') {
-          event.preventDefault();
+            event.preventDefault();
         }
-      };
+    };
 
 
     /////////////////// CONST RESPONSAVEL POR MANIPULAR O EVENTO SUBMIT
@@ -87,7 +88,7 @@ export default function PainelLogin() {
                 duration: 2000,
                 isClosable: true,
             })
-e
+
             router.push('/users');
 
 
@@ -139,139 +140,150 @@ e
     return (
 
         //src/components/PainelLogin.jsx
-        <Stack className={styles.painel} >
-            <Image
-                src='img/LOGO-H2L.png'
-                w='176px'
-                h='80px'
-                position='relative'
-                top='0'
-                transform='translate(0,40%)'
-                bgSize='cover'
-                bgRepeat='no-repeat'
-                bgPosition='center'
-            />
+        <Stack  >
+            <VStack className={styles.painel} >
 
-            <form onSubmit={handleLogin}>
-                <FormControl top='35%'>
-                    <Stack spacing='35px' top='30px' left='12.5%'>
-                        <Stack spacing='30px'>
+                <Image
+                    src='img/LOGO-H2L.png'
+                    fit='cover'
+                    boxSize='86px'
+                    w={{md:'210px'}}
+                    p='0 10px'
+                    transform='translate(0,40%)'
+                />
 
-                            <Box >
-                                <Text color='#003366' p='0 3px' fontSize={14} fontWeight={500}>Usuário</Text>
-                                <InputGroup>
-                                    <InputLeftElement >
-                                        <PersonOutlineOutlinedIcon sx={{ color: `#003366` }} />
-                                    </InputLeftElement>
-                                    <Input
-                                        variant='flushed'
-                                        placeholder='Nome de usuário'
-                                        name='username'
-                                        fontSize='18px'
-                                        value={formulario.username}
-                                        onChange={handleInputChange}
-                                        onKeyDown={handleKeyDown}
-                                    />
-                                </InputGroup>
-                            </Box>
+                <form  onSubmit={handleLogin}>
+                    <FormControl top='28%' >
+                        <Stack spacing='35px' top='30px' left='12.5%'>
+                            <Stack spacing='30px'>
 
-                            <Box >
-                                <Text color='#003366' p='0 3px' fontSize={14} fontWeight={500}>Senha</Text>
-                                <InputGroup>
-                                    <InputLeftElement>
-                                        <IconLock color='#003366' />
-                                    </InputLeftElement>
-                                    <Input
-                                        type={show ? 'text' : 'password'}
-                                        name='password'
-                                        fontSize='18px'
-                                        variant='flushed'
-                                        placeholder='Senha'
-                                        value={formulario.password}
-                                        onChange={handleInputChange}
-                                        onKeyDown={handleKeyDown}
-                                    />
-                                    <InputRightElement>
-                                        <Box as='button' onClick={handleClickEyes}>
-                                            {show ? <IconEye color='#003366' />
-                                                : <IconEyeClosed color='#003366' />}
-                                        </Box>
-                                    </InputRightElement>
-                                </InputGroup>
-                            </Box>
+                                <Box >
+                                    <Text color='#003366' p='0 3px' fontSize={14} fontWeight={500}>Usuário</Text>
+                                    <InputGroup>
+                                        <InputLeftElement >
+                                            <PersonOutlineOutlinedIcon sx={{ color: `#003366` }} />
+                                        </InputLeftElement>
+                                        <Input
+                                            variant='flushed'
+                                            placeholder='Nome de usuário'
+                                            name='username'
+                                            fontSize='18px'
+                                            value={formulario.username}
+                                            onChange={handleInputChange}
+                                            onKeyDown={handleKeyDown}
+                                        />
+                                    </InputGroup>
+                                </Box>
+
+                                <Box >
+                                    <Text color='#003366' p='0 3px' fontSize={14} fontWeight={500}>Senha</Text>
+                                    <InputGroup>
+                                        <InputLeftElement>
+                                            <IconLock color='#003366' />
+                                        </InputLeftElement>
+                                        <Input
+                                            type={show ? 'text' : 'password'}
+                                            name='password'
+                                            fontSize='18px'
+                                            variant='flushed'
+                                            placeholder='Senha'
+                                            value={formulario.password}
+                                            onChange={handleInputChange}
+                                            onKeyDown={handleKeyDown}
+                                        />
+                                        <InputRightElement>
+                                            <Box as='button' onClick={handleClickEyes}>
+                                                {show ? <IconEye color='#003366' />
+                                                    : <IconEyeClosed color='#003366' />}
+                                            </Box>
+                                        </InputRightElement>
+                                    </InputGroup>
+                                </Box>
+                            </Stack>
+
+                            <VStack spacing={3}>
+                                <Button
+                                    type='submit'
+                                    bg='#6699CC'
+                                    color='white'
+                                    w='100%' h='48px'
+                                    fontSize={20}
+                                    borderRadius='4px'
+                                    alignItems='center'
+                                    justifyContent='center'
+                                    fontWeight='550'
+                                    _hover={{ bg: `#5c7da6`, color: `#FFF` }}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? (
+                                        <Spinner
+                                            thickness='3px'
+                                            speed="0.65s"
+                                            color="white"
+                                            size="md"
+                                            position="absolute"
+                                        />
+                                    ) : (
+                                        'Entrar'
+                                    )}
+                                </Button>
+                            </VStack>
                         </Stack>
-
-                        <VStack spacing={3}>
-                            <Button
-                                type='submit'
-                                bg='#6699CC'
-                                color='white'
-                                w='100%' h='48px'
-                                fontSize={20}
-                                borderRadius='4px'
-                                alignItems='center'
-                                justifyContent='center'
-                                fontWeight='550'
-                                _hover={{ bg: `#5c7da6`, color: `#FFF` }}
-                                disabled={isLoading}
-                            >
-                                {isLoading ? (
-                                    <Spinner
-                                        thickness='3px'
-                                        speed="0.65s"
-                                        color="white"
-                                        size="md"
-                                        position="absolute"
-                                    />
-                                ) : (
-                                    'Entrar'
-                                )}
-                            </Button>
-                        </VStack>
-                    </Stack>
-                </FormControl>
-            </form>
-
-
-
-
-
-
-            {/* ////////////// MODAL RECUPERAÇÃO DE SENHA ////////////// */}
-
-
-            <Button color='#003366' top='16%' bg='' _hover={{ bg: `none`, textDecoration: `underline` }} onClick={onOpen}>Esqueceu sua senha?</Button>
-
-            <Modal
-                initialFocusRef={initialRef}
-                isOpen={isOpen}
-                onClose={onClose}
-            >
-                <ModalOverlay />
-                <ModalContent >
-                    <FormControl isRequired>
-                        <ModalHeader>Informe seu e-mail</ModalHeader>
-                        <ModalCloseButton />
-                        <ModalBody pb={6}>
-                            <FormLabel>E-mail</FormLabel>
-                            <Input type='email' placeholder='Digite seu e-mail' />
-                        </ModalBody>
-
-                        <ModalFooter>
-                            <Button colorScheme='blue' mr={3}>
-                                Recuperar senha
-                            </Button>
-                            <Button onClick={onClose}>Cancelar</Button>
-                        </ModalFooter>
                     </FormControl>
-                </ModalContent>
-            </Modal>
-
-
-            {/* ////////////// MODAL RECUPERAÇÃO DE SENHA ////////////// */}
+                </form>
 
 
 
+
+
+
+                {/* ////////////// MODAL RECUPERAÇÃO DE SENHA ////////////// */}
+
+
+                <Box
+                    as='button'
+                    position='relative'
+                    maxW='85%'
+                    top='14%'
+                    fontWeight={500}
+                    color='#003366'
+                    _hover={{ bg: `none`, textDecoration: `underline` }}
+                    onClick={onOpen}
+                >
+                    Esqueceu sua senha?
+                </Box>
+
+                <Modal
+                    initialFocusRef={initialRef}
+                    isOpen={isOpen}
+                    onClose={onClose}
+                >
+                    <ModalOverlay />
+                    <ModalContent >
+                        <FormControl isRequired>
+                            <ModalHeader>Informe seu e-mail</ModalHeader>
+                            <ModalCloseButton />
+                            <ModalBody pb={6}>
+                                <FormLabel>E-mail</FormLabel>
+                                <Input type='email' placeholder='Digite seu e-mail' />
+                            </ModalBody>
+
+                            <ModalFooter>
+                                <Button colorScheme='blue' mr={3}>
+                                    Recuperar senha
+                                </Button>
+                                <Button onClick={onClose}>Cancelar</Button>
+                            </ModalFooter>
+                        </FormControl>
+                    </ModalContent>
+                </Modal>
+
+
+                {/* ////////////// MODAL RECUPERAÇÃO DE SENHA ////////////// */}
+
+
+
+            </VStack>
 
 
 

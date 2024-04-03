@@ -1,5 +1,3 @@
-import InputPassword from './InputPassword';
-import InputUsername from './InputUsername';
 import ButtonHamburger from './ButtonHamburger';
 import HeaderChamados from './HeaderChamados';
 import ContainerMain from './ContainerMain';
@@ -16,8 +14,6 @@ import PageChamadosAndamento from './PageChamadosAndamento';
 
 // Exporte os componentes diretamente
 export {
-    InputPassword,
-    InputUsername,
     ButtonHamburger,
     HeaderChamados,
     HeaderHome,

@@ -1,4 +1,4 @@
-import { Box, Button, Flex, FormLabel, Input, VStack, useToast } from "@chakra-ui/react";
+import { Button, Flex, Grid, FormLabel, Input, VStack, useToast, FormControl, Box, Alert, AlertIcon, Stack } from "@chakra-ui/react";
 import { FormGroup } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -72,9 +72,16 @@ export default function cadastro() {
         }
     }
 
+    const caract = false;
+    const maius = true;
+    const minus = false;
+    const num = false;
+    const esp = false;
 
     return (
-        <VStack w='100%' h='100vh' justify='center' bg='#f0f0f0'>
+        <VStack w='100%' h='100vh' justify='center' bg='#f0f0f0'
+
+        >
 
             <Flex direction='row'>
                 <Flex gap='15px'>
@@ -87,81 +94,159 @@ export default function cadastro() {
                 </Flex>
             </Flex>
 
-            <Flex w='350px' h='450px' bg='#FFF' alignItems='center' justify='center' direction='column' border='2px solid #000'>
-                <form onSubmit={handleForm}>
+            <Flex
+                w='600px'
+                h='500px'
+                maxW={{ base: "90%" }}
+                
+                bg='#EDF2FF'
+                alignItems='center'
+                justify='center'
+                direction='column'
+                borderRadius='10px'
+                shadow='0 0 10px rgba(0, 0, 0, 0.4)'
+            >
+
+///////////////////////////parei mexendo nesse width do flex testando o em ou px ou rem
+                <Flex
+                    w='150em'
+                    p='0 10px'
+                    alignItems='center'
+                    justify='center'
+                >
+                    <form onSubmit={handleForm}>
 
 
-                    <Box>
-                    </Box>
-                    <FormGroup>
-                        <FormLabel paddingBottom='5px' >Name</FormLabel>
-                        <Input
-                            w='250px'
-                            p='0 0 0 10px'
-                            bottom='15px'
-                            variant='flushed'
-                            name='name'
-                            type='text'
-                            placeholder='Name'
-                            required
-                            value={formData.name}
-                            onChange={(e) => { handleFormEdit(e, 'name') }}
-                        />
-                        <FormLabel paddingBottom='5px' >Username</FormLabel>
-                        <Input
-                            p='0 0 0 10px'
-                            bottom='15px'
-                            variant='flushed'
-                            name='username'
-                            type='text'
-                            placeholder='Username'
-                            required
-                            value={formData.username}
-                            onChange={(e) => { handleFormEdit(e, 'username') }}
-                        />
-                        <FormLabel paddingBottom='5px' >Email</FormLabel>
-                        <Input
-                            p='0 0 0 10px'
-                            bottom='15px'
-                            variant='flushed'
-                            name='email'
-                            type='email'
-                            placeholder='Email'
-                            required
-                            value={formData.email}
-                            onChange={(e) => { handleFormEdit(e, 'email') }}
-                        />
-                        <FormLabel paddingBottom='5px' >Password</FormLabel>
-                        <Input
-                            p='0 0 0 10px'
-                            variant='flushed'
-                            bottom='15px'
-                            name='password'
-                            type='password'
-                            placeholder='Password'
-                            required
-                            value={formData.password}
-                            onChange={(e) => { handleFormEdit(e, 'password') }}
-                        />
 
+                        <FormGroup >
+                            <Grid templateColumns='repeat(2, 4fr)' gap={8} >
+                                <FormControl>
+                                    <FormLabel color='#003366' paddingBottom='5px' >Name</FormLabel>
+                                    <Input
+                                        p='0 0 0 10px'
+                                        bottom='15px'
+                                        variant='flushed'
+                                        name='name'
+                                        type='text'
+                                        placeholder='Name'
+                                        required
+                                        value={formData.name}
+                                        onChange={(e) => { handleFormEdit(e, 'name') }}
+                                    />
+                                </FormControl>
 
-                        <Button
-                            top='15px'
-                            type='submit'
-                            variant='solid'
+                                <FormControl>
+                                    <FormLabel color='#003366' paddingBottom='5px' >Username</FormLabel>
+                                    <Input
+                                        p='0 0 0 10px'
+                                        bottom='15px'
+                                        variant='flushed'
+                                        name='username'
+                                        type='text'
+                                        placeholder='Username'
+                                        required
+                                        value={formData.username}
+                                        onChange={(e) => { handleFormEdit(e, 'username') }}
+                                    />
+                                </FormControl>
 
-                        >
-                            Sign up
-                        </Button>
+                                <FormControl>
+                                    <FormLabel color='#003366' paddingBottom='5px' >Email</FormLabel>
+                                    <Input
+                                        p='0 0 0 10px'
+                                        bottom='15px'
+                                        variant='flushed'
+                                        name='email'
+                                        type='email'
+                                        placeholder='Email'
+                                        required
+                                        value={formData.email}
+                                        onChange={(e) => { handleFormEdit(e, 'email') }}
+                                    />
+                                </FormControl>
 
-                    </FormGroup>
+                                <FormControl>
+                                    <FormLabel color='#003366' paddingBottom='5px' >Password</FormLabel>
+                                    <Input
+                                        p='0 0 0 10px'
+                                        variant='flushed'
+                                        bottom='15px'
+                                        name='password'
+                                        type='password'
+                                        placeholder='Password'
+                                        required
+                                        value={formData.password}
+                                        onChange={(e) => { handleFormEdit(e, 'password') }}
+                                    />
+                                </FormControl>
 
-                </form>
+                                <FormControl>
+                                    <FormLabel color='#003366' paddingBottom='5px' >Setor</FormLabel>
+                                    <Input
+                                        p='0 0 0 10px'
+                                        variant='flushed'
+                                        bottom='15px'
+                                        name='setor'
+                                        type='text'
+                                        placeholder='Setor'
+                                        required
+                                        value={formData.setor}
+                                        onChange={(e) => { handleFormEdit(e, 'setor') }}
+                                    />
+                                </FormControl>
+
+                                <Stack w='190px' gap='0' justify='flex-end' paddingTop='50px' h='30px' fontSize='12px'  >
+                                    <Alert p='8px' bg='transparent' color={caract ? '#2F855A' : '#C53030'} status={caract ? 'success' : 'error'}>
+                                        <AlertIcon w='13px' />
+                                        Minímo 10 caracteres
+                                    </Alert>
+                                    <Alert p='8px' bg='transparent' color={maius ? '#2F855A' : '#C53030'} status={maius ? 'success' : 'error'}>
+                                        <AlertIcon w='13px' />
+                                        Minímo 1 maiúcula
+                                    </Alert>
+                                    <Alert p='8px' bg='transparent' color={minus ? '#2F855A' : '#C53030'} status={minus ? 'success' : 'error'}>
+                                        <AlertIcon w='13px' />
+                                        Minímo 1 minúscula
+                                    </Alert>
+                                    <Alert p='8px' bg='transparent' color={num ? '#2F855A' : '#C53030'} status={num ? 'success' : 'error'}>
+                                        <AlertIcon w='13px' />
+                                        Minímo 1 número
+                                    </Alert>
+                                    <Alert p='8px' bg='transparent' color={esp ? '#2F855A' : '#C53030'} status={esp ? 'success' : 'error'}>
+                                        <AlertIcon w='13px' />
+                                        Minímo 1 caracter especial
+                                    </Alert>
+                                </Stack>
+
+                            </Grid>
+
+                            <Button
+                                // w='100px'
+                                // top='20px'
+                                type='submit'
+                                bg='#6699CC'
+                                color='white'
+                                w='100%' h='48px'
+                                fontSize={20}
+                                borderRadius='4px'
+                                alignItems='center'
+                                justifyContent='center'
+                                fontWeight='500'
+                                _hover={{ bg: `#5c7da6`, color: `#FFF` }}
+
+                            >
+                                Sign up
+                            </Button>
+
+                        </FormGroup>
+
+                    </form>
+                </Flex>
             </Flex>
 
 
 
-        </VStack>
+        </VStack >
 
     )
 }
