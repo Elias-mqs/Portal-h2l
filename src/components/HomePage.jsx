@@ -1,4 +1,4 @@
-import { Flex, Button, Stack } from "@chakra-ui/react";
+import { Flex, Button, VStack } from "@chakra-ui/react";
 import { useRouter } from 'next/router';
 
 export default function HomePage() {
