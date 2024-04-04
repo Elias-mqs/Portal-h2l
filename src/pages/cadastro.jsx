@@ -1,4 +1,4 @@
-import { Button, Flex, Grid, FormLabel, Input, VStack, useToast, FormControl, Box, Alert, AlertIcon, Stack } from "@chakra-ui/react";
+import { Button, Flex, Grid, FormLabel, Input, VStack, useToast, FormControl, GridItem, Alert, AlertIcon, Stack, Text } from "@chakra-ui/react";
 import { FormGroup } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -79,174 +79,190 @@ export default function cadastro() {
     const esp = false;
 
     return (
-        <VStack w='100%' h='100vh' justify='center' bg='#f0f0f0'
+        <>
+            <VStack w='100%' h='100vh' justify='center' bg='#f0f0f0'>
 
-        >
-
-            <Flex direction='row'>
-                <Flex gap='15px'>
+                {/* Barra de navegação */}
+                {/* <Flex direction='row' alignItems='flex-start' justify='space-between' w='100%' p='20px'>
                     <Button colorScheme='teal' size='lg' onClick={() => router.push('/login')}>
                         Login
                     </Button>
                     <Button colorScheme='teal' size='lg' onClick={() => router.push('/users')}>
                         Users
                     </Button>
-                </Flex>
-            </Flex>
+                </Flex> */}
 
-            <Flex
-                w='600px'
-                h='500px'
-                maxW={{ base: "90%" }}
-                
-                bg='#EDF2FF'
-                alignItems='center'
-                justify='center'
-                direction='column'
-                borderRadius='10px'
-                shadow='0 0 10px rgba(0, 0, 0, 0.4)'
-            >
-
-///////////////////////////parei mexendo nesse width do flex testando o em ou px ou rem
+                {/* Formulário de cadastro */}
                 <Flex
-                    w='150em'
-                    p='0 10px'
-                    alignItems='center'
+                // mexendo na responsividade da tela ao esticar
+                    w={{ base:'100%',sm:'60%', md:'60%', lg:'45%'}}
+                    h={{ base:'100%',sm:'80%', md:'80%', lg:'65%'}}
+                    maxH={{ base:'100%', lg:'100%'}}
+                    // maxW={{ base: '60%', lg: '100%' }}
+                    
                     justify='center'
+                    align='center'
+                    bg='#EDF2FF'
+                    borderRadius='10px'
+                    boxShadow='0 0 10px rgba(0, 0, 0, 0.4)'
+                    p='20px'
                 >
-                    <form onSubmit={handleForm}>
 
+                    <form onSubmit={handleForm} style={{ width: '100%', maxWidth: '600px' }}>
 
+                        {/* Grid para organização dos campos */}
+                        <Grid
+                            templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', lg: 'repeat(2, 1fr)' }}
+                            w={{ lg:'100%', md:'100%', sm:'100%', base:'90%' }}
+                            align={{ lg:'stretch', md:'stretch', sm:'stretch', base:'center' }}
+                            gap={8}
+                            mb='20px'
+                        >
 
-                        <FormGroup >
-                            <Grid templateColumns='repeat(2, 4fr)' gap={8} >
-                                <FormControl>
-                                    <FormLabel color='#003366' paddingBottom='5px' >Name</FormLabel>
-                                    <Input
-                                        p='0 0 0 10px'
-                                        bottom='15px'
-                                        variant='flushed'
-                                        name='name'
-                                        type='text'
-                                        placeholder='Name'
-                                        required
-                                        value={formData.name}
-                                        onChange={(e) => { handleFormEdit(e, 'name') }}
-                                    />
-                                </FormControl>
+                            {/* Campo Nome */}
+                            <FormControl>
+                                <FormLabel color='#003366' paddingBottom='5px'>Name</FormLabel>
+                                <Input
+                                    p='0 0 0 10px'
+                                    variant='flushed'
+                                    name='name'
+                                    type='text'
+                                    placeholder='Name'
+                                    required
+                                    value={formData.name}
+                                    onChange={(e) => { handleFormEdit(e, 'name') }}
+                                />
+                            </FormControl>
 
-                                <FormControl>
-                                    <FormLabel color='#003366' paddingBottom='5px' >Username</FormLabel>
-                                    <Input
-                                        p='0 0 0 10px'
-                                        bottom='15px'
-                                        variant='flushed'
-                                        name='username'
-                                        type='text'
-                                        placeholder='Username'
-                                        required
-                                        value={formData.username}
-                                        onChange={(e) => { handleFormEdit(e, 'username') }}
-                                    />
-                                </FormControl>
+                            {/* Campo Username */}
+                            <FormControl>
+                                <FormLabel color='#003366' paddingBottom='5px'>Username</FormLabel>
+                                <Input
+                                    p='0 0 0 10px'
+                                    variant='flushed'
+                                    name='username'
+                                    type='text'
+                                    placeholder='Username'
+                                    required
+                                    value={formData.username}
+                                    onChange={(e) => { handleFormEdit(e, 'username') }}
+                                />
+                            </FormControl>
 
-                                <FormControl>
-                                    <FormLabel color='#003366' paddingBottom='5px' >Email</FormLabel>
-                                    <Input
-                                        p='0 0 0 10px'
-                                        bottom='15px'
-                                        variant='flushed'
-                                        name='email'
-                                        type='email'
-                                        placeholder='Email'
-                                        required
-                                        value={formData.email}
-                                        onChange={(e) => { handleFormEdit(e, 'email') }}
-                                    />
-                                </FormControl>
+                            {/* Campo Email */}
+                            <GridItem >
+                                <FormLabel color='#003366' paddingBottom='5px'>Email</FormLabel>
+                                <Input
+                                    p='0 0 0 10px'
+                                    variant='flushed'
+                                    name='email'
+                                    type='email'
+                                    placeholder='Email'
+                                    required
+                                    value={formData.email}
+                                    onChange={(e) => { handleFormEdit(e, 'email') }}
+                                />
+                            </GridItem>
 
-                                <FormControl>
-                                    <FormLabel color='#003366' paddingBottom='5px' >Password</FormLabel>
-                                    <Input
-                                        p='0 0 0 10px'
-                                        variant='flushed'
-                                        bottom='15px'
-                                        name='password'
-                                        type='password'
-                                        placeholder='Password'
-                                        required
-                                        value={formData.password}
-                                        onChange={(e) => { handleFormEdit(e, 'password') }}
-                                    />
-                                </FormControl>
+                            {/* Campo Password */}
+                            <GridItem rowSpan={2}>
+                                <FormLabel color='#003366' paddingBottom='5px'>Password</FormLabel>
+                                <Input
+                                    p='0 0 0 10px'
+                                    variant='flushed'
+                                    name='password'
+                                    type='password'
+                                    placeholder='Password'
+                                    required
+                                    value={formData.password}
+                                    onChange={(e) => { handleFormEdit(e, 'password') }}
+                                />
+                            <Stack w='100%' fontSize='xs' gap='0' justify='flex-start' >
+                                <Alert
+                                    p='0'
+                                    bg='transparent'
+                                    color={caract ? '#2F855A' : '#C53030'}
+                                    status={caract ? 'success' : 'error'}
+                                >
+                                    <AlertIcon w='13px' />
+                                    Minímo 10 caracteres
+                                </Alert>
+                                <Alert
+                                    p='0'
+                                    bg='transparent'
+                                    color={maius ? '#2F855A' : '#C53030'}
+                                    status={maius ? 'success' : 'error'}
+                                >
+                                    <AlertIcon w='13px' />
+                                    Minímo 1 maiúscula
+                                </Alert>
+                                <Alert
+                                    p='0'
+                                    bg='transparent'
+                                    color={num ? '#2F855A' : '#C53030'}
+                                    status={minus ? 'success' : 'error'}
+                                >
+                                    <AlertIcon w='13px' />
+                                    Minímo 1 minúscula
+                                </Alert>
+                                <Alert
+                                    p='0'
+                                    bg='transparent'
+                                    color={num ? '#2F855A' : '#C53030'}
+                                    status={num ? 'success' : 'error'}
+                                >
+                                    <AlertIcon w='13px' />
+                                    Minímo 1 número
+                                </Alert>
+                                <Alert
+                                    p='0'
+                                    bg='transparent'
+                                    color={esp ? '#2F855A' : '#C53030'}
+                                    status={esp ? 'success' : 'error'}
+                                >
+                                    <AlertIcon w='13px' />
+                                    Minímo 1 caracter especial
+                                </Alert>
+                            </Stack>
+                            </GridItem>
 
-                                <FormControl>
-                                    <FormLabel color='#003366' paddingBottom='5px' >Setor</FormLabel>
-                                    <Input
-                                        p='0 0 0 10px'
-                                        variant='flushed'
-                                        bottom='15px'
-                                        name='setor'
-                                        type='text'
-                                        placeholder='Setor'
-                                        required
-                                        value={formData.setor}
-                                        onChange={(e) => { handleFormEdit(e, 'setor') }}
-                                    />
-                                </FormControl>
+                            {/* Campo Setor */}
+                            <FormControl>
+                                <FormLabel color='#003366' paddingBottom='5px'>Setor</FormLabel>
+                                <Input
+                                    p='0 0 0 10px'
+                                    variant='flushed'
+                                    name='setor'
+                                    type='text'
+                                    placeholder='Setor'
+                                    required
+                                    value={formData.setor}
+                                    onChange={(e) => { handleFormEdit(e, 'setor') }}
+                                />
+                            </FormControl>
 
-                                <Stack w='190px' gap='0' justify='flex-end' paddingTop='50px' h='30px' fontSize='12px'  >
-                                    <Alert p='8px' bg='transparent' color={caract ? '#2F855A' : '#C53030'} status={caract ? 'success' : 'error'}>
-                                        <AlertIcon w='13px' />
-                                        Minímo 10 caracteres
-                                    </Alert>
-                                    <Alert p='8px' bg='transparent' color={maius ? '#2F855A' : '#C53030'} status={maius ? 'success' : 'error'}>
-                                        <AlertIcon w='13px' />
-                                        Minímo 1 maiúcula
-                                    </Alert>
-                                    <Alert p='8px' bg='transparent' color={minus ? '#2F855A' : '#C53030'} status={minus ? 'success' : 'error'}>
-                                        <AlertIcon w='13px' />
-                                        Minímo 1 minúscula
-                                    </Alert>
-                                    <Alert p='8px' bg='transparent' color={num ? '#2F855A' : '#C53030'} status={num ? 'success' : 'error'}>
-                                        <AlertIcon w='13px' />
-                                        Minímo 1 número
-                                    </Alert>
-                                    <Alert p='8px' bg='transparent' color={esp ? '#2F855A' : '#C53030'} status={esp ? 'success' : 'error'}>
-                                        <AlertIcon w='13px' />
-                                        Minímo 1 caracter especial
-                                    </Alert>
-                                </Stack>
+                            {/* Stack de mensagens de validação */}
 
-                            </Grid>
+                        </Grid>
 
-                            <Button
-                                // w='100px'
-                                // top='20px'
-                                type='submit'
-                                bg='#6699CC'
-                                color='white'
-                                w='100%' h='48px'
-                                fontSize={20}
-                                borderRadius='4px'
-                                alignItems='center'
-                                justifyContent='center'
-                                fontWeight='500'
-                                _hover={{ bg: `#5c7da6`, color: `#FFF` }}
-
-                            >
-                                Sign up
-                            </Button>
-
-                        </FormGroup>
+                        {/* Botão de cadastro */}
+                        <Button
+                            type='submit'
+                            bg='#6699CC'
+                            color='white'
+                            w='100%'
+                            h='48px'
+                            borderRadius='4px'
+                            fontSize='lg'
+                            fontWeight='500'
+                            _hover={{ bg: `#5c7da6`, color: `#FFF` }}
+                        >
+                            Sign up
+                        </Button>
 
                     </form>
                 </Flex>
-            </Flex>
-
-
-
-        </VStack >
-
+            </VStack>
+        </>
     )
 }

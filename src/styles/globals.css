@@ -5,7 +5,10 @@
     src: url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
   }
   
-  
+  * {
+    background-color: #f0f0f0;
+  }
+
   html {
     font-family: "Roboto", sans-serif;
   }
