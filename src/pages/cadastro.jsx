@@ -185,7 +185,7 @@ export default function cadastro() {
                                     status={caract ? 'success' : 'error'}
                                 >
                                     <AlertIcon w='13px' />
-                                    Minímo 10 caracteres
+                                    Minímo 10 caracteres;
                                 </Alert>
                                 <Alert
                                     p='0'
@@ -194,7 +194,7 @@ export default function cadastro() {
                                     status={maius ? 'success' : 'error'}
                                 >
                                     <AlertIcon w='13px' />
-                                    Minímo 1 maiúscula
+                                    Minímo 1 maiúscula;
                                 </Alert>
                                 <Alert
                                     p='0'
@@ -203,7 +203,7 @@ export default function cadastro() {
                                     status={minus ? 'success' : 'error'}
                                 >
                                     <AlertIcon w='13px' />
-                                    Minímo 1 minúscula
+                                    Minímo 1 minúscula;
                                 </Alert>
                                 <Alert
                                     p='0'
@@ -212,7 +212,7 @@ export default function cadastro() {
                                     status={num ? 'success' : 'error'}
                                 >
                                     <AlertIcon w='13px' />
-                                    Minímo 1 número
+                                    Minímo 1 número;
                                 </Alert>
                                 <Alert
                                     p='0'
@@ -221,7 +221,7 @@ export default function cadastro() {
                                     status={esp ? 'success' : 'error'}
                                 >
                                     <AlertIcon w='13px' />
-                                    Minímo 1 caracter especial
+                                    Minímo 1 caracter especial;
                                 </Alert>
                             </Stack>
                             </GridItem>

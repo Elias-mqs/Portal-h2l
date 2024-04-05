@@ -25,5 +25,5 @@ export {
     HomePage,
     PageChamados,
     CaminhoHeader,
-    PageChamadosAndamento
+    PageChamadosAndamento,
 };
