@@ -38,46 +38,49 @@ import { useState, useRef } from "react"
 
 
 
-
+// Componente PainelLogin
 export default function PainelLogin() {
+    //Estados
 
-
-    const [show, setShow] = useState(false) ///// CONTROLE DE ESTADO BUTTON EYES
-    const [isLoading, setIsLoading] = useState(false); ///// CONTROLE DE ESTADO SPINNER LOADING
-    const [formulario, setFormulario] = useState({ ///// CONTROLE DE ESTADO FORMULARIO PARA RECEBER DADOS DO USER
+    const [show, setShow] = useState(false); // Estado para controlar visibilidade da senha
+    const [isLoading, setIsLoading] = useState(false); // Estado para controlar o estado de carregamento
+    const [formulario, setFormulario] = useState({ // Estado para armazenar dados do formulário
         username: '',
         password: ''
     })
 
-    const toast = useToast() ///// INSTANCIA PARA FEEDBACKS AO TENTAR LOGAR (CARDS SUCCESS/ERRROR)
-    const router = useRouter() ///// INSTANCIA PARA REDIRECIONAMENTO
+    // Hooks
+    const toast = useToast() // Hook para exibir notificações na tela
+    const router = useRouter() // Hook para manipular a navegação
 
-    const handleClickEyes = (e) => { ///// CONTROLE DO EYE PARA NÃO SUBMIT AO MUDAR O ESTADO
-        e.preventDefault(); //EVITA O SUBMIT AO CLICAR
+    // Função para alternar a visibilidade da senha
+    const handleClickEyes = (e) => {
+        e.preventDefault();
         setShow(!show);
     };
 
-    const handleKeyDown = (event) => { //EVITA SUBMIT AO TECLAR ENTER NO EYES DO PASSWORD
+    // Impede o envio do formulário ao pressionar Enter
+    const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
         }
     };
 
-
-    /////////////////// CONST RESPONSAVEL POR MANIPULAR O EVENTO SUBMIT
+    // Função para lidar com o envio do formulário de login
     const handleLogin = async (e) => {
         e.preventDefault()
-        setIsLoading(true); // INICIA O SPINNER ANTES DA VALIDAÇÃO
+        setIsLoading(true);
 
-        if (isLoading) { // QUANTO ATIVO EVITA QUE O USUARIO EVIE O FORM NOVAMENTE ENQUANTO LOGIN EM ANDAMENTO
+        if (isLoading) {
             return;
         }
 
-        // TRY/CATCH VALIDAÇÃO DO USUARIO
+
         try {
             const result = await axios.post('/api/login', formulario)
             const token = result?.data?.token;
-
+            console.log(result)
+            console.log(token)
             localStorage.setItem('token', token);
             setFormulario({ username: ``, password: `` })
 
@@ -103,20 +106,27 @@ export default function PainelLogin() {
         } finally {
             setIsLoading(false);
         }
+        console.log(setFormulario)
+        console.log(handleLogin)
+
     }
 
-
+    // Função para lidar com a mudança nos campos de entrada do formulário
     const handleInputChange = (e) => {
-        // Cria uma cópia do estado atual usando spread operator
+
         let novosDados = { ...formulario };
 
-        // Atualiza o valor correspondente ao nome do campo do evento
+
         novosDados[e.target.name] = e.target.value
         if (e.target.name == 'username') {
-            novosDados.username = e.target.value.toLowerCase()
+            novosDados.username = e.target.value.toLowerCase().trim()
         }
 
-        // Define o novo estado com os dados atualizados
+        if (e.target.name == 'password') {
+            novosDados.password = e.target.value.trim()
+        }
+
+
         setFormulario(novosDados);
     }
 
@@ -139,7 +149,6 @@ export default function PainelLogin() {
 
     return (
 
-        //src/components/PainelLogin.jsx
         <Stack  >
             <VStack className={styles.painel} >
 
@@ -147,12 +156,12 @@ export default function PainelLogin() {
                     src='img/LOGO-H2L.png'
                     fit='cover'
                     boxSize='86px'
-                    w={{md:'210px'}}
+                    w={{ md: '210px' }}
                     p='0 10px'
                     transform='translate(0,40%)'
                 />
 
-                <form  onSubmit={handleLogin}>
+                <form onSubmit={handleLogin}>
                     <FormControl top='28%' >
                         <Stack spacing='35px' top='30px' left='12.5%'>
                             <Stack spacing='30px'>
@@ -212,7 +221,8 @@ export default function PainelLogin() {
                                     alignItems='center'
                                     justifyContent='center'
                                     fontWeight='550'
-                                    _hover={{ bg: `#5c7da6`, color: `#FFF` }}
+                                    _hover={{ bg: `#5c7da6`, color: `#FFF`, transform: `translateY(-1px)` }}
+                                    _active={{ transform: 'translateY(1px)' }}
                                     disabled={isLoading}
                                 >
                                     {isLoading ? (
