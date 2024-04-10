@@ -6,17 +6,11 @@ export default function HomePage() {
 
     return (
         <VStack>
-        <Flex>
-            <Button colorScheme='teal' size='lg' onClick={() => router.push('/login')}>
-                Login
-            </Button>
-        </Flex>
-
-        <Flex>
-            <Button colorScheme='teal' size='lg' onClick={() => router.push('/login')}>
-                Login
-            </Button>
-        </Flex>
+            <Flex>
+                <Button colorScheme='teal' size='lg' onClick={() => router.push('/login')}>
+                    Login
+                </Button>
+            </Flex>
         </VStack>
     );
 }

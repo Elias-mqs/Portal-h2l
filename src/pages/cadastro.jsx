@@ -20,6 +20,7 @@ export default function cadastro() {
         setor: '',
     });
 
+    // Refs para manter no campo quando der erro ao enviar o form
     // const campoRefs = {
     //     name: useRef(null),
     //     username: useRef(null),
@@ -206,7 +207,7 @@ export default function cadastro() {
 
                 {/* Grid com campos do form */}
                 <Grid
-                    templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', lg: 'repeat(2, 1fr)' }} ///// VER QUAL FICA MELHOR, ESSE OU O DE BAIXO
+                    templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', lg: 'repeat(2, 1fr)' }} 
                     w={{ base: '100%' }}
                     gap={8}
                 >

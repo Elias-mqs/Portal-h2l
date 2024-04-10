@@ -10,6 +10,7 @@ import PageChamados from './PageChamados';
 import HeaderHome from './HeaderHome';
 import CaminhoHeader from './CaminhoHeader';
 import PageChamadosAndamento from './PageChamadosAndamento';
+import HeaderTeste from './HeaderTeste';
 
 
 // Exporte os componentes diretamente
@@ -26,4 +27,5 @@ export {
     PageChamados,
     CaminhoHeader,
     PageChamadosAndamento,
+    HeaderTeste,
 };

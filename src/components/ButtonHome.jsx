@@ -17,6 +17,7 @@ export default function ButtonHome() {
 
     const stylesButtonOne = {
         background: 'linear-gradient(to bottom, #96C6F5, #EDF2FF)',
+        transform: 'scale(1.05)',
         width: '220px',
         height: '50px',
         display: 'flex',
