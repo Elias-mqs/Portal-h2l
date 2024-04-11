@@ -17,15 +17,15 @@ export default function HeaderHome() {
     const toggleSidebar = () => { setIsOpen(!isOpen); };
 
     return (
-        <Flex bg='transparent' w='100%' justify='space-between' spacing={10} >
-            <Stack w={isOpen ? '200px' : '50px'} h='100%' pb='32px' > //transition='transform 1s linear' aqui
-                <SideBar isOpen={isOpen} toggle={toggleSidebar} />
+        <Flex bg='transparent' justify='space-between' spacing={10}  >
+            <Stack >
+                <SideBar isOpen={isOpen} maxW={isOpen ? '200px' : '50px'} transition='max-width .5s ease' toggle={toggleSidebar} /> {/* w={isOpen ? '200px' : '50px'} */}
             </Stack>
-            <Stack w='100%' >
-                <Flex h='35px' alignItems='flex-start' justifyContent='space-between' >
+            <Stack w={isOpen ? 'calc(100% - 200px)' : '95%'} transition='width .5s ease'>  {/* w={isOpen ? 'calc(100% - 200px)' : '95%'} transition='width .5s ease' */}
+                <Flex w='100%' h='35px' alignItems='flex-start' justifyContent='space-between' >
                     <Box color='#7B809A' >
                         <CaminhoHeader />
-                        <IconButton aria-label="Toggle Sidebar" bg='transparent' w='20px' icon={<MdMenu />} onClick={toggleSidebar} color='#7B809A' />
+                        <IconButton aria-label="Toggle Sidebar" bg='transparent' _hover={{ bg: '' }} borderRadius='20px' w='20px' icon={<MdMenu />} onClick={toggleSidebar} color='#7B809A' />
                     </Box>
 
                     <Box display='flex' w='90px' p='0 30px 0 0' justifyContent='space-between' color='#7B809A' >
