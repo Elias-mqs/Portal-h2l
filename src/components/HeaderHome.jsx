@@ -1,31 +1,61 @@
 
 // primeiro código
-import { Flex, Box, Text, VStack, IconButton, Stack, HStack, Spacer } from '@chakra-ui/react'
-import { MdMenu } from "react-icons/md"
+import { Flex, Box, Text, VStack, IconButton, Stack, HStack, Button, Spacer } from '@chakra-ui/react'
+import { MdMenu, MdOutlineHome, MdOutlineSettings, MdNotifications } from "react-icons/md"
 import { SideBar } from '.'
-import CaminhoHeader from './CaminhoHeader'
-import SettingsIcon from '@mui/icons-material/Settings'
-import NotificationsIcon from '@mui/icons-material/Notifications'
 import { useState } from 'react'
+import { useRouter } from 'next/router'
 
-
-// estou tentando sincronizar o width do header e da sidebar
 
 export default function HeaderHome() {
 
     const [isOpen, setIsOpen] = useState(true);
     const toggleSidebar = () => { setIsOpen(!isOpen); };
+    const router = useRouter();
 
     return (
-        <Flex bg='transparent' justify='space-between' spacing={10}  >
-            <Stack >
-                <SideBar isOpen={isOpen} maxW={isOpen ? '200px' : '50px'} transition='max-width .5s ease' toggle={toggleSidebar} /> {/* w={isOpen ? '200px' : '50px'} */}
+        <Flex justify='space-between' h='100%' >
+
+            <Box>
+                <SideBar isOpen={isOpen} maxW={isOpen ? '200px' : '50px'} transition='all .3s linear' toggle={toggleSidebar} />
+            </Box>
+
+            <Stack w={isOpen ? 'calc(100% - 200px)' : 'calc(100% - 50px)'} h='100%' transition='width .3s linear' p='0 10px' >
+
+                <VStack  h='100%' align='start' bg='#FFF' borderBottom='2px solid rgb(123, 128, 154, 0.4)'>
+                    <HStack justify='space-between' w='100%' h='50%'>
+
+                        <VStack align='start'>
+                            <Flex align='center' >
+                                <IconButton aria-label='btnIconHome' bg='transparent' borderRadius='20px' mt='1px' icon={<MdOutlineHome size={22} />} _hover={{ bg: 'transparent' }} onClick={() => router.push('/')} color='#7B809A' />
+                                <Text color='#7B809A' cursor='default'>/</Text>
+                                <Button bg='transparent' p='0' ml='12px' color='#7B809A' _hover={{ bg: 'transparent' }}>Home</Button>
+                            </Flex>
+                        </VStack>
+                        <HStack align='start' wrap='wrap' >
+                            <IconButton bg='transparent' icon={<MdOutlineSettings size={22} />} borderRadius='20px' color='#7B809A' />
+                            <IconButton bg='transparent' icon={<MdNotifications size={22} />} borderRadius='20px' color='#7B809A' />
+                        </HStack>
+
+                    </HStack>
+                    <Flex align='center' objectFit={'cover'} justify='space-between' h='50%' w='30%' >
+                        <IconButton aria-label="Toggle Sidebar" bg='transparent' borderRadius='20px' icon={<MdMenu />} onClick={toggleSidebar} color='#7B809A' />
+                        <Text color='#004B96' borderBottom='1px solid #004B96'>Home</Text>
+                    </Flex>
+                </VStack>
+
+
+
+
             </Stack>
-            <Stack w={isOpen ? 'calc(100% - 200px)' : '95%'} transition='width .5s ease'>  {/* w={isOpen ? 'calc(100% - 200px)' : '95%'} transition='width .5s ease' */}
-                <Flex w='100%' h='35px' alignItems='flex-start' justifyContent='space-between' >
+        </Flex >
+    )
+}
+
+{/*             <Flex w='100%' h='35px' alignItems='flex-start' justifyContent='space-between' >
                     <Box color='#7B809A' >
                         <CaminhoHeader />
-                        <IconButton aria-label="Toggle Sidebar" bg='transparent' _hover={{ bg: '' }} borderRadius='20px' w='20px' icon={<MdMenu />} onClick={toggleSidebar} color='#7B809A' />
+                        <IconButton aria-label="Toggle Sidebar" bg='transparent'  borderRadius='20px' w={5} icon={<MdMenu />} onClick={toggleSidebar} color='#7B809A' />
                     </Box>
 
                     <Box display='flex' w='90px' p='0 30px 0 0' justifyContent='space-between' color='#7B809A' >
@@ -38,8 +68,4 @@ export default function HeaderHome() {
                     <Text marginLeft='95px' p='0 30px' color='#004B96' borderBottom='1px solid #004B96' fontWeight='500' position='relative' bottom='-1px' zIndex='1' >
                         Home
                     </Text>
-                </Flex>
-            </Stack>
-        </Flex >
-    )
-}
+                </Flex> */}

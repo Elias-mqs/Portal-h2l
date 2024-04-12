@@ -1,4 +1,3 @@
-import ButtonHamburger from './ButtonHamburger';
 import HeaderChamados from './HeaderChamados';
 import ContainerMain from './ContainerMain';
 import PainelLogin from './PainelLogin';
@@ -11,11 +10,11 @@ import HeaderHome from './HeaderHome';
 import CaminhoHeader from './CaminhoHeader';
 import PageChamadosAndamento from './PageChamadosAndamento';
 import HeaderTeste from './HeaderTeste';
+import ButtonSidebar from './ButtonSidebar'
 
 
 // Exporte os componentes diretamente
 export {
-    ButtonHamburger,
     HeaderChamados,
     HeaderHome,
     ContainerMain,
@@ -28,4 +27,5 @@ export {
     CaminhoHeader,
     PageChamadosAndamento,
     HeaderTeste,
+    ButtonSidebar,
 };

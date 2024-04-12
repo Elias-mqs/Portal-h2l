@@ -1,5 +1,5 @@
 import { HStack, VStack, Flex } from "@chakra-ui/react";
-import { SideBar, PageChamados, HeaderChamados } from "@/components";
+import { SideBar, PageChamados, HeaderHome } from "@/components";
 import styles from "@/styles/Home.module.css";
 
 
@@ -8,7 +8,7 @@ export default function chamados() {
         <HStack w="full" h="100vh" bg="#F0F2F5" padding='32px 32px 0 32px'>
             <SideBar />
             <VStack w='100%' h='100%'>
-                <HeaderChamados>
+                <HeaderHome>
                     <Flex
                         as="main"
                         w='100%'
@@ -21,7 +21,7 @@ export default function chamados() {
                     >
                         <PageChamados/>
                     </Flex>
-                </HeaderChamados>
+                </HeaderHome>
             </VStack>
         </HStack>
     )

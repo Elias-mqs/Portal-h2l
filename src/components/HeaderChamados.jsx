@@ -21,13 +21,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications'
 
 export default function HeaderChamados({ children, onSubmit }) {
     return (
-        <VStack
-            bg='transparent'
-            w='100%'
-            h='100px'
-            paddingTop='10px'
-            align='stretch'
-        >
+        <VStack bg='transparent' w='100%' h='100px' paddingTop='10px' align='stretch'        >
             <Flex
                 h='35px'
                 alignItems='flex-start'
