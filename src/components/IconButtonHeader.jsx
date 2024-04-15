@@ -15,5 +15,4 @@ function IconButtonHeader ({ ariaLabel, icon, onClick }) {
     )
 }
 
-
-export default IconButtonHeader
+export default IconButtonHeader;

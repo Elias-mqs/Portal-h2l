@@ -1,19 +1,26 @@
 
-import { Button, Box, Icon, Text } from '@chakra-ui/react'
+import { Button, Box, Icon, Text, Flex } from '@chakra-ui/react'
 
 function ButtonSidebar({ btnIcon, btnText, isOpen, btnTransition }) {
+
+    const iconBox = { base: '40px', md: isOpen ? '40px' : '30px' }
+
     return (
         <Box>
-            <Button w={'100%'} maxWidth={isOpen ? '100%' : '45px'}  borderRadius={'4rem'} bg='transparent' transition={btnTransition} h='50px' gap={2} >
-                <Icon width={isOpen ? '40px' : '30px'} height={isOpen ? '40px' : '30px'} transition={'width .5s ease, height .5s ease'} ml={isOpen ? '0' : '.5rem'}>
-                    {btnIcon}
-                </Icon>
+            <Button w={'100%'} h={'100%'} maxW={isOpen ? '100%' : '45px'} borderRadius={'4rem'} bg='transparent' transition={btnTransition} gap={2} >
 
-                <Box style={{ maxWidth: isOpen ? '100%' : 0, overflow: 'hidden', transition: 'max-width .5s ease' }}>
-                    <Text>
-                        {btnText}
-                    </Text>
+                <Box>
+                    <Icon w={iconBox} h={iconBox} transition={btnTransition} ml={isOpen ? '0' : '.5rem'} >
+                        {btnIcon}
+                    </Icon>
                 </Box>
+                <Flex overflow={'hidden'}>
+                    <Box >
+                        <Text >
+                            {btnText}
+                        </Text>
+                    </Box>
+                </Flex>
             </Button>
         </Box>
     )

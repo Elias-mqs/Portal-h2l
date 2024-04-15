@@ -149,8 +149,8 @@ export default function PainelLogin() {
 
     return (
 
-        <Stack  >
-            <VStack className={styles.painel} >
+        <Stack >
+            <VStack className={styles.painel} overflow='auto'>
 
                 <Image
                     src='img/LOGO-H2L.png'

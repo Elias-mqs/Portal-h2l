@@ -6,17 +6,18 @@ import MenuChamados from './MenuChamados';
 import MenuPedidos from './MenuPedidos';
 import HomePage from './HomePage';
 import PageChamados from './PageChamados';
-import HeaderHome from './HeaderHome';
-import CaminhoHeader from './CaminhoHeader';
+import Header from './Header';
 import PageChamadosAndamento from './PageChamadosAndamento';
 import HeaderTeste from './HeaderTeste';
-import ButtonSidebar from './ButtonSidebar'
+import ButtonSidebar from './ButtonSidebar';
+import NavBar from './NavBar'
+import IconButtonHeader from './IconButtonHeader'
 
 
 // Exporte os componentes diretamente
 export {
     HeaderChamados,
-    HeaderHome,
+    Header,
     ContainerMain,
     PainelLogin,
     SideBar,
@@ -24,8 +25,9 @@ export {
     MenuPedidos,
     HomePage,
     PageChamados,
-    CaminhoHeader,
     PageChamadosAndamento,
     HeaderTeste,
     ButtonSidebar,
+    NavBar,
+    IconButtonHeader,
 };

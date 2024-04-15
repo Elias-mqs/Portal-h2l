@@ -1,6 +1,7 @@
 .bgLogin {
     background-image: url('../../public/img/bgLogin.jpg');
     background-size: cover;
+    position: fixed;
     background-position: center;
     display: flex;
     align-items: center;
