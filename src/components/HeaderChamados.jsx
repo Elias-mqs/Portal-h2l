@@ -13,8 +13,8 @@ import {
     TabPanel,
     TabIndicator
 } from '@chakra-ui/react'
-import { ButtonHamburger, PageChamadosAndamento } from '.'
-import { CaminhoHeader, PageChamados } from '.'
+import { PageChamadosAndamento } from '.'
+import { PageChamados } from '.'
 import SettingsIcon from '@mui/icons-material/Settings'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 
@@ -28,8 +28,6 @@ export default function HeaderChamados({ children, onSubmit }) {
                 justifyContent='space-between'
             >
                 <Box color='#7B809A'>
-                    <CaminhoHeader />
-                    <ButtonHamburger />
                 </Box>
                 <Box
                     display='flex'
