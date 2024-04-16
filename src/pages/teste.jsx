@@ -1,13 +1,14 @@
+import { Stack, HStack, VStack, Flex, Container, Box } from "@chakra-ui/react";
+import PageChamadosTeste from "@/components/PageChamadosTeste";
 
-import { Stack, Box } from "@chakra-ui/react"
-import Header from '../components/HeaderTeste'
 
-export default function Login() {
-
+export default function chamados() {
+    
     return (
-        <Stack w="full" h="100vh" bg="#F0F2F5" padding='32px 32px 10px 32px'>
-            <Header/>
-            <Box>teste</Box>
+        <Stack bg='#FFF' w='100%' maxW={'100%'} transition='max-width 1s linear' overflow='auto' p='30px' >
+            <PageChamadosTeste/>
         </Stack>
+        
     )
 }
+

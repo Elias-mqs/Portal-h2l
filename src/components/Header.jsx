@@ -4,20 +4,20 @@ import { MdMenu } from "react-icons/md"
 import { SideBar, NavBar } from '.'
 import { useRouter } from 'next/router'
 
-export default function Header({isOpen, toggleSidebar}) {
+export default function Header({ isOpen, toggleSidebar }) {
 
     const router = useRouter();
     const transition = 'all .4s linear';
-
+    const maxWSide = isOpen ? '170px' : '50px';
 
     return (
         <Flex justify='space-between' transition={transition} direction={{ base: 'column', md: 'row' }} >
 
             <Box transition={transition} >
-                <SideBar alt='Sidebar' isOpen={isOpen} transition={transition} toggle={toggleSidebar} />
+                <SideBar alt='Sidebar' maxW={{ base: '100%', md: maxWSide }} isOpen={isOpen} transition={transition} toggle={toggleSidebar} />
             </Box>
 
-            <Stack alt='NavBar' w={{ base: '100%', md: `calc(100% - ${isOpen ? '200px' : '50px'})` }} transition={transition} pl={{ base: '0', md: '10px' }} >
+            <Stack alt='NavBar' w={{ base: '100%', md: `calc(100% - ${maxWSide})` }} transition={transition} pl={{ base: '0', md: '10px' }} >
 
                 <NavBar router={() => { router.push('/') }} roadPage={'Home'} onClickToggle={toggleSidebar} iconToggle={<MdMenu />} navTab={'Home'} />
 

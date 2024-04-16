@@ -121,7 +121,6 @@ export default function PainelLogin() {
         if (e.target.name == 'username') {
             novosDados.username = e.target.value.toLowerCase().trim()
         }
-
         if (e.target.name == 'password') {
             novosDados.password = e.target.value.trim()
         }
@@ -152,14 +151,7 @@ export default function PainelLogin() {
         <Stack >
             <VStack className={styles.painel} overflow='auto'>
 
-                <Image
-                    src='img/LOGO-H2L.png'
-                    fit='cover'
-                    boxSize='86px'
-                    w={{ md: '210px' }}
-                    p='0 10px'
-                    transform='translate(0,40%)'
-                />
+                <Image src='img/LOGO-H2L.png' fit='cover' boxSize='86px' w={{ md: '210px' }} p='0 10px' transform='translate(0,40%)' />
 
                 <form onSubmit={handleLogin}>
                     <FormControl top='28%' >
@@ -213,29 +205,17 @@ export default function PainelLogin() {
                             <VStack spacing={3}>
                                 <Button
                                     type='submit'
-                                    bg='#6699CC'
-                                    color='white'
-                                    w='100%' h='48px'
+                                    bg='#6699CC' color='#FFF'
+                                    w='100%' h={12}
                                     fontSize={20}
-                                    borderRadius='4px'
-                                    alignItems='center'
-                                    justifyContent='center'
-                                    fontWeight='550'
                                     _hover={{ bg: `#5c7da6`, color: `#FFF`, transform: `translateY(-1px)` }}
                                     _active={{ transform: 'translateY(1px)' }}
                                     disabled={isLoading}
                                 >
-                                    {isLoading ? (
-                                        <Spinner
-                                            thickness='3px'
-                                            speed="0.65s"
-                                            color="white"
-                                            size="md"
-                                            position="absolute"
-                                        />
-                                    ) : (
-                                        'Entrar'
-                                    )}
+                                    {isLoading ?
+                                        (<Spinner thickness='3px' speed="0.65s" color="white" size="md" position="absolute" />)
+                                        :
+                                        ('Entrar')}
                                 </Button>
                             </VStack>
                         </Stack>
