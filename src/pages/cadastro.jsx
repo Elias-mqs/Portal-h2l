@@ -1,12 +1,8 @@
 import { Button, Grid, FormLabel, Input, VStack, useToast, GridItem, Alert, AlertIcon, FormControl, Stack, Box } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import api from '../utils/api'
 
 export default function cadastro() {
-
-    // Roteador para navegação
-    const router = useRouter();
 
     // Toast para exibir mensagens na interface
     const toast = useToast();
@@ -20,22 +16,13 @@ export default function cadastro() {
         setor: '',
     });
 
-    // Refs para manter no campo quando der erro ao enviar o form
-    // const campoRefs = {
-    //     name: useRef(null),
-    //     username: useRef(null),
-    //     email: useRef(null),
-    //     password: useRef(null),
-    //     setor: useRef(null)
-    // };
-
     // Estado para armazenar erros relacionados à senha
     const [passwordError, setPasswordError] = useState('');
 
     // Função para manipular a edição de campos do formulário
     const handleFormEdit = (event, name) => {
         let value = event.target.value;
-    
+
         // Normaliza o valor do campo username para letras minúsculas e remove espaços em branco
         if (name === 'username') {
             value = value.toLowerCase().trim();
@@ -44,7 +31,7 @@ export default function cadastro() {
         if (name === 'password') {
             value = value.trim();
         }
-     
+
         setFormData({
             ...formData,
             [name]: value
@@ -207,7 +194,7 @@ export default function cadastro() {
 
                 {/* Grid com campos do form */}
                 <Grid
-                    templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', lg: 'repeat(2, 1fr)' }} 
+                    templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', lg: 'repeat(2, 1fr)' }}
                     w={{ base: '100%' }}
                     gap={8}
                 >

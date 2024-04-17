@@ -57,7 +57,7 @@ export default async function handler(req, res) {
             // vai informar o erro
         } catch (error) {
             console.log(error)
-            res.status(400).json({ message: 'não foi possivel autenticar' })
+            res.status(400).json({ message: 'Não foi possivel autenticar' })
             return
         }
 

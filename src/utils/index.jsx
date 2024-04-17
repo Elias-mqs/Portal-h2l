@@ -5,7 +5,6 @@ import { db } from './database';
 import dayjs from 'dayjs';
 
 
-
 ///////// GERAR TOKEN E DATA /////////
 export function generateToken() {
     return new Promise((resolve, reject) => {
@@ -26,31 +25,28 @@ export function generateToken() {
 async function authenticate(token) {
     token = token.replace('Bearer ', '')
     const now = dayjs().unix()
-    return await db
+    const user = await db
         .selectFrom('usuarios')
-        .select(['usr_id', 'nome', 'username'])
+        .select(['usr_id', 'nome', 'username', 'createdAt'])
         .where('token', '=', token)
         .where('prazo', '>', now)
         .executeTakeFirst()
+
+    if (user && validateToken(user.createdAt)) {
+        return user;
+    } else {
+        throw new Error('Token inválido ou expirado');
+    }
 }
 
-
-
-
-
-///////// VALIDADE TOKEN ///////// PRECISA TERMINAR***
-const TOKEN_EXPIRATION_TIME = 60 * 1000; // 1 minuto em milissegundos
+///////// VALIDADE TOKEN /////////
+const TOKEN_EXPIRATION_TIME = 60; // 1 minuto em segundos
 
 export function validateToken(createdAt) {
-    const currentTime = Date.now();
+    const currentTime = dayjs().unix();
     const elapsedTime = currentTime - createdAt;
     return elapsedTime > TOKEN_EXPIRATION_TIME;
 }
-
-
-
-
-
 
 
 export { authenticate }

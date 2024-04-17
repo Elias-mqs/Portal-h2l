@@ -1,6 +1,6 @@
 //src/pages/_app.jsx
 import { Header } from "@/components";
-import { ChakraProvider, Stack, Box, Flex, HStack, Container } from "@chakra-ui/react";
+import { ChakraProvider, Stack, Box, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 

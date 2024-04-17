@@ -35,6 +35,7 @@ import { IconLock, IconEyeClosed, IconEye } from '@tabler/icons-react';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import { useRouter } from 'next/router'
 import { useState, useRef } from "react"
+import api from '../utils/api'
 
 
 
@@ -77,10 +78,8 @@ export default function PainelLogin() {
 
 
         try {
-            const result = await axios.post('/api/login', formulario)
+            const result = await api.post('login', formulario)
             const token = result?.data?.token;
-            console.log(result)
-            console.log(token)
             localStorage.setItem('token', token);
             setFormulario({ username: ``, password: `` })
 
@@ -106,16 +105,12 @@ export default function PainelLogin() {
         } finally {
             setIsLoading(false);
         }
-        console.log(setFormulario)
-        console.log(handleLogin)
-
     }
 
     // Função para lidar com a mudança nos campos de entrada do formulário
     const handleInputChange = (e) => {
 
         let novosDados = { ...formulario };
-
 
         novosDados[e.target.name] = e.target.value
         if (e.target.name == 'username') {
@@ -124,7 +119,6 @@ export default function PainelLogin() {
         if (e.target.name == 'password') {
             novosDados.password = e.target.value.trim()
         }
-
 
         setFormulario(novosDados);
     }
