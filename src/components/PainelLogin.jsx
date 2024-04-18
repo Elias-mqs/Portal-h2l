@@ -4,7 +4,6 @@ import {
     Button,
     Stack,
     VStack,
-    Container,
     Text,
     Image,
     FormControl,
@@ -25,18 +24,13 @@ import {
     InputRightElement,
     InputGroup,
 
-
-
-
 } from "@chakra-ui/react"
 import styles from '../styles/PainelLogin.module.css'
-import axios from "axios"
 import { IconLock, IconEyeClosed, IconEye } from '@tabler/icons-react';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import { useRouter } from 'next/router'
 import { useState, useRef } from "react"
 import api from '../utils/api'
-
 
 
 // Componente PainelLogin

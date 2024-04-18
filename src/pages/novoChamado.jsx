@@ -1,8 +1,9 @@
+
 import { Stack } from "@chakra-ui/react";
 import PageChamadosTeste from "@/components/PageChamadosTeste";
 
 
-export default function chamados() {
+export default function novo() {
     
     return (
         <Stack aria-label='container-main' bg='#FFF' w='100%' maxW={'100%'} h={'auto'} transition='max-width 1s linear' p='30px' 

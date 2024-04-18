@@ -8,6 +8,14 @@ export default async function handler(req, res) {
 
         try {
 
+            const busca = await db.selectFrom('chamados')
+                .select(['contador_pb', 'contador_cor'])
+                .where('serie', '=', serial)
+                .executeTakeFirst()
+
+            if (busca.contador_pb >= countPb && busca.contador_cor >= countCor) {
+                return res.status(409).json({ message: 'Chamado já registrado para esse contador' })
+            } else if(busca.contador)
             // db.insertInto('chamados')
             //     .values({
             //         serie: serial,

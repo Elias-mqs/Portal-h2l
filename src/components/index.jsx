@@ -12,6 +12,7 @@ import HeaderTeste from './HeaderTeste';
 import ButtonSidebar from './ButtonSidebar';
 import NavBar from './NavBar'
 import IconButtonHeader from './IconButtonHeader'
+import NavigationTabs from './NavigationTabs'
 
 
 // Exporte os componentes diretamente
@@ -30,4 +31,5 @@ export {
     ButtonSidebar,
     NavBar,
     IconButtonHeader,
+    NavigationTabs,
 };

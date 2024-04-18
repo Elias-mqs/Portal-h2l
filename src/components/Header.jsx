@@ -2,18 +2,11 @@
 import { Flex, Box, Stack } from '@chakra-ui/react'
 import { MdMenu } from "react-icons/md"
 import { SideBar, NavBar } from '.'
-import { useRouter } from 'next/router'
 
-export default function Header({ isOpen, toggleSidebar, navTab }) {
+export default function Header({ isOpen, toggleSidebar, navTabs }) {
 
-    const router = useRouter();
     const transition = 'all .4s linear';
     const maxWSide = isOpen ? '170px' : '50px';
-
-    const navTabs = [
-        { label: 'Novo', route: '/teste' },
-        { label: 'Em andamento', route: '/chamadosEmAndamento' }
-    ];
 
     return (
         <Flex justify='space-between' transition={transition} direction={{ base: 'column', md: 'row' }} >
@@ -23,9 +16,7 @@ export default function Header({ isOpen, toggleSidebar, navTab }) {
             </Box>
 
             <Stack alt='NavBar' w={{ base: '100%', md: `calc(100% - ${maxWSide})` }} transition={transition} pl={{ base: '0', md: '10px' }} >
-
                 <NavBar onClickToggle={toggleSidebar} iconToggle={<MdMenu />} navTabs={navTabs} />
-
             </Stack>
         </Flex >
     )

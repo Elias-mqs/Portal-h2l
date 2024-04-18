@@ -3,14 +3,22 @@
 import { Box, Image, Stack, Flex, VStack } from "@chakra-ui/react";
 import SupportAgentOutlinedIcon from '@mui/icons-material/SupportAgentOutlined';
 import { ButtonSidebar } from ".";
+import { useRouter } from "next/router";
 
 
 
 const SideBar = ({ isOpen, transition, maxW }) => {
 
+    const router = useRouter()
+
     const maxHeight = isOpen ? '600px' : '0px';
     const mdImgWidth = isOpen ? '200px' : '0px';
 
+    const navButtons = [
+        { route: '/', label: 'Pagina inicial', icon: <SupportAgentOutlinedIcon /> },
+        { route: '/novoChamado', label: 'Chamados', icon: <SupportAgentOutlinedIcon /> },
+        { route: '/pedidos', label: 'Pedidos', icon: <SupportAgentOutlinedIcon /> },
+    ];
 
     return (
 
@@ -35,9 +43,17 @@ const SideBar = ({ isOpen, transition, maxW }) => {
                 </Box>
 
                 <Box align='center' >
-                    <ButtonSidebar isOpen={isOpen} m={'10px 0 0 0'} btnText='Pagina inicial' btnIcon={<SupportAgentOutlinedIcon />} />
-                    <ButtonSidebar isOpen={isOpen} m={'10px 0 0 0'} btnText='Chamados' btnIcon={<SupportAgentOutlinedIcon />} />
-                    <ButtonSidebar isOpen={isOpen} m={'10px 0 10px 0'} btnText='Pedidos' btnIcon={<SupportAgentOutlinedIcon />} />
+                    {navButtons.map((button, index) => (
+                        <ButtonSidebar
+                            key={index}
+                            isOpen={isOpen}
+                            m={'10px 0 0 0'}
+                            btnText={button.label}
+                            isActive={router.pathname === button.route}
+                            onClick={() => router.push(button.route)}
+                            btnIcon={button.icon}
+                        />
+                    ))}
                 </Box>
 
             </Stack>

@@ -55,7 +55,7 @@ function PageChamadosTeste() {
 
     return (
         <Stack as='form' onSubmit={handleSave} gap={8} >
-            <Box h='auto' >
+            <Box >
                 <Grid aria-label='boxGrid' templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }} gap={8} >
                     <FormInput name={'serial'} value={formChamado.serial} variant={'filled'} border={'1px solid #C7CCD0'} label={'Nº de série do equipamento:'} placeholder={'Número de série'} onChange={handleSaveEdit} required={true} />
                     <FormInput name={'model'} value={formChamado.model} variant={'filled'} border={'1px solid #C7CCD0'} label={'Modelo do equipamento:'} placeholder={'Modelo'} onChange={handleSaveEdit} required={true} />
