@@ -24,24 +24,21 @@ const SideBar = ({ isOpen, transition, maxW }) => {
             position={{ base: 'sticky', md: 'fixed' }}
             bg='#EDF2FF'
             alignItems='center'
-            borderRadius={{base: '0', md: '1.5rem'}}
+            borderRadius={{ base: '0', md: '1.5rem' }}
             boxShadow={{ base: 'none', md: '0px 1px 4px 1px rgba(0, 0, 0, 0.2)' }}
         >
-            <Stack align='center' gap={{base: 0, md: isOpen ? 5 : 0}} >
+            <Stack aria-label='Itens-Sidebar' align='center' w='100%' gap={{ base: 0, md: isOpen ? 5 : 0 }} >
 
-                <Box align='center' h={{base: '0', md:'100%'}}>
-
-                    <Image w='60%'  m={isOpen ? '15px 0' : 0} maxW={{ base: '0', md: mdImgWidth }}
-                     maxH={{ base: '0', md: maxHeight }} transition={{base: 'all 0s linear', md: transition}} src='img/LOGO-H2L.png' alt='Logo' />
-
+                <Box align='center' h={{ base: '0', md: '100%' }}>
+                    <Image w='60%' m={isOpen ? '15px 0' : 0} maxW={{ base: '0', md: mdImgWidth }}
+                        maxH={{ base: '0', md: maxHeight }} transition={{ base: 'all 0s linear', md: transition }} src='img/LOGO-H2L.png' alt='Logo' />
                 </Box>
 
-               <Box align='center'>
+                <Box align='center' >
+                    <ButtonSidebar isOpen={isOpen} m={'10px 0 0 0'} btnText='Pagina inicial' btnIcon={<SupportAgentOutlinedIcon />} />
                     <ButtonSidebar isOpen={isOpen} m={'10px 0 0 0'} btnText='Chamados' btnIcon={<SupportAgentOutlinedIcon />} />
-                    <ButtonSidebar isOpen={isOpen} m={'10px 0 0 0'} btnText='Chamados' btnIcon={<SupportAgentOutlinedIcon />} />
-                    <ButtonSidebar isOpen={isOpen} m={'10px 0 10px 0'} btnText='Chamados' btnIcon={<SupportAgentOutlinedIcon />} />
-               </Box>
-               
+                    <ButtonSidebar isOpen={isOpen} m={'10px 0 10px 0'} btnText='Pedidos' btnIcon={<SupportAgentOutlinedIcon />} />
+                </Box>
 
             </Stack>
         </Stack >

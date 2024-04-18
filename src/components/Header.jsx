@@ -4,11 +4,16 @@ import { MdMenu } from "react-icons/md"
 import { SideBar, NavBar } from '.'
 import { useRouter } from 'next/router'
 
-export default function Header({ isOpen, toggleSidebar }) {
+export default function Header({ isOpen, toggleSidebar, navTab }) {
 
     const router = useRouter();
     const transition = 'all .4s linear';
     const maxWSide = isOpen ? '170px' : '50px';
+
+    const navTabs = [
+        { label: 'Novo', route: '/teste' },
+        { label: 'Em andamento', route: '/chamadosEmAndamento' }
+    ];
 
     return (
         <Flex justify='space-between' transition={transition} direction={{ base: 'column', md: 'row' }} >
@@ -19,7 +24,7 @@ export default function Header({ isOpen, toggleSidebar }) {
 
             <Stack alt='NavBar' w={{ base: '100%', md: `calc(100% - ${maxWSide})` }} transition={transition} pl={{ base: '0', md: '10px' }} >
 
-                <NavBar router={() => { router.push('/') }} roadPage={'Home'} onClickToggle={toggleSidebar} iconToggle={<MdMenu />} navTab={'Home'} />
+                <NavBar onClickToggle={toggleSidebar} iconToggle={<MdMenu />} navTabs={navTabs} />
 
             </Stack>
         </Flex >

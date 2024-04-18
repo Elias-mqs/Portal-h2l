@@ -17,12 +17,12 @@ export default function App({ Component, pageProps }) {
       {hideOnRoutes.includes(router.pathname) ? (
         <Component {...pageProps} />
       ) : (
-        <Flex w='100%' h='100vh' position={'fixed'} direction='column' bg='#F0F2F5' p={{ base: 0, md: '32px' }} >
+        <Flex w='100%' h='100%' position={'fixed'} direction='column' bg='#F0F2F5' p={{ base: 0, md: '32px' }} >
           <Box aria-label='container-header'>
-            <Header isOpen={isOpen} toggleSidebar={toggleHeader} />
+            <Header isOpen={isOpen} toggleSidebar={toggleHeader} navTab={'Chamados'} />
           </Box>
-          <Flex aria-label='container-page' justify={'flex-end'} flex='1' sx={{ '&::-webkit-scrollbar': { display: 'none', '-ms-overflow-style': 'none', } }} overflow='auto'  >
-            <Stack w={{ base: '100%', md: `calc(100% - ${isOpen ? '170px' : '50px'})` }} h='100%' p={{ base: '0', md: '5px 0 0 10px' }}  >
+          <Flex aria-label='container-page' justify={'flex-end'} flex='1' sx={{ '&::-webkit-scrollbar': { display: 'none', 'msOverflowStyle': 'none', } }} overflow='auto'  >
+            <Stack w={{ base: '100%', md: `calc(100% - ${isOpen ? '170px' : '50px'})` }} h='auto' p={{ base: '0', md: '2px 0 0 10px' }}  >
               <Component {...pageProps} />
             </Stack>
           </Flex>
