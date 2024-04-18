@@ -8,22 +8,22 @@ export default async function handler(req, res) {
 
         try {
 
-            db.insertInto('chamados')
-                .values({
-                    serie: serial,
-                    modelo: model,
-                    contador_pb: countPb,
-                    contador_cor: countCor,
-                    cliente: client,
-                    endereco: adress,
-                    horario_atendimento: officeHours,
-                    solicitante: requester,
-                    setor: sector,
-                    telefone: tel,
-                    ocorrencia: incident,
-                    descricao: description,
-                })
-                .execute();
+            // db.insertInto('chamados')
+            //     .values({
+            //         serie: serial,
+            //         modelo: model,
+            //         contador_pb: countPb,
+            //         contador_cor: countCor,
+            //         cliente: client,
+            //         endereco: adress,
+            //         horario_atendimento: officeHours,
+            //         solicitante: requester,
+            //         setor: sector,
+            //         telefone: tel,
+            //         ocorrencia: incident,
+            //         descricao: description,
+            //     })
+            //     .execute();
 
             return res.status(201).json({ message: 'Chamado aberto com sucesso' });
 
