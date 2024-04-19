@@ -40,9 +40,9 @@ async function authenticate(token) {
 }
 
 ///////// VALIDADE TOKEN /////////
-const TOKEN_EXPIRATION_TIME = 60; // 1 minuto em segundos
 
 export function validateToken(createdAt) {
+    const TOKEN_EXPIRATION_TIME = 60 * 60; // 1 hora em segundos
     const currentTime = dayjs().unix();
     const elapsedTime = currentTime - createdAt;
     return elapsedTime > TOKEN_EXPIRATION_TIME;

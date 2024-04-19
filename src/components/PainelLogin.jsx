@@ -96,6 +96,10 @@ export default function PainelLogin() {
                 duration: 2000,
                 isClosable: true,
             })
+
+            if (error?.response?.status === 401) {
+                router.push('/login');}
+
         } finally {
             setIsLoading(false);
         }

@@ -16,7 +16,7 @@ export default function Header({ isOpen, toggleSidebar, navTabs }) {
             </Box>
 
             <Stack alt='NavBar' w={{ base: '100%', md: `calc(100% - ${maxWSide})` }} transition={transition} pl={{ base: '0', md: '10px' }} >
-                <NavBar onClickToggle={toggleSidebar} iconToggle={<MdMenu />} navTabs={navTabs} />
+                <NavBar onClickToggle={toggleSidebar} iconToggle={<MdMenu size='24px' />} navTabs={navTabs} />
             </Stack>
         </Flex >
     )

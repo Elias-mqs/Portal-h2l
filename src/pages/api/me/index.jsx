@@ -5,6 +5,9 @@ import { authenticate } from "@/utils/index"
 
 export default async function me(req, res) {
     
+  if(req.method === 'GET'){
+    
+
     const token = req.headers.authorization;
     const usuario = await authenticate(token);
 
@@ -13,7 +16,10 @@ export default async function me(req, res) {
     }
     res.status(200).json(usuario)
 
+  }else{
+    res.status(405).json({ message: 'Método não permitido' });
   }
+}
 
  
   

@@ -4,6 +4,7 @@ import { Flex, Text, Input, Button, VStack } from "@chakra-ui/react";
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import api from '@/utils/api';
+import axios from 'axios'
 
 
 export default function users() {
@@ -13,7 +14,7 @@ export default function users() {
     useEffect(() => {
         async function buscarDados() {
             try {
-                const res = await api.get('me');
+                const res = await axios.get('me', dados);
                 setDados(res.data);
 
             } catch (error) {

@@ -1,9 +1,10 @@
-import { Box, Stack, Flex, Grid, GridItem, useToast } from '@chakra-ui/react'
+import { Box, Stack, Flex, Grid, useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/router';
-import { FormInput, FormTextarea } from './FormInputs';
+import { FormInput, FormTextarea, FormInputBtn } from './FormInputs';
 import { FormButtonSave, ButtonCancel } from './FormButton';
 import { useState } from 'react';
 import api from '../utils/api'
+import { MdSearch } from 'react-icons/md';
 // INICIAR CRIAÇÃO DE COMUNICAÇÃO ....handleSave, API...
 function PageChamadosTeste() {
 
@@ -53,27 +54,31 @@ function PageChamadosTeste() {
         }
     }
 
+
     return (
         <Stack as='form' onSubmit={handleSave} gap={8} >
             <Box >
-                <Grid aria-label='boxGrid' templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }} gap={8} >
-                    <FormInput name={'serial'} value={formChamado.serial} variant={'filled'} border={'1px solid #C7CCD0'} label={'Nº de série do equipamento:'} placeholder={'Número de série'} onChange={handleSaveEdit} required={true} />
-                    <FormInput name={'model'} value={formChamado.model} variant={'filled'} border={'1px solid #C7CCD0'} label={'Modelo do equipamento:'} placeholder={'Modelo'} onChange={handleSaveEdit} required={true} />
+                <Grid aria-label='boxGrid' justify='flex-end' templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }} gap={8} >
+                    <FormInputBtn name={'serial'} value={formChamado.serial} variant={'filled'} label={'Série do equipamento:'} placeholder={'Número de série'} onChange={handleSaveEdit} icon={<MdSearch size='24px' />} onClick={()=>router.push('/')} required={true}/>
+                    <FormInput name={'model'} value={formChamado.model} variant={'filled'} label={'Modelo:'} placeholder={'Modelo'} onChange={handleSaveEdit} pointerEvents={'none'} tabIndex={'-1'} />
+
                     <Flex align={'end'} gap={3}>
-                        <FormInput name={'countPb'} type='number' value={formChamado.countPb} w={'100%'} variant={'filled'} border={'1px solid #C7CCD0'} label={'Contador:'} placeholder={'P/B'} onChange={handleSaveEdit} required={true} />
-                        <FormInput name={'countCor'} type='number' value={formChamado.countCor} w={'100%'} variant={'filled'} border={'1px solid #C7CCD0'} placeholder={'COR'} onChange={handleSaveEdit} required={false} />
+                        <FormInput name={'countPb'} type='number' value={formChamado.countPb} w={'100%'} variant={'filled'} label={'Contador:'} placeholder={'P/B'} onChange={handleSaveEdit} required={true} />
+                        <FormInput name={'countCor'} type='number' value={formChamado.countCor} w={'100%'} variant={'filled'} placeholder={'COR'} onChange={handleSaveEdit} required={false} />
                     </Flex>
-                    <FormInput name={'client'} value={formChamado.client} variant={'filled'} border={'1px solid #C7CCD0'} label={'Cliente:'} placeholder={'Cliente'} onChange={handleSaveEdit} required={true} />
-                    <FormInput name={'adress'} value={formChamado.adress} variant={'filled'} border={'1px solid #C7CCD0'} label={'Endereço:'} placeholder={'Endereço'} onChange={handleSaveEdit} required={true} />
-                    <FormInput name={'officeHours'} value={formChamado.officeHours} variant={'filled'} border={'1px solid #C7CCD0'} label={'Horário de funcionamento:'} placeholder={'De 00:00 à 00:00 - seg à sex'} onChange={handleSaveEdit} required={true} />
-                    <FormInput name={'requester'} value={formChamado.requester} variant={'filled'} border={'1px solid #C7CCD0'} label={'Solicitante:'} placeholder={'Solicitante'} onChange={handleSaveEdit} required={true} />
-                    <FormInput name={'sector'} value={formChamado.sector} variant={'filled'} border={'1px solid #C7CCD0'} label={'Setor:'} placeholder={'Setor'} onChange={handleSaveEdit} required={true} />
-                    <FormInput name={'tel'} value={formChamado.tel} variant={'filled'} border={'1px solid #C7CCD0'} label={'Telefone:'} placeholder={'(XX) XXXXX-XXXX'} onChange={handleSaveEdit} required={true} />
-                    <FormInput name={'incident'} value={formChamado.incident} variant={'filled'} border={'1px solid #C7CCD0'} label={'Ocorrência:'} placeholder={'Ocorrência'} onChange={handleSaveEdit} required={true} />
+
+                    <FormInput name={'client'} value={formChamado.client} variant={'filled'} label={'Cliente:'} placeholder={'Cliente'} onChange={handleSaveEdit} pointerEvents={'none'} tabIndex={'-1'} />
+                    <FormInput name={'adress'} value={formChamado.adress} variant={'filled'} label={'Endereço:'} placeholder={'Endereço'} onChange={handleSaveEdit} pointerEvents={'none'} tabIndex={'-1'} />
+                    <FormInput name={'officeHours'} value={formChamado.officeHours} variant={'filled'} label={'Funcionamento:'} placeholder={'De 00:00 à 00:00 - seg à sex'} onChange={handleSaveEdit} pointerEvents={'none'} tabIndex={'-1'} />
+                    <FormInput name={'requester'} value={formChamado.requester} variant={'filled'} label={'Solicitante:'} placeholder={'Solicitante'} onChange={handleSaveEdit} />
+                    <FormInput name={'sector'} value={formChamado.sector} variant={'filled'} label={'Setor:'} placeholder={'Setor'} onChange={handleSaveEdit} pointerEvents={'none'} tabIndex={'-1'} />
+                    <FormInput name={'tel'} value={formChamado.tel} variant={'filled'} label={'Telefone:'} placeholder={'(XX) XXXXX-XXXX'} onChange={handleSaveEdit} pointerEvents={'none'} tabIndex={'-1'} />
+                    <FormInput name={'incident'} value={formChamado.incident} variant={'filled'} label={'Ocorrência:'} placeholder={'Ocorrência'} onChange={handleSaveEdit} required={true} />
+                    <FormInputBtn label={'teste'} placeholder={'testando'} variant={'filled'} />
                 </Grid>
             </Box>
             <Box pr={{ base: 0, lg: 8 }} >
-                <FormTextarea name={'description'} value={formChamado.description} w={{ base: '100%', lg: '50%' }} border={'1px solid #C7CCD0'} label={'Descrição:'} placeholder={'Digite aqui'} onChange={handleSaveEdit} required={true} />
+                <FormTextarea name={'description'} value={formChamado.description} w={{ base: '100%', lg: '50%' }} label={'Descrição:'} placeholder={'Digite aqui'} onChange={handleSaveEdit} required={true} />
             </Box>
 
             <Flex alignItems='center' justify='flex-end' gap={3}>

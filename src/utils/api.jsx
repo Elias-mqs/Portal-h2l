@@ -1,6 +1,7 @@
 
 //src/utils/api.js
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 
 const api = axios.create({
@@ -9,17 +10,17 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
-  
+
 
   if (token) {
     config.headers.authorization = `Bearer ${token}`;
   }
   return config;
 },
- function (error) {
-  console.error('Request interceptor error:', error);
-  return Promise.reject(error);
-}
+  function (error) {
+    console.error('Request interceptor error:', error);
+    return Promise.reject(error);
+  }
 );
 
 api.interceptors.response.use((response) => {
