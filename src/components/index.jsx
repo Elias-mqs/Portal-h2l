@@ -1,5 +1,5 @@
 import HeaderChamados from './HeaderChamados';
-import ContainerMain from './ContainerMain';
+import Container from './Container';
 import PainelLogin from './PainelLogin';
 import SideBar from './SideBar';
 import MenuChamados from './MenuChamados';
@@ -8,7 +8,6 @@ import HomePage from './HomePage';
 import PageChamados from './PageChamados';
 import Header from './Header';
 import PageChamadosAndamento from './PageChamadosAndamento';
-import HeaderTeste from './HeaderTeste';
 import ButtonSidebar from './ButtonSidebar';
 import NavBar from './NavBar'
 import IconButtonHeader from './IconButtonHeader'
@@ -19,7 +18,7 @@ import NavigationTabs from './NavigationTabs'
 export {
     HeaderChamados,
     Header,
-    ContainerMain,
+    Container,
     PainelLogin,
     SideBar,
     MenuChamados,
@@ -27,7 +26,6 @@ export {
     HomePage,
     PageChamados,
     PageChamadosAndamento,
-    HeaderTeste,
     ButtonSidebar,
     NavBar,
     IconButtonHeader,
