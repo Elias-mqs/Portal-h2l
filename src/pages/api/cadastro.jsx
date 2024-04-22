@@ -11,7 +11,7 @@ export default async function handler(req, res) {
 
         // Validar se foi inserido o usuario e/ou a senha
         if (!name || !username || !email || !setor || !password) {
-            return res.status(401).json({ message: 'Necessario informar todos os dados' })
+            return res.status(404).json({ message: 'Necessario informar todos os dados' })
         }
 
         // Criar as validações //

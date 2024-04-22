@@ -9,9 +9,12 @@ import PageChamados from './PageChamados';
 import Header from './Header';
 import PageChamadosAndamento from './PageChamadosAndamento';
 import ButtonSidebar from './ButtonSidebar';
-import NavBar from './NavBar'
-import IconButtonHeader from './IconButtonHeader'
-import NavigationTabs from './NavigationTabs'
+import NavBar from './NavBar';
+import IconButtonHeader from './IconButtonHeader';
+import NavigationTabs from './NavigationTabs';
+import { FormInput, FormTextarea, FormInputBtn } from './FormInputs';
+import { FormButtonSave, ButtonCancel } from './FormButton';
+import { Cadastro, ModalCadastro } from './Cadastro'
 
 
 // Exporte os componentes diretamente
@@ -30,4 +33,12 @@ export {
     NavBar,
     IconButtonHeader,
     NavigationTabs,
+    FormInput,
+    FormTextarea,
+    FormInputBtn,
+    FormButtonSave,
+    ButtonCancel,
+    Cadastro,
+    ModalCadastro,
+
 };

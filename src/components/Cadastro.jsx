@@ -1,9 +1,27 @@
-import { Button, Grid, FormLabel, Input, VStack, useToast, GridItem, Alert, AlertIcon, Stack, Box } from "@chakra-ui/react";
+import {
+    Button,
+    Grid,
+    useToast,
+    Alert,
+    AlertIcon,
+    Stack,
+    Box,
+    Flex,
+    Text,
+    useDisclosure,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalCloseButton,
+    ModalBody,
+    ModalFooter
+} from "@chakra-ui/react";
 import { FormInput } from '@/components'
 import { useState } from "react";
 import api from '../utils/api'
 
-export default function cadastro() {
+function Cadastro() {
 
     const toast = useToast();
 
@@ -112,20 +130,19 @@ export default function cadastro() {
     }
 
     return (
-        <Stack w='1000px' align='center'>
 
             <Stack
                 as='form'
                 onSubmit={handleForm}
-                w="100%"
-                maxW="500px"
+                w='100%'
                 bg="#EDF2FF"
                 borderRadius="10px"
                 boxShadow="0 0 10px rgba(0, 0, 0, 0.4)"
-                p={{ base: '35px 20px', sm: "50px 35px" }}
+                p={{ base: '0px 20px 35px 20px', sm: "0px 35px 50px 35px" }}
                 transition={{ base: 'max-width 0.3s ease' }}
             >
-
+                <Text p='30px 0 20px' fontSize='20px' fontWeight={600} >Cadastro</Text>
+                <ModalCloseButton />
                 <Grid gap={4}>
                     <FormInput name={'name'} value={formData.name} variant={'flushed'} label={'Name'} placeholder={'Nome'} onChange={handleFormEdit} required={true} />
                     <FormInput name={'email'} value={formData.email} type={'email'} variant={'flushed'} label={'Email'} placeholder={'Email'} onChange={handleFormEdit} required={true} />
@@ -148,6 +165,29 @@ export default function cadastro() {
                 </Button>
 
             </Stack>
-        </Stack>
     )
 }
+
+
+//Estou editando o modal aqui para ver como vai ficar depois vou importar o modal no navBar ao clicar no icon
+function ModalCadastro() {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    return (
+        <Box>
+
+            <Button onClick={onOpen}>Open Modal</Button>
+
+            <Modal isOpen={isOpen} size='xl' onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+
+                    <Cadastro />
+                </ModalContent>
+            </Modal>
+        </Box>
+
+
+    )
+}
+
+export { Cadastro, ModalCadastro };

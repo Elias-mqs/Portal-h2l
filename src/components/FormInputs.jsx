@@ -1,11 +1,10 @@
-import { Input, Text, Flex, Textarea, Box, InputGroup, InputLeftElement, InputRightElement, Button } from '@chakra-ui/react'
-import { MdSearch } from 'react-icons/md'
+import { Input, Text, Flex, Textarea, InputGroup, InputRightElement } from '@chakra-ui/react'
 
 function FormInput({ label, w, maxW, name, value, type, variant, placeholder, onChange, pointerEvents, tabIndex, required }) {
     return (
         <Flex direction='column' w={w} maxW={maxW} justify='flex-end' h='100%' >
             <Text fontWeight={500} fontSize={14} pl={2} pb={1}>{label}</Text>
-            <Input name={name} value={value} type={type} variant={variant} border={'1px solid #C7CCD0'} placeholder={placeholder}
+            <Input name={name} value={value} type={type} variant={variant} placeholder={placeholder}
                 onChange={onChange} pointerEvents={pointerEvents} tabIndex={tabIndex} required={required} />
         </Flex>
     )

@@ -1,11 +1,11 @@
 import { Box, Stack, Flex, Grid, useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/router';
-import { FormInput, FormTextarea, FormInputBtn } from './FormInputs';
-import { FormButtonSave, ButtonCancel } from './FormButton';
+import { FormInput, FormTextarea, FormInputBtn, FormButtonSave, ButtonCancel } from '.';
 import { useState } from 'react';
 import api from '../utils/api'
 import { MdSearch } from 'react-icons/md';
-// INICIAR CRIAÇÃO DE COMUNICAÇÃO ....handleSave, API...
+
+
 function PageChamadosTeste() {
 
     const toast = useToast()
@@ -34,23 +34,43 @@ function PageChamadosTeste() {
 
             setFormChamado({ serial: '', model: '', countPb: '', countCor: '', client: '', adress: '', officeHours: '', requester: '', sector: '', tel: '', incident: '', description: '' })
 
-            toast({
-                title: "Sucesso!",
-                description: result?.data?.message,
-                status: 'success',
-                duration: 2000,
-                isClosable: true,
-            })
+            toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
 
         } catch (error) {
             console.log(error)
-            toast({
-                title: "Erro!",
-                description: error?.response?.data?.message,
-                status: 'error',
-                duration: 2000,
-                isClosable: true,
-            })
+            toast({ position: 'top', title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
+        }
+    }
+
+    const searchSerial = async (e) => {
+        e.preventDefault()
+
+
+
+        try {
+            // const result = await api.post('chamados', { ...formChamado, search: true }); DESSA FORMA ENVIA TODOS OS DADOS PARA A BUSCA
+            const result = await api.post('chamados', { serial: formChamado.serial, search: true }); //DESSA FORMA ENVIA APENAS O SERIAL
+            const token = result.data.token;
+            localStorage.setItem('token', token)
+
+            if (!result || !result.data || !result.data.dados) {
+                throw new Error('Dados não encontrados.')
+            }
+
+            setFormChamado(prevState => ({
+                ...prevState,
+                model: result.data.dados.equip_modelo,
+                countPb: result.data.dados.equip_contador_pb,
+                countCor: result.data.dados.equip_contador_cor
+            }));
+            toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
+
+        } catch (error) {
+            if (error.response) {
+                toast({ position: 'top', title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
+            } else {
+                toast({ position: 'top', title: "Erro!", description: error.message, status: 'error', duration: 2000, isClosable: true, })
+            }
         }
     }
 
@@ -59,11 +79,11 @@ function PageChamadosTeste() {
         <Stack as='form' onSubmit={handleSave} gap={8} >
             <Box >
                 <Grid aria-label='boxGrid' justify='flex-end' templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }} gap={8} >
-                    <FormInputBtn name={'serial'} value={formChamado.serial} variant={'filled'} label={'Série do equipamento:'} placeholder={'Número de série'} onChange={handleSaveEdit} icon={<MdSearch size='24px' />} onClick={()=>router.push('/')} required={true}/>
+                    <FormInputBtn name={'serial'} value={formChamado.serial} variant={'filled'} label={'Série do equipamento:'} placeholder={'Número de série'} onChange={handleSaveEdit} icon={<MdSearch size='24px' onClick={searchSerial} />} required={true} />
                     <FormInput name={'model'} value={formChamado.model} variant={'filled'} label={'Modelo:'} placeholder={'Modelo'} onChange={handleSaveEdit} pointerEvents={'none'} tabIndex={'-1'} />
 
                     <Flex align={'end'} gap={3}>
-                        <FormInput name={'countPb'} type='number' value={formChamado.countPb} w={'100%'} variant={'filled'} label={'Contador:'} placeholder={'P/B'} onChange={handleSaveEdit} required={true} />
+                        <FormInput name={'countPb'} type='number' value={formChamado.countPb} w={'100%'} variant={'filled'} label={'Contador:'} placeholder={'P/B'} onChange={handleSaveEdit} required={false} />
                         <FormInput name={'countCor'} type='number' value={formChamado.countCor} w={'100%'} variant={'filled'} placeholder={'COR'} onChange={handleSaveEdit} required={false} />
                     </Flex>
 
