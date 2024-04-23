@@ -31,8 +31,6 @@ const SideBar = ({ isOpen, transition, maxW }) => {
             overflow={{ base: `${isOpen ? 'visible' : 'hidden'}`, md: 'visible' }}
             position={{ base: 'sticky', md: 'fixed' }}
             bg='#EDF2FF'
-            alignItems='center'
-            borderRadius={{ base: '0', md: '1.5rem' }}
             boxShadow={{ base: 'none', md: '0px 1px 4px 1px rgba(0, 0, 0, 0.2)' }}
         >
             <Stack aria-label='Itens-Sidebar' align='center' w='100%' gap={{ base: 0, md: isOpen ? 5 : 0 }} >

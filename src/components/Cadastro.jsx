@@ -15,7 +15,9 @@ import {
     ModalHeader,
     ModalCloseButton,
     ModalBody,
-    ModalFooter
+    ModalFooter,
+    Tab,
+    Divider,
 } from "@chakra-ui/react";
 import { FormInput } from '@/components'
 import { useState } from "react";
@@ -131,63 +133,44 @@ function Cadastro() {
 
     return (
 
-            <Stack
-                as='form'
-                onSubmit={handleForm}
-                w='100%'
-                bg="#EDF2FF"
-                borderRadius="10px"
-                boxShadow="0 0 10px rgba(0, 0, 0, 0.4)"
-                p={{ base: '0px 20px 35px 20px', sm: "0px 35px 50px 35px" }}
-                transition={{ base: 'max-width 0.3s ease' }}
-            >
-                <Text p='30px 0 20px' fontSize='20px' fontWeight={600} >Cadastro</Text>
-                <ModalCloseButton />
-                <Grid gap={4}>
-                    <FormInput name={'name'} value={formData.name} variant={'flushed'} label={'Name'} placeholder={'Nome'} onChange={handleFormEdit} required={true} />
-                    <FormInput name={'email'} value={formData.email} type={'email'} variant={'flushed'} label={'Email'} placeholder={'Email'} onChange={handleFormEdit} required={true} />
-                    <FormInput name={'setor'} value={formData.setor} variant={'flushed'} label={'Setor'} placeholder={'Setor'} onChange={handleFormEdit} required={true} />
-                    <FormInput name={'username'} value={formData.username.trim()} type={'text'} variant={'flushed'} label={'Username'} placeholder={'Username'} onChange={handleFormEdit} required={true} />
-                    <FormInput name={'password'} value={formData.password} type={'password'} variant={'flushed'} label={'Password'} placeholder={'Password'} onChange={handleFormEdit} required={true} />
-                    {passwordError && (
-                        <Stack w='100%' fontSize='xs' gap='0' justify='flex-start' >
-                            <Alert p='0' bg='transparent' color='#C53030' status='error' >
-                                <AlertIcon w='13px' />
-                                {passwordError}
-                            </Alert>
-                        </Stack>
-                    )}
-                </Grid>
+        <Stack
+            as='form'
+            onSubmit={handleForm}
+            w='100%'
+            h='auto'
+            bg="#EDF2FF"
+            borderRadius={{base: '0', md: "10px"}}
+            boxShadow="0 0 10px rgba(0, 0, 0, 0.4)"
+            p={{ base: '35px', md: "0px 35px 50px" }}
+            transition={{ base: 'max-width 0.3s ease' }}
+        >
+            <ModalCloseButton m={4} />
+            <Flex justify='center' borderBottom={'1px solid #858585'} pb={3} >
+                <Text p='30px 0 5px' w='auto' fontSize='20px' fontWeight={600} >Novo usuário</Text>
+            </Flex>
+            <Grid gap={12} mb={5} >
+                <FormInput name={'name'} value={formData.name} variant={'flushed'} label={'Name'} placeholder={'Nome'} onChange={handleFormEdit} required={true} />
+                <FormInput name={'email'} value={formData.email} type={'email'} variant={'flushed'} label={'Email'} placeholder={'Email'} onChange={handleFormEdit} required={true} />
+                <FormInput name={'setor'} value={formData.setor} variant={'flushed'} label={'Setor'} placeholder={'Setor'} onChange={handleFormEdit} required={true} />
+                <FormInput name={'username'} value={formData.username} type={'text'} variant={'flushed'} label={'Username'} placeholder={'Username'} onChange={handleFormEdit} required={true} />
+                <FormInput name={'password'} value={formData.password} type={'password'} variant={'flushed'} label={'Password'} placeholder={'Password'} onChange={handleFormEdit} required={true} />
+                {passwordError && (
+                    <Stack w='100%' fontSize='xs' gap='0' justify='flex-start' >
+                        <Alert p='0' bg='transparent' color='#C53030' status='error' >
+                            <AlertIcon w='13px' />
+                            {passwordError}
+                        </Alert>
+                    </Stack>
+                )}
+            </Grid>
 
-                <Button type='submit' bg='#6699CC' mt={8} color='#FFF' w='100%' h='48px' borderRadius='4px' fontSize='lg' fontWeight='500'
-                    _hover={{ bg: `#5c7da6`, color: `#FFF`, transform: `translateY(-2px)` }} _active={{ transform: 'translateY(2px)' }} >
-                    Cadastro
-                </Button>
+            <Button type='submit' bg='#6699CC' color='#FFF' w='100%' h='48px' borderRadius='4px' fontSize='lg' fontWeight='500'
+                _hover={{ bg: `#5c7da6`, color: `#FFF`, transform: `translateY(-2px)` }} _active={{ transform: 'translateY(2px)' }} >
+                Cadastrar
+            </Button>
 
-            </Stack>
+        </Stack>
     )
 }
 
-
-//Estou editando o modal aqui para ver como vai ficar depois vou importar o modal no navBar ao clicar no icon
-function ModalCadastro() {
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    return (
-        <Box>
-
-            <Button onClick={onOpen}>Open Modal</Button>
-
-            <Modal isOpen={isOpen} size='xl' onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent>
-
-                    <Cadastro />
-                </ModalContent>
-            </Modal>
-        </Box>
-
-
-    )
-}
-
-export { Cadastro, ModalCadastro };
+export { Cadastro };

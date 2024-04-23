@@ -1,7 +1,8 @@
 import { HStack, Flex, TabList, Tab, Tabs, TabIndicator } from '@chakra-ui/react'
-import { IconButtonHeader, ModalCadastro } from '.'
+import { IconButtonHeader, Cadastro } from '.'
 import { MdOutlineSettings, MdNotifications } from 'react-icons/md'
 import { useRouter } from 'next/router';
+import Settings from '@/components/Settings'
 
 function NavBar({ onClickToggle, iconToggle, navTabs }) {
 
@@ -28,9 +29,9 @@ function NavBar({ onClickToggle, iconToggle, navTabs }) {
             </Flex>
 
             <HStack align='center' >
+                <Settings ariaLabel={'Settings'} sizeModal={{base: 'xl', md: 'xl'}} option={<Cadastro/>} icon={<MdOutlineSettings size={22} />} />
                 <IconButtonHeader icon={<MdOutlineSettings size={22} />} />
                 <IconButtonHeader icon={<MdNotifications size={22} />} />
-                <ModalCadastro/>
             </HStack>
 
         </HStack>
