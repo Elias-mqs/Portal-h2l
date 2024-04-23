@@ -137,7 +137,8 @@ function Cadastro() {
             as='form'
             onSubmit={handleForm}
             w='100%'
-            h='auto'
+            h='100%'
+            maxH='auto'
             bg="#EDF2FF"
             borderRadius={{base: '0', md: "10px"}}
             boxShadow="0 0 10px rgba(0, 0, 0, 0.4)"

@@ -9,7 +9,7 @@ export default function Settings({ option, icon, sizeModal, ariaLabel }) {
             <IconButtonHeader ariaLabel={ariaLabel} onClick={onOpen} icon={icon} />
             <Modal isOpen={isOpen} size={sizeModal} onClose={onClose}>
                 <ModalOverlay />
-                    <ModalContent h={{ base: '300px', md: 'auto' }} arialabel='content' >
+                    <ModalContent h='auto' arialabel='content' >
                         {option}
                     </ModalContent>
             </Modal>
