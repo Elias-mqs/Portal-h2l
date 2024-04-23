@@ -1,5 +1,4 @@
-import { IconButtonHeader, Cadastro } from '.'
-import { MdOutlineSettings } from 'react-icons/md'
+import { IconButtonHeader } from '.'
 import { Modal, ModalOverlay, ModalContent, useDisclosure, Stack } from '@chakra-ui/react'
 
 export default function Settings({ option, icon, sizeModal, ariaLabel }) {
@@ -9,7 +8,7 @@ export default function Settings({ option, icon, sizeModal, ariaLabel }) {
             <IconButtonHeader ariaLabel={ariaLabel} onClick={onOpen} icon={icon} />
             <Modal isOpen={isOpen} size={sizeModal} onClose={onClose}>
                 <ModalOverlay />
-                    <ModalContent h='auto' arialabel='content' >
+                    <ModalContent h='auto' >
                         {option}
                     </ModalContent>
             </Modal>

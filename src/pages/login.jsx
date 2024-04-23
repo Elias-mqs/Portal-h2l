@@ -1,11 +1,10 @@
 
 import PainelLogin from "@/components/PainelLogin"
-import styles from "../styles/LoginPage.module.css"
 import { HStack } from "@chakra-ui/react"
 
 export default function Login() {
     return (
-        <HStack w="full" h="100vh" className={styles.bgLogin}>
+        <HStack w="full" h="100vh" p={{base: 0, md: '32px'}} justify='center' >
             <PainelLogin/>
         </HStack>
     )

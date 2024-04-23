@@ -5,19 +5,9 @@ import {
     Alert,
     AlertIcon,
     Stack,
-    Box,
     Flex,
     Text,
-    useDisclosure,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
     ModalCloseButton,
-    ModalBody,
-    ModalFooter,
-    Tab,
-    Divider,
 } from "@chakra-ui/react";
 import { FormInput } from '@/components'
 import { useState } from "react";
@@ -140,16 +130,16 @@ function Cadastro() {
             h='100%'
             maxH='auto'
             bg="#EDF2FF"
-            borderRadius={{base: '0', md: "10px"}}
+            borderRadius={{ base: '0', md: "10px" }}
             boxShadow="0 0 10px rgba(0, 0, 0, 0.4)"
-            p={{ base: '35px', md: "0px 35px 50px" }}
+            p={{ base: '35px', md: "30px 35px 50px" }}
             transition={{ base: 'max-width 0.3s ease' }}
         >
             <ModalCloseButton m={4} />
-            <Flex justify='center' borderBottom={'1px solid #858585'} pb={3} >
-                <Text p='30px 0 5px' w='auto' fontSize='20px' fontWeight={600} >Novo usuário</Text>
+            <Flex justify='center' borderBottom={'1px solid #858585'} pb={1} mb={5} >
+                <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} >Novo usuário</Text>
             </Flex>
-            <Grid gap={12} mb={5} >
+            <Grid gap={8} mb={5} >
                 <FormInput name={'name'} value={formData.name} variant={'flushed'} label={'Name'} placeholder={'Nome'} onChange={handleFormEdit} required={true} />
                 <FormInput name={'email'} value={formData.email} type={'email'} variant={'flushed'} label={'Email'} placeholder={'Email'} onChange={handleFormEdit} required={true} />
                 <FormInput name={'setor'} value={formData.setor} variant={'flushed'} label={'Setor'} placeholder={'Setor'} onChange={handleFormEdit} required={true} />

@@ -12,9 +12,10 @@ import ButtonSidebar from './ButtonSidebar';
 import NavBar from './NavBar';
 import IconButtonHeader from './IconButtonHeader';
 import NavigationTabs from './NavigationTabs';
-import { FormInput, FormTextarea, FormInputBtn } from './FormInputs';
+import { FormInput, FormTextarea, FormInputBtn, FormInputBtnL } from './FormInputs';
 import { FormButtonSave, ButtonCancel } from './FormButton';
-import { Cadastro, ModalCadastro } from './Cadastro'
+import { Cadastro } from './Cadastro'
+import Settings from './Settings'
 
 
 // Exporte os componentes diretamente
@@ -36,9 +37,11 @@ export {
     FormInput,
     FormTextarea,
     FormInputBtn,
+    FormInputBtnL,
     FormButtonSave,
     ButtonCancel,
     Cadastro,
-    ModalCadastro,
+    Settings,
+    
 
 };
