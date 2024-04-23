@@ -113,8 +113,8 @@ export default function PainelLogin() {
 
     return (
 
-        <VStack bg='#EDF2FF' borderRadius={{ base: 0, md: '2rem' }} w={{ base: '100%', md: '500px' }} h={{ base: '100%', md: 'lg' }} p='0px 50px'
-            boxShadow='0px 1px 4px 1px rgba(0, 0, 0, 0.2)' justify='center' >
+        <VStack bg='#EDF2FF' borderRadius={{ base: 0, md: '1.5rem' }} w={{ base: '100%', md: '500px' }} h={{ base: '100%', md: 'lg' }} p='0px 50px'
+            boxShadow='0px 1px 4px 1px rgba(0, 0, 0, 0.2)' justify='center' position='fixed' overflow='auto' >
             <Stack w='100%' align='center' gap={{ base: 20, md: 12 }}>
 
                 <Image src='img/LOGO-H2L.png' fit='contain' w={{ base: '150px', md: '180px' }} />
@@ -123,7 +123,7 @@ export default function PainelLogin() {
                     <Stack as='form' onSubmit={handleLogin} w='100%' maxW='100%' gap={10} >
                         <Stack spacing={8}>
 
-                            <FormInputBtnL name={'name'} value={formulario.username} fontSize={'18px'} variant={'flushed'} label={'Usuário'}
+                            <FormInputBtnL name={'username'} value={formulario.username} fontSize={'18px'} variant={'flushed'} label={'Usuário'}
                                 icon={<PersonOutlineOutlinedIcon sx={{ color: `#003366` }} />} placeholder={'Nome de usuário'} onChange={handleInputChange} />
 
                             <Box >

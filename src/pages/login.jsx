@@ -1,11 +1,14 @@
-
 import PainelLogin from "@/components/PainelLogin"
-import { HStack } from "@chakra-ui/react"
+import { Stack } from "@chakra-ui/react"
 
 export default function Login() {
     return (
-        <HStack w="full" h="100vh" p={{base: 0, md: '32px'}} justify='center' >
-            <PainelLogin/>
-        </HStack>
+        <Stack w="full" h="100vh" p={{ base: 0, md: '32px' }} align='center' justify='center'
+            backgroundImage="url('/img/bgLogin.jpg')"
+            backgroundSize="cover"
+            bgRepeat='no-repeat'
+            backgroundPosition="center" >
+            <PainelLogin />
+        </Stack>
     )
 }

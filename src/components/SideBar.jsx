@@ -6,7 +6,6 @@ import { ButtonSidebar } from ".";
 import { useRouter } from "next/router";
 
 
-
 const SideBar = ({ isOpen, transition, maxW }) => {
 
     const router = useRouter()
