@@ -34,7 +34,6 @@ import api from '../utils/api'
 
 // Componente PainelLogin
 export default function PainelLogin() {
-    //Estados
 
     const [show, setShow] = useState(false); // Estado para controlar visibilidade da senha
     const [isLoading, setIsLoading] = useState(false); // Estado para controlar o estado de carregamento
@@ -103,9 +102,6 @@ export default function PainelLogin() {
         setFormulario(novosDados);
     }
 
-
-
-
     ////////////// TESTANDO MODAL DE RECUPERAÇÃO DE SENHA //////////////
 
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -115,54 +111,52 @@ export default function PainelLogin() {
 
     }
 
-    ////////////// TESTANDO MODAL DE RECUPERAÇÃO DE SENHA //////////////
-
     return (
 
         <VStack bg='#EDF2FF' borderRadius={{ base: 0, md: '2rem' }} w={{ base: '100%', md: '500px' }} h={{ base: '100%', md: 'lg' }} p='0px 50px'
             boxShadow='0px 1px 4px 1px rgba(0, 0, 0, 0.2)' justify='center' >
-            <Stack w='100%' align='center' gap={{base: 20, md: 12 }}>
+            <Stack w='100%' align='center' gap={{ base: 20, md: 12 }}>
 
                 <Image src='img/LOGO-H2L.png' fit='contain' w={{ base: '150px', md: '180px' }} />
-                <Stack as='form' onSubmit={handleLogin} w='100%' maxW='100%' gap={10} >
-                    <Stack spacing='30px'>
+                <Stack w='100%' align='center' gap={4}>
 
-                        <FormInputBtnL name={'name'} value={formulario.username} fontSize={'18px'} variant={'flushed'} label={'Usuário'}
-                            icon={<PersonOutlineOutlinedIcon sx={{ color: `#003366` }} />} placeholder={'Nome de usuário'} onChange={handleInputChange} />
+                    <Stack as='form' onSubmit={handleLogin} w='100%' maxW='100%' gap={10} >
+                        <Stack spacing={8}>
 
-                        <Box >
-                            <Text pb={1} pl={2} fontSize={14} fontWeight={500}>Senha</Text>
+                            <FormInputBtnL name={'name'} value={formulario.username} fontSize={'18px'} variant={'flushed'} label={'Usuário'}
+                                icon={<PersonOutlineOutlinedIcon sx={{ color: `#003366` }} />} placeholder={'Nome de usuário'} onChange={handleInputChange} />
 
-                            <InputGroup>
-                                <InputLeftElement>
-                                    <IconLock color='#003366' />
-                                </InputLeftElement>
-                                <Input type={show ? 'text' : 'password'} name='password' fontSize='18px' variant='flushed' placeholder='Senha'
-                                    value={formulario.password} onChange={handleInputChange} onKeyDown={handleKeyDown} />
-                                <InputRightElement>
-                                    <Box as='button' onClick={handleClickEyes}>
-                                        {show ? <IconEye color='#003366' />
-                                            : <IconEyeClosed color='#003366' />}
-                                    </Box>
-                                </InputRightElement>
-                            </InputGroup>
+                            <Box >
+                                <Text pb={1} pl={2} fontSize={14} fontWeight={500}>Senha</Text>
 
-                        </Box>
+                                <InputGroup>
+                                    <InputLeftElement>
+                                        <IconLock color='#003366' />
+                                    </InputLeftElement>
+                                    <Input type={show ? 'text' : 'password'} name='password' fontSize='18px' variant='flushed' placeholder='Senha'
+                                        value={formulario.password} onChange={handleInputChange} onKeyDown={handleKeyDown} />
+                                    <InputRightElement>
+                                        <Box as='button' onClick={handleClickEyes}>
+                                            {show ? <IconEye color='#003366' />
+                                                : <IconEyeClosed color='#003366' />}
+                                        </Box>
+                                    </InputRightElement>
+                                </InputGroup>
+
+                            </Box>
+                        </Stack>
+
+                            <Button type='submit' bg='#6699CC' color='#FFF' w='100%' h={12} fontSize={20}
+                                _hover={{ bg: `#5c7da6`, color: `#FFF`, transform: `translateY(-1px)` }} _active={{ transform: 'translateY(1px)' }} disabled={isLoading} >
+                                {isLoading ?
+                                    (<Spinner thickness='3px' speed="0.65s" color="white" size="md" position="absolute" />)
+                                    :
+                                    ('Entrar')}
+                            </Button>
                     </Stack>
-
-                    <VStack spacing={3}>
-
-                        <Button type='submit' bg='#6699CC' color='#FFF' w='100%' h={12} fontSize={20}
-                            _hover={{ bg: `#5c7da6`, color: `#FFF`, transform: `translateY(-1px)` }} _active={{ transform: 'translateY(1px)' }} disabled={isLoading} >
-                            {isLoading ?
-                                (<Spinner thickness='3px' speed="0.65s" color="white" size="md" position="absolute" />)
-                                :
-                                ('Entrar')}
-                        </Button>
-                        <Box as='button' position='relative' maxW='85%' fontWeight={500} color='#003366' _hover={{ bg: `none`, textDecoration: `underline` }} onClick={onOpen} >
-                            Esqueceu sua senha?
-                        </Box>
-                    </VStack>
+                    <Box as='button' type='button' position='relative' maxW='85%' fontWeight={500} color='#003366' _hover={{ bg: `none`, textDecoration: `underline` }} onClick={onOpen} >
+                        Esqueceu sua senha?
+                    </Box>
                 </Stack>
             </Stack>
 
