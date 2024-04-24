@@ -30,16 +30,20 @@ import { useRouter } from 'next/router'
 import { useState, useRef } from "react"
 import { FormInputBtnL } from '@/components'
 import api from '../utils/api'
+import axios from 'axios'
 
 
 // Componente PainelLogin
 export default function PainelLogin() {
 
-    const [show, setShow] = useState(false); // Estado para controlar visibilidade da senha
-    const [isLoading, setIsLoading] = useState(false); // Estado para controlar o estado de carregamento
-    const [formulario, setFormulario] = useState({ // Estado para armazenar dados do formulário
+    const [show, setShow] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); 
+    const [formulario, setFormulario] = useState({ 
         username: '',
         password: ''
+    })
+    const [formRecPass, setFormRecPass] = useState({
+        email: ''
     })
 
     // Hooks
@@ -53,9 +57,9 @@ export default function PainelLogin() {
     };
 
     // Impede o envio do formulário ao pressionar Enter
-    const handleKeyDown = (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
         }
     };
 
@@ -90,36 +94,55 @@ export default function PainelLogin() {
     const handleInputChange = (e) => {
 
         let novosDados = { ...formulario };
-
         novosDados[e.target.name] = e.target.value
+
         if (e.target.name == 'username') {
             novosDados.username = e.target.value.toLowerCase().trim()
         }
         if (e.target.name == 'password') {
             novosDados.password = e.target.value.trim()
         }
-
         setFormulario(novosDados);
     }
 
-    ////////////// TESTANDO MODAL DE RECUPERAÇÃO DE SENHA //////////////
-
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    // Modal Recuperação de senha
     const initialRef = useRef();
-
-    const handleInputPass = (e) => {
-
+    const { isOpen, onOpen, onClose: chakraOnClose } = useDisclosure();
+    const onClose = () => {
+        setFormRecPass({ ...formRecPass, email: '' });
+        chakraOnClose();
     }
+
+    const handleRecoverPass = async (e) => {
+        e.preventDefault()
+        try {
+            const result = await axios.post('/api/recoveryPass', formRecPass)
+            console.log(result)
+            setFormRecPass({ email: '' })
+
+            toast({ position: top, title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
+            
+        } catch (error) {
+            console.log(error)
+            onClose()
+            toast({ title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
+        }
+    }
+    const handleEmailChange = (e) => {
+        setFormRecPass({ ...formRecPass, email: e.target.value })
+    }
+
 
     return (
 
         <VStack bg='#EDF2FF' borderRadius={{ base: 0, md: '1.5rem' }} w={{ base: '100%', md: '500px' }} h={{ base: '100%', md: 'lg' }} p='0px 50px'
             boxShadow='0px 1px 4px 1px rgba(0, 0, 0, 0.2)' justify='center' position='fixed' overflow='auto' >
+
             <Stack w='100%' align='center' gap={{ base: 20, md: 12 }}>
 
                 <Image src='img/LOGO-H2L.png' fit='contain' w={{ base: '150px', md: '180px' }} />
-                <Stack w='100%' align='center' gap={4}>
 
+                <Stack w='100%' align='center' gap={4}>
                     <Stack as='form' onSubmit={handleLogin} w='100%' maxW='100%' gap={10} >
                         <Stack spacing={8}>
 
@@ -128,7 +151,6 @@ export default function PainelLogin() {
 
                             <Box >
                                 <Text pb={1} pl={2} fontSize={14} fontWeight={500}>Senha</Text>
-
                                 <InputGroup>
                                     <InputLeftElement>
                                         <IconLock color='#003366' />
@@ -146,13 +168,13 @@ export default function PainelLogin() {
                             </Box>
                         </Stack>
 
-                            <Button type='submit' bg='#6699CC' color='#FFF' w='100%' h={12} fontSize={20}
-                                _hover={{ bg: `#5c7da6`, color: `#FFF`, transform: `translateY(-1px)` }} _active={{ transform: 'translateY(1px)' }} disabled={isLoading} >
-                                {isLoading ?
-                                    (<Spinner thickness='3px' speed="0.65s" color="white" size="md" position="absolute" />)
-                                    :
-                                    ('Entrar')}
-                            </Button>
+                        <Button type='submit' bg='#6699CC' color='#FFF' w='100%' h={12} fontSize={20} _hover={{ bg: `#5c7da6`, color: `#FFF`, transform: `translateY(-1px)` }}
+                            _active={{ transform: 'translateY(1px)' }} disabled={isLoading} >
+                            {isLoading ?
+                                (<Spinner thickness='3px' speed="0.65s" color="white" size="md" position="absolute" />)
+                                :
+                                ('Entrar')}
+                        </Button>
                     </Stack>
                     <Box as='button' type='button' position='relative' maxW='85%' fontWeight={500} color='#003366' _hover={{ bg: `none`, textDecoration: `underline` }} onClick={onOpen} >
                         Esqueceu sua senha?
@@ -160,26 +182,25 @@ export default function PainelLogin() {
                 </Stack>
             </Stack>
 
-
             {/* ////////////// MODAL RECUPERAÇÃO DE SENHA ////////////// */}
             <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}            >
                 <ModalOverlay />
                 <ModalContent >
-                    <FormControl isRequired>
+                    <Stack as='form' onSubmit={handleRecoverPass} >
                         <ModalHeader>Informe seu e-mail</ModalHeader>
                         <ModalCloseButton />
                         <ModalBody pb={6}>
                             <FormLabel>E-mail</FormLabel>
-                            <Input type='email' placeholder='Digite seu e-mail' />
+                            <Input name='email' type='email' value={formRecPass.email} onChange={handleEmailChange} placeholder='Digite seu e-mail' required />
                         </ModalBody>
 
                         <ModalFooter>
-                            <Button colorScheme='blue' mr={3}>
+                            <Button colorScheme='blue' mr={3} type='submit'>
                                 Recuperar senha
                             </Button>
-                            <Button onClick={onClose}>Cancelar</Button>
+                            <Button onClick={onClose} >Cancelar</Button>
                         </ModalFooter>
-                    </FormControl>
+                    </Stack>
                 </ModalContent>
             </Modal>
 
