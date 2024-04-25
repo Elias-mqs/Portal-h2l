@@ -6,7 +6,6 @@ import {
     VStack,
     Text,
     Image,
-    FormControl,
     useToast,
     Input,
     useDisclosure,
@@ -37,8 +36,8 @@ import axios from 'axios'
 export default function PainelLogin() {
 
     const [show, setShow] = useState(false);
-    const [isLoading, setIsLoading] = useState(false); 
-    const [formulario, setFormulario] = useState({ 
+    const [isLoading, setIsLoading] = useState(false);
+    const [formulario, setFormulario] = useState({
         username: '',
         password: ''
     })
@@ -113,19 +112,34 @@ export default function PainelLogin() {
         chakraOnClose();
     }
 
+    const validateEmail = (email) => {
+        const emailRegex = /^[a-z0-9]+(\.[a-z0-9]+)*@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            toast({ position: 'top', title: "Erro!", description: "Por favor, preencha todos os campos corretamente.", status: 'error', duration: 2000, isClosable: true, });
+            return false;
+        }
+        return true;
+    }
+
     const handleRecoverPass = async (e) => {
         e.preventDefault()
+
+        if (!validateEmail(formRecPass.email)) {
+            return;
+        }
+
         try {
             const result = await axios.post('/api/recoveryPass', formRecPass)
             console.log(result)
-            setFormRecPass({ email: '' })
+            setFormRecPass({ email:'' })
 
-            toast({ position: top, title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
-            
+            toast({ description: 'Se houver um e-mail cadastrado, você receberá uma mensagem com instruções de recuperação.', duration: 6000, isClosable: true, })
+
         } catch (error) {
             console.log(error)
-            onClose()
             toast({ title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
+        } finally {
+            onClose()
         }
     }
     const handleEmailChange = (e) => {
@@ -195,9 +209,7 @@ export default function PainelLogin() {
                         </ModalBody>
 
                         <ModalFooter>
-                            <Button colorScheme='blue' mr={3} type='submit'>
-                                Recuperar senha
-                            </Button>
+                            <Button colorScheme='blue' mr={3} type='submit'> Recuperar senha </Button>
                             <Button onClick={onClose} >Cancelar</Button>
                         </ModalFooter>
                     </Stack>

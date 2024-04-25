@@ -16,6 +16,7 @@ import { FormInput, FormTextarea, FormInputBtn, FormInputBtnL } from './FormInpu
 import { FormButtonSave, ButtonCancel } from './FormButton';
 import { Cadastro } from './Cadastro'
 import Settings from './Settings'
+import { FbCenter } from './Feedbacks'
 
 
 // Exporte os componentes diretamente
@@ -42,6 +43,7 @@ export {
     ButtonCancel,
     Cadastro,
     Settings,
-    
+    FbCenter,
+
 
 };

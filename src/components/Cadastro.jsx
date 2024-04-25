@@ -70,23 +70,13 @@ function Cadastro() {
     };
 
     const validateEmail = (email) => {
-        // const validationEmail = /\S+@\S+\.\S+$/.test(formData.email);
-        const hasAtSymbol = /\S+@\S+/.test(email);
-        const hasDot = /\S+\.\S+/.test(email);
-        // O email é válido
-        if (!hasAtSymbol) {
-            // Email não contém pelo menos um "@"
-            toast({ position: 'top', title: "Erro!", description: "Por favor, preencha todos os campos corretamente.", status: 'error', duration: 2000, isClosable: true, });
-            return false;
-        }
-        if (!hasDot) {
-            // Email não contém pelo menos um "."
+        const emailRegex = /^[a-z0-9]+(\.[a-z0-9]+)*@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
             toast({ position: 'top', title: "Erro!", description: "Por favor, preencha todos os campos corretamente.", status: 'error', duration: 2000, isClosable: true, });
             return false;
         }
         return true;
     }
-
 
     const handleForm = async (event) => {
         event.preventDefault()

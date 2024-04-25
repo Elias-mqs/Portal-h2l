@@ -10,7 +10,7 @@ export default async function handler(req, res) {
         const { username, password } = req.body;
 
         if (!username || !password) {
-            return res.status(401).json({ message: 'Necessario informar usuario e senha' })
+            return res.status(401).json({ message: 'Necessário informar usuario e senha' })
         }
 
         try {
@@ -19,7 +19,6 @@ export default async function handler(req, res) {
                 .select('password_hash')
                 .where('username', '=', username)
                 .executeTakeFirst()
-            // console.log(username)
 
             const userid = await db.selectFrom('usuarios')
                 .select('usr_id')
@@ -27,7 +26,7 @@ export default async function handler(req, res) {
                 .executeTakeFirst()
 
             if (!usuario) {
-                return res.status(404).json({ message: 'usuário não encontrado' })
+                return res.status(404).json({ message: 'Usuário não encontrado' })
             }
 
             const passwordHash = hashPassword(password);
@@ -49,7 +48,6 @@ export default async function handler(req, res) {
             }
 
         } catch (error) {
-            console.log(error)
             res.status(400).json({ message: 'não foi possivel autenticar' })
             return
         }
