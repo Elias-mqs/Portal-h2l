@@ -14,10 +14,10 @@ import IconButtonHeader from './IconButtonHeader';
 import NavigationTabs from './NavigationTabs';
 import { FormInput, FormTextarea, FormInputBtn, FormInputBtnL } from './FormInputs';
 import { FormButtonSave, ButtonCancel } from './FormButton';
-import { Cadastro } from './Cadastro'
-import Settings from './Settings'
-import { FbCenter } from './Feedbacks'
-
+import { Cadastro } from './Cadastro';
+import Settings from './Settings';
+import { FbCenter } from './Feedbacks';
+import RouteNavigation from './RouteNavigation';
 
 // Exporte os componentes diretamente
 export {
@@ -44,6 +44,6 @@ export {
     Cadastro,
     Settings,
     FbCenter,
-
+    RouteNavigation,
 
 };

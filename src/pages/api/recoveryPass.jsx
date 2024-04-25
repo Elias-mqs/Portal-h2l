@@ -26,9 +26,6 @@ export default async function handler(req, res) {
             .where('email', '=', email)
             .execute()
 
-        if (!result) {
-            return res.status(404).json({ message: 'Email não encontrado' })
-        }
 
         let message = {
             from: `'testando' <${process.env.USERMAIL}>`,
@@ -40,8 +37,15 @@ export default async function handler(req, res) {
         };
 
         try {
+
+            if (!result || result.length === 0) {
+                return res.status(404).json({ message: 'Email não encontrado' })
+            }
+
             await transport.sendMail(message);
+
             return res.status(200).json({ message: 'E-mail enviado com sucesso!' });
+
         } catch (error) {
             console.log(error)
             return res.status(400).json({ message: 'Erro ao enviar o email!' });

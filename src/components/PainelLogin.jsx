@@ -137,7 +137,7 @@ export default function PainelLogin() {
 
         } catch (error) {
             console.log(error)
-            toast({ title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
+            toast({ description: 'Se houver um e-mail cadastrado, você receberá uma mensagem com instruções de recuperação.', duration: 6000, isClosable: true, })
         } finally {
             onClose()
         }

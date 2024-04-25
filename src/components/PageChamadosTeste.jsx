@@ -38,7 +38,12 @@ function PageChamadosTeste() {
 
         } catch (error) {
             console.log(error)
-            toast({ position: 'top', title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
+            if (error.response && error.response.status === 401) {
+                toast({ position: 'top', title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
+                router.push('/login')
+            } else {
+                toast({ position: 'top', title: "Erro!", description: error.message, status: 'error', duration: 2000, isClosable: true, })
+            }
         }
     }
 
@@ -66,8 +71,9 @@ function PageChamadosTeste() {
             toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
 
         } catch (error) {
-            if (error.response) {
+            if (error.response && error.response.status === 401) {
                 toast({ position: 'top', title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
+                router.push('/login')
             } else {
                 toast({ position: 'top', title: "Erro!", description: error.message, status: 'error', duration: 2000, isClosable: true, })
             }

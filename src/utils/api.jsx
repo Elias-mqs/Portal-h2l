@@ -25,13 +25,11 @@ api.interceptors.response.use((response) => {
 },
   (error) => {
     if (error.response.status === 401) {
-      console.log('Usuário não autorizado. Redirecionando para a página de login.');
+      localStorage.removeItem('token');
     }
     return Promise.reject(error);
   }
 );
-
-
 
 
 export default api;
