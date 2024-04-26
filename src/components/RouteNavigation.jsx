@@ -15,7 +15,7 @@ export default function RouteNavigation({ children }) {
     const xxxl = '1536px';
 
     return (
-        <Stack>
+        <Stack >
 
             {hideOnRoutes.includes(router.pathname) ? (
                 children

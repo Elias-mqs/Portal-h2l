@@ -1,7 +1,5 @@
 import { Button } from "@chakra-ui/react";
 
-
-
 const FormButtonSave = ({type}) => {
     return (
         <Button type={type} color='white' w='80px' h='28px' borderRadius='20px' fontSize='15px'
