@@ -1,11 +1,11 @@
 import { Input, Text, Flex, Textarea, InputGroup, InputRightElement, InputLeftElement } from '@chakra-ui/react'
 
-function FormInput({ label, w, maxW, name, value, type, variant, placeholder, onChange, pointerEvents, tabIndex, required }) {
+function FormInput({ label, w, maxW, name, value, type, variant, placeholder, onChange, pointerEvents, tabIndex, required, isInvalid }) {
     return (
         <Flex direction='column' w={w} maxW={maxW} justify='flex-end' h='100%' >
             <Text fontWeight={500} fontSize={14} pl={2} pb={1}>{label}</Text>
             <Input name={name} value={value} type={type}  variant={variant} placeholder={placeholder}
-                onChange={onChange} pointerEvents={pointerEvents} tabIndex={tabIndex} required={required} />
+                onChange={onChange} pointerEvents={pointerEvents} tabIndex={tabIndex} required={required} isInvalid={isInvalid} />
         </Flex>
     )
 }

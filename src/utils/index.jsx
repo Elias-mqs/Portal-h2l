@@ -1,52 +1,43 @@
-
 // src/utils/index.js
-const crypto = require('crypto');
+import jwt from 'jsonwebtoken';
 import { db } from './database';
 import dayjs from 'dayjs';
 
+const secret = process.env.JWT_SECRET;
 
 ///////// GERAR TOKEN E DATA /////////
-export function generateToken() {
+export function generateToken(payload, secret) {
     return new Promise((resolve, reject) => {
-        crypto.randomBytes(64, (err, buffer) => {
+        jwt.sign(payload, secret, { expiresIn: '60s' }, (err, token) => {
             if (err) {
                 reject(err);
             } else {
-                const token = buffer.toString('hex');
-                const createdAt = Date.now();
+                const createdAt = dayjs().unix();
                 resolve({ token, createdAt });
             }
         });
     });
 }
 
-
 ///////// AUTENTICAR TOKEN /////////
 async function authenticate(token) {
     token = token.replace('Bearer ', '')
-    const now = dayjs().unix()
-    const user = await db
-        .selectFrom('usuarios')
-        .select(['usr_id', 'nome', 'username', 'createdAt'])
-        .where('token', '=', token)
-        .where('prazo', '>', now)
-        .executeTakeFirst()
+    try {
+        const decoded = jwt.verify(token, secret);
+        const user = await db
+            .selectFrom('usuarios')
+            .select(['usr_id', 'nome', 'username','email', 'createdAt'])
+            .where('token', '=', token)
+            .executeTakeFirst()
 
-    if (user && validateToken(user.createdAt)) {
-        return user;
-    } else {
+        if (user) {
+            return user;
+        } else {
+            throw new Error('Token inválido ou expirado');
+        }
+    } catch (err) {
         throw new Error('Token inválido ou expirado');
     }
 }
-
-///////// VALIDADE TOKEN /////////
-
-export function validateToken(createdAt) {
-    const TOKEN_EXPIRATION_TIME = 60 * 60; // 1 hora em segundos
-    const currentTime = dayjs().unix();
-    const elapsedTime = currentTime - createdAt;
-    return elapsedTime > TOKEN_EXPIRATION_TIME;
-}
-
 
 export { authenticate }

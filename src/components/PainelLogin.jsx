@@ -79,7 +79,7 @@ export default function PainelLogin() {
 
             toast({ title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
 
-            router.push('/users');
+            router.push('/');
 
         } catch (error) {
             toast({ title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
