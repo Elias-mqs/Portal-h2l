@@ -1,22 +1,25 @@
-import { VStack, Stack, Flex, Center, Box, Image, Button, Alert, AlertIcon, useToast } from '@chakra-ui/react'
+import { VStack, Stack, Flex, Box, Image, Button, Alert, AlertIcon, useToast } from '@chakra-ui/react'
 import { FormInput } from '../components'
 import { useState } from 'react';
-import api from '../utils/api'
+import api from '../utils/api';
+import { authenticate } from '../utils'
+import { useRouter } from 'next/router';
 
-export default function RecoveryPass({ user }) {
+export default function RecoveryPass({ simpleUser }) {
 
-    if (!user) {
+    if (!simpleUser) {
         return null;
     }
 
+    const router = useRouter()
     const toast = useToast()
-    const [formPass, setFormPass] = useState({ password: '' })
+    const [formPass, setFormPass] = useState({ password: '', id: simpleUser.usr_id })
     const [confirmPass, setConfirmPass] = useState({ confirmPass: '' })
     const [passwordError, setPasswordError] = useState('');
 
     const handleFormEdit = (e) => {
         if (e.target.name === 'password') {
-            setFormPass({ password: e.target.value.trim() });
+            setFormPass(prevState => ({ ...prevState, password: e.target.value.trim() }));
         } else if (e.target.name === 'confirmPass') {
             setConfirmPass({ confirmPass: e.target.value.trim() });
         }
@@ -64,12 +67,6 @@ export default function RecoveryPass({ user }) {
         event.preventDefault()
         setPasswordError('')
 
-        // Verifica se algum campo do formulário está vazio 
-        const isInvalid = Object.values(formPass).some(value => value.trim() === '');
-        if (isInvalid) {
-            toast({ position: 'top', title: "Erro!", description: "Por favor, preencha todos os campos corretamente.", status: 'error', duration: 2000, isClosable: true, });
-            return;
-        }
         if (!validatePassword(formPass.password) || formPass.password !== confirmPass.confirmPass) {
             toast({ title: "Erro!", description: "As senhas não coincidem.", status: 'error', duration: 2000, isClosable: true, });
             return;
@@ -79,16 +76,16 @@ export default function RecoveryPass({ user }) {
         }
 
         try {
-            const result = await api.post('recoveryPassword', formPass)
+            const result = await api.post('recoveryPass', formPass)
             const token = result?.data?.token;
             localStorage.setItem('token', token);
 
-            setFormPass({ password: `` })
+            setFormPass({ password: ``, id: `` })
+            setConfirmPass({ confirmPass: `` })
 
             toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
-
+            router.push('/login')
         } catch (error) {
-            console.log(error)
             toast({ position: 'top', title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
         }
     }
@@ -126,21 +123,17 @@ export default function RecoveryPass({ user }) {
     )
 }
 
-export async function getServerSideProps(context) {
-    const { req, res } = context;
-    const { token } = req.query;
-    console.log(token)
+export async function getServerSideProps({ query: { token }, res }) {
 
     try {
-        // Verifica se o token é válido
         const user = await authenticate(token);
+        const simpleUser = JSON.parse(JSON.stringify(user))
 
-        // Se o token for válido, passa o usuário como prop para o componente
-        return { props: { user } };
+        return { props: { simpleUser } };
     } catch (err) {
-        // Se o token não for válido, redireciona para a página de login
         res.writeHead(302, { Location: '/login' });
         res.end();
         return { props: {} };
+
     }
 }

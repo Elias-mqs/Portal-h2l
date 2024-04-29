@@ -37,6 +37,7 @@ export default function PainelLogin() {
 
     const [show, setShow] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingRec, setIsLoadingRec] = useState(false);
     const [formulario, setFormulario] = useState({
         username: '',
         password: ''
@@ -123,8 +124,12 @@ export default function PainelLogin() {
 
     const handleRecoverPass = async (e) => {
         e.preventDefault()
+        setIsLoadingRec(true);
 
         if (!validateEmail(formRecPass.email)) {
+            return;
+        }
+        if (isLoadingRec) {
             return;
         }
 
@@ -140,6 +145,7 @@ export default function PainelLogin() {
             toast({ description: 'Se houver um e-mail cadastrado, você receberá uma mensagem com instruções de recuperação.', duration: 6000, isClosable: true, })
         } finally {
             onClose()
+            setIsLoadingRec(false);
         }
     }
     const handleEmailChange = (e) => {
@@ -209,7 +215,7 @@ export default function PainelLogin() {
                         </ModalBody>
 
                         <ModalFooter>
-                            <Button colorScheme='blue' mr={3} type='submit'> Recuperar senha </Button>
+                            <Button colorScheme='blue' mr={3} type='submit' disabled={isLoadingRec}> Recuperar senha </Button>
                             <Button onClick={onClose} >Cancelar</Button>
                         </ModalFooter>
                     </Stack>

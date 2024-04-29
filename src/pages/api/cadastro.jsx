@@ -1,6 +1,5 @@
 import { db } from '@/utils/database';
-const crypto = require('crypto');
-
+import { hashPassword } from '@/utils'
 
 export default async function handler(req, res) {
 
@@ -64,15 +63,5 @@ export default async function handler(req, res) {
     } else {
         // Se o método HTTP não for POST, retorna um erro de método não permitido
         res.status(405).json({ message: 'Método não permitido' });
-    }
-
-
-    function hashPassword(password) {
-        try {
-            const hashedPassword = crypto.createHash('sha256').update(password).digest('hex');
-            return hashedPassword;
-        } catch (error) {
-            throw new Error('Erro ao gerar o hash da senha');
-        }
     }
 }

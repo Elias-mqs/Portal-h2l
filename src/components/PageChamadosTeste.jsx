@@ -4,9 +4,14 @@ import { FormInput, FormTextarea, FormInputBtn, FormButtonSave, ButtonCancel } f
 import { useState } from 'react';
 import api from '../utils/api'
 import { MdSearch } from 'react-icons/md';
+import { authenticate } from '../utils'
 
 
-function PageChamadosTeste() {
+function PageChamadosTeste({ simpleUser }) {
+
+    if (!simpleUser) {
+        return null;
+    }
 
     const toast = useToast()
     const router = useRouter()
@@ -114,6 +119,21 @@ function PageChamadosTeste() {
 
         </Stack >
     )
+}
+
+export async function getServerSideProps({ query: { token }, res }) {
+
+    try {
+        const user = await authenticate(token);
+        const simpleUser = JSON.parse(JSON.stringify(user))
+
+        return { props: { simpleUser } };
+    } catch (err) {
+        res.writeHead(302, { Location: '/login' });
+        res.end();
+        return { props: {} };
+
+    }
 }
 
 export default PageChamadosTeste;

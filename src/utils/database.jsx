@@ -1,5 +1,5 @@
 
-import { createPool, Pool } from 'mysql';
+import { createPool } from 'mysql';
 import { Kysely, MysqlDialect } from 'kysely';
 
 const pool = createPool({
