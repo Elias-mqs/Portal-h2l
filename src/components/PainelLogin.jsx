@@ -30,10 +30,13 @@ import { useState, useRef } from "react"
 import { FormInputBtnL } from '@/components'
 import api from '../utils/api'
 import axios from 'axios'
+import { signIn, useSession } from "next-auth/react";
 
 
 // Componente PainelLogin
 export default function PainelLogin() {
+
+    // const { data: session } = useSession()
 
     const [show, setShow] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -63,7 +66,7 @@ export default function PainelLogin() {
         }
     };
 
-    // Função para lidar com o envio do formulário de login
+    ///////////// MINHA Função para lidar com o envio do formulário de login
     const handleLogin = async (e) => {
         e.preventDefault()
         setIsLoading(true);
@@ -80,7 +83,7 @@ export default function PainelLogin() {
 
             toast({ title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
 
-            router.push('/');
+            router.push('/')
 
         } catch (error) {
             toast({ title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
@@ -89,6 +92,27 @@ export default function PainelLogin() {
             setIsLoading(false);
         }
     }
+
+    // FUNÇÃO NEXTAUTH
+    // const handleSignIn = async (values) => {
+    //     const res = await signIn('credentials', {
+    //         redirect: true,
+    //         username: values.username,
+    //         password: values.password,
+    //     });
+    //     console.log(handleSignIn)
+
+    //     if (res.error) {
+    //         toast({
+    //             title: `res.error`,
+    //             status: 'error',
+    //             duration: 4000,
+    //             isClosable: true,
+    //         });
+    //     }
+
+    //     // if (res.url) router.push(res.url);
+    // }
 
     // Função para lidar com a mudança nos campos de entrada do formulário
     const handleInputChange = (e) => {
@@ -136,7 +160,7 @@ export default function PainelLogin() {
         try {
             const result = await axios.post('/api/recoveryPass', formRecPass)
             console.log(result)
-            setFormRecPass({ email:'' })
+            setFormRecPass({ email: '' })
 
             toast({ description: 'Se houver um e-mail cadastrado, você receberá uma mensagem com instruções de recuperação.', duration: 6000, isClosable: true, })
 
