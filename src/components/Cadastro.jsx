@@ -12,6 +12,7 @@ import {
 import { FormInput } from '@/components'
 import { useState } from "react";
 import api from '../utils/api'
+import Cookies from 'js-cookie'
 
 function Cadastro() {
 
@@ -99,7 +100,7 @@ function Cadastro() {
         try {
             const result = await api.post('cadastro', formData)
             const token = result?.data?.token;
-            localStorage.setItem('token', token);
+            Cookies.set('token', token);
 
             setFormData({ name: ``, username: ``, email: ``, password: ``, setor: `` })
 

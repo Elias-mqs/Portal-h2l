@@ -14,8 +14,7 @@ export function generateToken(payload, secret) {
             if (err) {
                 reject(err);
             } else {
-                const createdAt = dayjs().unix();
-                resolve({ token, createdAt });
+                resolve({ token });
             }
         });
     });

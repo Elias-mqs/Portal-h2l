@@ -1,4 +1,4 @@
-
+//src/components/PainelLogin.jsx
 import {
     Box,
     Button,
@@ -30,13 +30,11 @@ import { useState, useRef } from "react"
 import { FormInputBtnL } from '@/components'
 import api from '../utils/api'
 import axios from 'axios'
-import { signIn, useSession } from "next-auth/react";
+import Cookies from 'js-cookie'
 
 
 // Componente PainelLogin
 export default function PainelLogin() {
-
-    // const { data: session } = useSession()
 
     const [show, setShow] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -78,7 +76,7 @@ export default function PainelLogin() {
         try {
             const result = await api.post('login', formulario)
             const token = result?.data?.token;
-            localStorage.setItem('token', token);
+            Cookies.set('token', token);
             setFormulario({ username: ``, password: `` })
 
             toast({ title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
@@ -92,27 +90,6 @@ export default function PainelLogin() {
             setIsLoading(false);
         }
     }
-
-    // FUNÇÃO NEXTAUTH
-    // const handleSignIn = async (values) => {
-    //     const res = await signIn('credentials', {
-    //         redirect: true,
-    //         username: values.username,
-    //         password: values.password,
-    //     });
-    //     console.log(handleSignIn)
-
-    //     if (res.error) {
-    //         toast({
-    //             title: `res.error`,
-    //             status: 'error',
-    //             duration: 4000,
-    //             isClosable: true,
-    //         });
-    //     }
-
-    //     // if (res.url) router.push(res.url);
-    // }
 
     // Função para lidar com a mudança nos campos de entrada do formulário
     const handleInputChange = (e) => {

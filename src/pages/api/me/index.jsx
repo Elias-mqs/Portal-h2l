@@ -1,45 +1,17 @@
 
 //src/pages/api/me/index.js
-
-import { authenticate } from "@/utils/index"
+import jwt from 'jsonwebtoken';
 
 export default async function me(req, res) {
-    
-  if(req.method === 'GET'){
-    
 
-    const token = req.headers.authorization;
-    const usuario = await authenticate(token);
+  const secret = process.env.JWT_SECRET;
+  const token = req.headers.authorization;
 
-    if (!usuario) {
-      res.status(401).json({ message: 'Usuário não autenticado' })
-    }
-    res.status(200).json(usuario)
-
-  }else{
-    res.status(405).json({ message: 'Método não permitido' });
+  try {
+    const authToken = jwt.verify(token, secret);
+    console.log(authToken)
+    res.status(200).json({ authenticated: true })
+  } catch (error) {
+    res.status(401).json({ authenticated: false })
   }
 }
-
- 
-  
-  
-  ////////////////// FUNÇÃO DE AUTENTICAÇÃO DO TOKEN //////////////////
-  
-  
-  
-  
-  
-  
-  /////////// Vou usar essa parte quando criar o usuario chefe///////////
-  // Check if the user has the 'admin' role
-  // if (session.user.role !== 'admin') {
-  //   res.status(401).json({
-  //     error: 'Acesso não autorizado. Restrito à administradores.',
-  //   })
-  //   return
-  // }
-  
-  // Proceed with the route for authorized users
-  // ... implementation of the API Route
-  

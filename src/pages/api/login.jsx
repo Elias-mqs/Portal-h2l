@@ -23,11 +23,9 @@ export default async function handler(req, res) {
                 const payload = {
                     username: USERNAMEADM
                 }
-                const { token, createdAt } = await generateToken(payload, secret)
-                db.updateTable('usuarios')
-                    .set({ token: token, prazo: createdAt })
-                    .where('admin', '=', 1)
-                    .execute();
+                const { token } = await generateToken(payload, secret)
+                console.log(token)
+
                 res.status(200).json({ token });
             } else {
                 const usuario = await db.selectFrom('usuarios')

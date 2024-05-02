@@ -4,7 +4,7 @@ import { FormInput, FormTextarea, FormInputBtn, FormButtonSave, ButtonCancel } f
 import { useState } from 'react';
 import api from '../utils/api'
 import { MdSearch } from 'react-icons/md';
-// import { authenticate } from '../utils'
+import Cookies from 'js-cookie'
 
 
 function PageChamadosTeste() {
@@ -31,7 +31,7 @@ function PageChamadosTeste() {
         try {
             const result = await api.post('chamados', formChamado)
             const token = result?.data?.token;
-            localStorage.setItem('token', token)
+            Cookies.set('token', token)
 
             setFormChamado({ serial: '', model: '', countPb: '', countCor: '', client: '', adress: '', officeHours: '', requester: '', sector: '', tel: '', incident: '', description: '' })
 
@@ -57,7 +57,7 @@ function PageChamadosTeste() {
             // const result = await api.post('chamados', { ...formChamado, search: true }); DESSA FORMA ENVIA TODOS OS DADOS PARA A BUSCA
             const result = await api.post('chamados', { serial: formChamado.serial, search: true }); //DESSA FORMA ENVIA APENAS O SERIAL
             const token = result.data.token;
-            localStorage.setItem('token', token)
+            Cookies.set('token', token)
 
             if (!result || !result.data || !result.data.dados) {
                 throw new Error('Dados não encontrados.')

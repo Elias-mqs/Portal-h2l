@@ -4,6 +4,7 @@ import { useState } from 'react';
 import api from '../utils/api';
 import { authenticate } from '../utils'
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie'
 
 export default function RecoveryPass({ simpleUser }) {
 
@@ -78,7 +79,7 @@ export default function RecoveryPass({ simpleUser }) {
         try {
             const result = await api.post('recoveryPass', formPass)
             const token = result?.data?.token;
-            localStorage.setItem('token', token);
+            Cookies.set('token', token);
 
             setFormPass({ password: ``, id: `` })
             setConfirmPass({ confirmPass: `` })
