@@ -9,7 +9,6 @@ export default async function me(req, res) {
 
   try {
     const authToken = jwt.verify(token, secret);
-    console.log(authToken)
     res.status(200).json({ authenticated: true })
   } catch (error) {
     res.status(401).json({ authenticated: false })

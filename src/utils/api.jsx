@@ -9,12 +9,10 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   const token = Cookies.get('token');
-  console.log(token)
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
-  console.log(config.headers.Authorization)
   return config;
 }, function (error) {
     console.error('Request interceptor error:', error);
@@ -23,7 +21,6 @@ api.interceptors.request.use((config) => {
 );
 
 api.interceptors.response.use((response) => {
-  // console.log(response)
   return response;
 },
   (error) => {

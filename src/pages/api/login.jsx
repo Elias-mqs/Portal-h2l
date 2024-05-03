@@ -21,10 +21,10 @@ export default async function handler(req, res) {
 
             if (username === USERADM && password === PASSADM) {
                 const payload = {
-                    username: USERNAMEADM
+                    username: USERNAMEADM,
+                    isAdmin: true
                 }
                 const { token } = await generateToken(payload, secret)
-                console.log(token)
 
                 res.status(200).json({ token });
             } else {
@@ -45,12 +45,10 @@ export default async function handler(req, res) {
                         username: usuario.username,
                         isAdmin: usuario.admin
                     }
-                    const { token, createdAt } = await generateToken(payload, secret)
-                    console.log(token)
-                    console.log(createdAt)
+                    const { token } = await generateToken(payload, secret)
 
                     db.updateTable('usuarios')
-                        .set({ token: token, prazo: createdAt })
+                        .set({ token: token })
                         .where('usr_id', '=', usuario.usr_id)
                         .execute();
 

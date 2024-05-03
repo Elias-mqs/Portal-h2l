@@ -1,10 +1,12 @@
 import { Flex, Button, VStack } from "@chakra-ui/react";
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie'
 
 export default function HomePage() {
     const router = useRouter();
 
     const handleLogOut = () => {
+        Cookies.remove('token')
         router.push('/login')
     }
 

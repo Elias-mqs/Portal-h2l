@@ -11,29 +11,31 @@ export async function middleware(req) {
             headers: { authorization: token },
         });
         const authData = await authRes.json()
-        console.log(authData)
 
         if (!authData.authenticated) {
-            throw new Error('Token não fornecido')
+            throw new Error('Token expirado ou não fornecido')
         }
-        if (authData) {
-            if (req.nextUrl.pathname === '/login') {
-                console.log('passou no if')
-                return NextResponse.redirect(new URL('/', req.url))
-            }
-            return NextResponse.next()
-        }
-        
 
+        if (req.nextUrl.pathname == '/login') {
+            return NextResponse.redirect(new URL('/', req.url))
+        }
+
+        return NextResponse.next()
 
     } catch (error) {
         console.log(error)
-        return NextResponse.redirect(new URL('/login', req.url))
+        if (error.message === 'Token expirado ou não fornecido') {
+            if (req.nextUrl.pathname == '/login') {
+                return NextResponse.next()
+            }
+            return NextResponse.redirect(new URL('/login', req.url))
+        }
     }
 }
-
 export const config = {
     matcher: [
         '/',
-        '/novoChamado'],
+        '/login',
+        '/novoChamado',
+    ],
 }

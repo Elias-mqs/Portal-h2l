@@ -1,8 +1,8 @@
 // src/utils/index.js
 import jwt from 'jsonwebtoken';
 import { db } from './database';
-import dayjs from 'dayjs';
 import crypto from 'crypto'
+import Cookies from 'js-cookie'
 
 
 const secret = process.env.JWT_SECRET;
@@ -10,7 +10,7 @@ const secret = process.env.JWT_SECRET;
 ///////// GERAR TOKEN E DATA /////////
 export function generateToken(payload, secret) {
     return new Promise((resolve, reject) => {
-        jwt.sign(payload, secret, { expiresIn: '60s' }, (err, token) => {
+        jwt.sign(payload, secret, { expiresIn: '10m' }, (err, token) => {
             if (err) {
                 reject(err);
             } else {
@@ -51,8 +51,12 @@ function hashPassword(password) {
     }
 }
 
+///////// REMOVE TOKEN /////////
+function removeToken(token){
+    return Cookies.remove(token)
+}
 
-export { authenticate, hashPassword };
+export { authenticate, hashPassword, removeToken };
 
 
 //    ANALISAR ESSA FORMA DE CRIAR SENHAS, TEM QUE VER COMO É O CAMPO NO BANCO DE DADOS REAL 
