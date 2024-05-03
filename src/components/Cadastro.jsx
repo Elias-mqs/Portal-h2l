@@ -122,7 +122,7 @@ function Cadastro() {
             maxH='auto'
             bg="#EDF2FF"
             borderRadius={{ base: '0', md: "10px" }}
-            boxShadow="0 0 10px rgba(0, 0, 0, 0.4)"
+            // boxShadow="0 0 10px rgba(0, 0, 0, 0.4)"
             p={{ base: '35px', md: "30px 35px 50px" }}
             transition={{ base: 'max-width 0.3s ease' }}
         >

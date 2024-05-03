@@ -1,4 +1,4 @@
-import { HStack, Flex, TabList, Tab, Tabs, TabIndicator } from '@chakra-ui/react'
+import { HStack, Flex, TabList, Tab, Tabs, TabIndicator, IconButton } from '@chakra-ui/react'
 import { IconButtonHeader, Cadastro, Settings } from '.'
 import { MdOutlineSettings, MdNotifications } from 'react-icons/md'
 import { useRouter } from 'next/router';
@@ -16,7 +16,7 @@ function NavBar({ onClickToggle, iconToggle, navTabs }) {
         <HStack h='100%' align='start' justify={'space-between'} pr={'20px'} borderBottom='2px solid rgb(123, 128, 154, 0.4)'>
 
             <Flex align='end' objectFit={'cover'} gap={5} h='100%' >
-                <IconButtonHeader alt="Toggle Sidebar" icon={iconToggle} onClick={onClickToggle} />
+                <IconButton alt="Toggle Sidebar" bg='transparent' mb={'1px'} borderRadius='20px' color='#7B809A' icon={iconToggle} onClick={onClickToggle} />
                 <Tabs defaultIndex={navTabs.findIndex(tab => tab.route === router.pathname)}>
                     <TabList gap={6}>
                         {navTabs && navTabs.map((navTab, index) => (
@@ -30,6 +30,7 @@ function NavBar({ onClickToggle, iconToggle, navTabs }) {
             <HStack align='center' >
                 <Settings ariaLabel={'Settings'} sizeModal={'xl'} option={<Cadastro/>} icon={<MdOutlineSettings size={22} />} />
                 <IconButtonHeader icon={<MdNotifications size={22} />} />
+                <IconButton icon={<MdNotifications size={22} />} bg='transparent' mb={'1px'} borderRadius='20px' color='#7B809A' />
             </HStack>
 
         </HStack>

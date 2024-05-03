@@ -7,6 +7,8 @@ export async function middleware(req) {
     const authUrl = new URL('/api/me', `http://localhost:3000`);
 
     try {
+
+
         const authRes = await fetch(authUrl, {
             headers: { authorization: token },
         });
@@ -15,7 +17,6 @@ export async function middleware(req) {
         if (!authData.authenticated) {
             throw new Error('Token expirado ou não fornecido')
         }
-
         if (req.nextUrl.pathname == '/login') {
             return NextResponse.redirect(new URL('/', req.url))
         }
