@@ -21,8 +21,9 @@ export default async function handler(req, res) {
 
             if (username === USERADM && password === PASSADM) {
                 const payload = {
+                    id: 1,
                     username: USERNAMEADM,
-                    isAdmin: true
+                    isAdmin: 1
                 }
                 const { token } = await generateToken(payload, secret)
 
@@ -41,7 +42,7 @@ export default async function handler(req, res) {
 
                 if (passwordHash === usuario.password_hash) {
                     const payload = {
-                        userId: usuario.usr_id,
+                        id: usuario.usr_id,
                         username: usuario.username,
                         isAdmin: usuario.admin
                     }

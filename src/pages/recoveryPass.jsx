@@ -4,9 +4,8 @@ import { useState } from 'react';
 import api from '../utils/api';
 import { authenticate } from '../utils'
 import { useRouter } from 'next/router';
-import Cookies from 'js-cookie'
 
-export default function RecoveryPass({ simpleUser }) {
+export default function RecoveryPass({ pageProps: { simpleUser } }) {
 
     if (!simpleUser) {
         return null;
@@ -78,8 +77,6 @@ export default function RecoveryPass({ simpleUser }) {
 
         try {
             const result = await api.post('recoveryPass', formPass)
-            const token = result?.data?.token;
-            Cookies.set('token', token);
 
             setFormPass({ password: ``, id: `` })
             setConfirmPass({ confirmPass: `` })
@@ -129,8 +126,8 @@ export async function getServerSideProps({ query: { token }, res }) {
     try {
         const user = await authenticate(token);
         const simpleUser = JSON.parse(JSON.stringify(user))
-
-        return { props: { simpleUser } };
+        
+        return { props: { simpleUser } }
     } catch (err) {
         res.writeHead(302, { Location: '/login' });
         res.end();

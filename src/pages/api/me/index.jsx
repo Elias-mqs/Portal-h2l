@@ -1,4 +1,3 @@
-
 //src/pages/api/me/index.js
 import jwt from 'jsonwebtoken';
 
@@ -14,3 +13,4 @@ export default async function me(req, res) {
     res.status(401).json({ authenticated: false })
   }
 }
+

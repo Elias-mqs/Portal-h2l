@@ -27,9 +27,9 @@ function NavBar({ onClickToggle, iconToggle, navTabs }) {
                 </Tabs>
             </Flex>
 
-            <HStack align='center' >
-                <Settings ariaLabel={'Settings'} sizeModal={'xl'} option={<Cadastro/>} icon={<MdOutlineSettings size={22} />} />
-                <IconButtonHeader icon={<MdNotifications size={22} />} />
+            <HStack align='center' gap={6} >
+                <Settings ariaLabel={'Settings'} />
+                {/* <IconButtonHeader icon={<MdNotifications size={22} />} option={<Cadastro/>} /> */}
                 <IconButton icon={<MdNotifications size={22} />} bg='transparent' mb={'1px'} borderRadius='20px' color='#7B809A' />
             </HStack>
 

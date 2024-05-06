@@ -7,8 +7,6 @@ export async function middleware(req) {
     const authUrl = new URL('/api/me', `http://localhost:3000`);
 
     try {
-
-
         const authRes = await fetch(authUrl, {
             headers: { authorization: token },
         });

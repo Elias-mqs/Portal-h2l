@@ -63,14 +63,12 @@ export default async function handler(req, res) {
 
         if (!email && password) {
             const passwordHash = hashPassword(password)
-            const resultPass = await db
-                .updateTable('usuarios')
+            await db.updateTable('usuarios')
                 .set({
                     password_hash: passwordHash,
                 })
                 .where('usr_id', '=', id)
                 .executeTakeFirst()
-            console.log(resultPass)
 
             return res.status(200).json({ message: 'Senha atualizada com sucesso!' })
         }

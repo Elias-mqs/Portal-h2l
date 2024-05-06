@@ -7,10 +7,10 @@ import Cookies from 'js-cookie'
 
 const secret = process.env.JWT_SECRET;
 
-///////// GERAR TOKEN E DATA /////////
+///////// GERAR TOKEN /////////
 export function generateToken(payload, secret) {
     return new Promise((resolve, reject) => {
-        jwt.sign(payload, secret, { expiresIn: '10m' }, (err, token) => {
+        jwt.sign(payload, secret, { expiresIn: '30m' }, (err, token) => {
             if (err) {
                 reject(err);
             } else {
@@ -27,7 +27,7 @@ async function authenticate(token) {
         const decoded = jwt.verify(token, secret);
         const user = await db
             .selectFrom('usuarios')
-            .select(['usr_id', 'nome', 'username','email'])
+            .select(['usr_id', 'username', 'email', 'admin'])
             .where('usr_id', '=', decoded.id)
             .executeTakeFirst()
 
@@ -52,14 +52,14 @@ function hashPassword(password) {
 }
 
 ///////// REMOVE TOKEN /////////
-function removeToken(token){
+function removeToken(token) {
     return Cookies.remove(token)
 }
 
 export { authenticate, hashPassword, removeToken };
 
 
-//    ANALISAR ESSA FORMA DE CRIAR SENHAS, TEM QUE VER COMO É O CAMPO NO BANCO DE DADOS REAL 
+//    ANALISAR ESSA FORMA DE CRIAR SENHAS, TEM QUE VER COMO É O CAMPO NO BANCO DE DADOS REAL
 
 // function hashPassword(password) {
 //     try {
