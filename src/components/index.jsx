@@ -18,6 +18,8 @@ import { Cadastro } from './Cadastro';
 import Settings from './Settings';
 import { FbCenter } from './Feedbacks';
 import RouteNavigation from './RouteNavigation';
+import DadosUser from './DadosUser';
+import { UpdatePass } from './UpdateData';
 
 // Exporte os componentes diretamente
 export {
@@ -45,5 +47,7 @@ export {
     Settings,
     FbCenter,
     RouteNavigation,
+    DadosUser,
+    UpdatePass,
     
 };

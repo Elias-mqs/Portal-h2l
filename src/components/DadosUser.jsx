@@ -8,20 +8,24 @@ import {
     Flex,
     Text,
     ModalCloseButton,
-    Checkbox,
+    useDisclosure,
+    Modal,
+    ModalOverlay,
+    ModalContent,
 } from "@chakra-ui/react";
-import { FormInput } from '@/components'
+import { FormInput, UpdatePass } from '@/components'
 import { useState } from "react";
 import api from '../utils/api'
 import Cookies from 'js-cookie'
 
-function Cadastro({isMaster}) {
+function DadosUser({ formData, setFormData, isDisabled }) {
 
     const toast = useToast();
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
     // Estado do formulário e função para atualizá-lo
-    const [formData, setFormData] = useState({ name: '', username: '', email: '', password: '', setor: '', });
-
+    // const [formData, setFormData] = useState({ name: '', username: '', email: '', password: '', setor: '', });
+    
     // Estado para armazenar erros relacionados à senha
     const [passwordError, setPasswordError] = useState('');
 
@@ -74,7 +78,7 @@ function Cadastro({isMaster}) {
     const validateEmail = (email) => {
         const emailRegex = /^[a-z0-9]+(\.[a-z0-9]+)*@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            toast({ position: 'top', title: "Erro!", description: "Por favor, preencha todos os campos corretamente.", status: 'error', duration: 2000, isClosable: true, });
+            toast({ position: 'top', title: "Erro!", description: "Por favor, preencha todos os campos corretamente. primeiro", status: 'error', duration: 2000, isClosable: true, });
             return false;
         }
         return true;
@@ -87,7 +91,7 @@ function Cadastro({isMaster}) {
         // Verifica se algum campo do formulário está vazio 
         const isInvalid = Object.values(formData).some(value => value.trim() === '');
         if (isInvalid) {
-            toast({ position: 'top', title: "Erro!", description: "Por favor, preencha todos os campos corretamente.", status: 'error', duration: 2000, isClosable: true, });
+            toast({ position: 'top', title: "Erro!", description: "Por favor, preencha todos os campos corretamente. segundo", status: 'error', duration: 2000, isClosable: true, });
             return;
         }
 
@@ -129,19 +133,17 @@ function Cadastro({isMaster}) {
         >
             <ModalCloseButton m={4} />
             <Flex justify='center' borderBottom={'1px solid #858585'} pb={1} mb={5} >
-                <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} display={isMaster ? 'none' : 'block'} >Novo usuário</Text>
-                <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} display={isMaster ? 'block' : 'none'} >Novo usuário adm</Text>
+                <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} >Informações da conta</Text>
             </Flex>
             <Grid gap={8} mb={5} >
-                <FormInput name={'name'} value={formData.name} variant={'flushed'} label={'Nome'} placeholder={'Nome'} onChange={handleFormEdit} required={true} />
-                <FormInput name={'email'} value={formData.email} type={'email'} variant={'flushed'} label={'Email'} placeholder={'Email'} onChange={handleFormEdit} required={true} />
-                <FormInput name={'setor'} value={formData.setor} variant={'flushed'} label={'Setor'} placeholder={'Setor'} onChange={handleFormEdit} required={true} />
-                {/* CONFIRMAR COM O MARCELO SE DEIXO UM CAMPO ADMIN COM CHECKBOX OU SE A CAMILA SÓ VAI CADASTRAR ADM'S MESMO */}
-                {/* <Flex > */} 
-                    <FormInput name={'username'} w='100%' flex='1' value={formData.username} type={'text'} variant={'flushed'} label={'Usuário'} placeholder={'Usuário'} onChange={handleFormEdit} required={true} />
-                    {/* <Checkbox>Admin</Checkbox> */}
-                {/* </Flex> */}
-                <FormInput name={'password'} value={formData.password} type={'password'} variant={'flushed'} label={'Senha'} placeholder={'Ex: (@Senha1234!)'} onChange={handleFormEdit} required={true} />
+                <FormInput name={'name'} value={formData.name} variant={'flushed'} label={'Nome'} placeholder={'Nome'} onChange={handleFormEdit} isDisabled={isDisabled} required={true} />
+                <FormInput name={'email'} value={formData.email} type={'email'} variant={'flushed'} label={'Email'} placeholder={'Email'} onChange={handleFormEdit} isDisabled={isDisabled} required={true} />
+                <FormInput name={'setor'} value={formData.setor} variant={'flushed'} label={'Setor'} placeholder={'Setor'} onChange={handleFormEdit} isDisabled={isDisabled} required={true} />
+                <FormInput name={'username'} w='100%' flex='1' value={formData.username} type={'text'} variant={'flushed'} label={'Usuário'} placeholder={'Usuário'} onChange={handleFormEdit} isDisabled={isDisabled} required={true} />
+                <Flex>
+                    <FormInput name={'password'} w='100%' value={formData.password} type={'password'} variant={'flushed'} label={'Senha'} placeholder={'**********'} onChange={handleFormEdit} isDisabled={isDisabled} required={true} />
+                    <Button colorScheme='blue' m='auto' onClick={onOpen} >Atualizar</Button>
+                </Flex>
                 {passwordError && (
                     <Stack w='100%' fontSize='xs' gap='0' justify='flex-start' >
                         <Alert p='0' bg='transparent' color='#C53030' status='error' >
@@ -154,11 +156,12 @@ function Cadastro({isMaster}) {
 
             <Button type='submit' bg='#6699CC' color='#FFF' w='100%' h='48px' borderRadius='4px' fontSize='lg' fontWeight='500'
                 _hover={{ bg: `#5c7da6`, color: `#FFF`, transform: `translateY(-2px)` }} _active={{ transform: 'translateY(2px)' }} >
-                Cadastrar
+                Salvar
             </Button>
 
+            <UpdatePass isOpen={isOpen} onClose={onClose} setPassword={(newPassword) => setFormData({ ...formData, password: newPassword })} />
         </Stack>
     )
 }
 
-export { Cadastro };
+export default DadosUser;

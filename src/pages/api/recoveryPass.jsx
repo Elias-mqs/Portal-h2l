@@ -5,8 +5,8 @@ import { hashPassword } from '@/utils'
 import jwt from 'jsonwebtoken';
 
 let transport = nodemailer.createTransport({
-    host: "sandbox.smtp.mailtrap.io",
-    port: 2525,
+    host: "smtp.h2l.com.br",
+    port: 587,
     auth: {
         user: process.env.USERMAIL,
         pass: process.env.PASSMAIL
@@ -44,7 +44,7 @@ export default async function handler(req, res) {
             let resetPasswordUrl = `http://localhost:3000/recoveryPass?token=${temporaryToken}`;
 
             let message = {
-                from: `'Portal H2L' <${process.env.USERMAIL}>`,
+                from: `Portal H2L <${process.env.USERMAIL}>`,
                 to: email,
                 replyTo: email,
                 subject: "Recuperação de senha",

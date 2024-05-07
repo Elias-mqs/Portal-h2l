@@ -27,7 +27,7 @@ async function authenticate(token) {
         const decoded = jwt.verify(token, secret);
         const user = await db
             .selectFrom('usuarios')
-            .select(['usr_id', 'username', 'email', 'admin'])
+            .select(['usr_id', 'username', 'email', 'admin', 'setor', 'nome'])
             .where('usr_id', '=', decoded.id)
             .executeTakeFirst()
 

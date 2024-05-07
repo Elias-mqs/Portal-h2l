@@ -45,7 +45,7 @@ export default async function handler(req, res) {
             } else {
                 res.status(401).json({ message: 'Credenciais inválidas' });
             }
-            
+
         } catch (error) {
             res.status(400).json({ message: 'não foi possivel autenticar' })
             console.log(error)
