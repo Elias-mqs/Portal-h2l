@@ -8,13 +8,14 @@ import {
     Flex,
     Text,
     ModalCloseButton,
+    Checkbox,
 } from "@chakra-ui/react";
 import { FormInput } from '@/components'
 import { useState } from "react";
 import api from '../utils/api'
 import Cookies from 'js-cookie'
 
-function Cadastro() {
+function Cadastro({isMaster}) {
 
     const toast = useToast();
 
@@ -122,19 +123,24 @@ function Cadastro() {
             maxH='auto'
             bg="#EDF2FF"
             borderRadius={{ base: '0', md: "10px" }}
-            // boxShadow="0 0 10px rgba(0, 0, 0, 0.4)"
+            boxShadow="0 0 10px rgba(0, 0, 0, 0.2)"
             p={{ base: '35px', md: "30px 35px 50px" }}
             transition={{ base: 'max-width 0.3s ease' }}
         >
             <ModalCloseButton m={4} />
             <Flex justify='center' borderBottom={'1px solid #858585'} pb={1} mb={5} >
-                <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} >Novo usuário</Text>
+                <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} display={isMaster ? 'none' : 'block'} >Novo usuário</Text>
+                <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} display={isMaster ? 'block' : 'none'} >Novo usuário adm</Text>
             </Flex>
             <Grid gap={8} mb={5} >
                 <FormInput name={'name'} value={formData.name} variant={'flushed'} label={'Name'} placeholder={'Nome'} onChange={handleFormEdit} required={true} />
                 <FormInput name={'email'} value={formData.email} type={'email'} variant={'flushed'} label={'Email'} placeholder={'Email'} onChange={handleFormEdit} required={true} />
                 <FormInput name={'setor'} value={formData.setor} variant={'flushed'} label={'Setor'} placeholder={'Setor'} onChange={handleFormEdit} required={true} />
-                <FormInput name={'username'} value={formData.username} type={'text'} variant={'flushed'} label={'Username'} placeholder={'Username'} onChange={handleFormEdit} required={true} />
+                {/* CONFIRMAR COM O MARCELO SE DEIXO UM CAMPO ADMIN COM CHECKBOX OU SE A CAMILA SÓ VAI CADASTRAR ADM'S MESMO */}
+                {/* <Flex > */} 
+                    <FormInput name={'username'} w='100%' flex='1' value={formData.username} type={'text'} variant={'flushed'} label={'Username'} placeholder={'Username'} onChange={handleFormEdit} required={true} />
+                    {/* <Checkbox>Admin</Checkbox> */}
+                {/* </Flex> */}
                 <FormInput name={'password'} value={formData.password} type={'password'} variant={'flushed'} label={'Password'} placeholder={'Password'} onChange={handleFormEdit} required={true} />
                 {passwordError && (
                     <Stack w='100%' fontSize='xs' gap='0' justify='flex-start' >

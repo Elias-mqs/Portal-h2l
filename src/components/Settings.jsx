@@ -33,8 +33,8 @@ export default function Settings() {
                 <IconButtonHeader labelBtn='Teste 2' />
                 <IconButtonHeader labelBtn='Teste 3' />
                 <IconButtonHeader labelBtn='Teste 4' />
-                <IconButtonHeader sizeModal='xl' conteudo={<Cadastro />} labelBtn='Cadastro' display={isAdmin ? 'block' : 'none'} />
-                <IconButtonHeader sizeModal='xl' conteudo={<Cadastro />} labelBtn='Cadastro adm' display={isMaster ? 'block' : 'none'} />
+                <IconButtonHeader sizeModal='xl' conteudo={<Cadastro isMaster={false} />} labelBtn='Cadastro' display={isAdmin ? 'block' : 'none'} />
+                <IconButtonHeader sizeModal='xl' conteudo={<Cadastro isMaster={true} />} labelBtn='Cadastro adm' display={isMaster ? 'block' : 'none'} />
             </MenuList>
         </Menu>
 

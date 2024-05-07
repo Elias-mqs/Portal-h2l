@@ -6,9 +6,6 @@ export default async function handler(req, res) {
 
     if (req.method === 'POST') {
 
-        const USERADM = process.env.USERADM
-        const PASSADM = process.env.PASSADM
-        const USERNAMEADM = process.env.USERNAME_ADM
         const secret = process.env.JWT_SECRET;
 
         const { username, password } = req.body;
@@ -19,47 +16,36 @@ export default async function handler(req, res) {
 
         try {
 
-            if (username === USERADM && password === PASSADM) {
+            const usuario = await db.selectFrom('usuarios')
+                .select(['password_hash', 'usr_id', 'username', 'admin'])
+                .where('username', '=', username)
+                .executeTakeFirst()
+
+            if (!usuario) {
+                return res.status(404).json({ message: 'Usuário não encontrado' })
+            }
+
+            const passwordHash = hashPassword(password);
+
+            if (passwordHash === usuario.password_hash) {
                 const payload = {
-                    id: 1,
-                    username: USERNAMEADM,
-                    isAdmin: 1
+                    id: usuario.usr_id,
+                    username: usuario.username,
+                    isAdmin: usuario.admin
                 }
                 const { token } = await generateToken(payload, secret)
 
+                db.updateTable('usuarios')
+                    .set({ token: token })
+                    .where('usr_id', '=', usuario.usr_id)
+                    .execute();
+
                 res.status(200).json({ token });
+
             } else {
-                const usuario = await db.selectFrom('usuarios')
-                    .select(['password_hash', 'usr_id', 'username', 'admin'])
-                    .where('username', '=', username)
-                    .executeTakeFirst()
-
-                if (!usuario) {
-                    return res.status(404).json({ message: 'Usuário não encontrado' })
-                }
-
-                const passwordHash = hashPassword(password);
-
-                if (passwordHash === usuario.password_hash) {
-                    const payload = {
-                        id: usuario.usr_id,
-                        username: usuario.username,
-                        isAdmin: usuario.admin
-                    }
-                    const { token } = await generateToken(payload, secret)
-
-                    db.updateTable('usuarios')
-                        .set({ token: token })
-                        .where('usr_id', '=', usuario.usr_id)
-                        .execute();
-
-                    res.status(200).json({ token });
-
-                } else {
-                    res.status(401).json({ message: 'Credenciais inválidas' });
-                }
+                res.status(401).json({ message: 'Credenciais inválidas' });
             }
-
+            
         } catch (error) {
             res.status(400).json({ message: 'não foi possivel autenticar' })
             console.log(error)
