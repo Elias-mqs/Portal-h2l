@@ -73,7 +73,11 @@ function UpdatePass({ isOpen, onClose, setPassword }) {
         event.stopPropagation()
         setPasswordError('')
 
-        if (!validatePassword(formPass.password) || formPass.password !== confirmPass.confirmPass) {
+        if(!validatePassword(formPass.password)){
+            return
+        }
+
+        if (formPass.password != confirmPass.confirmPass) {
             toast({ title: "Erro!", description: "As senhas não coincidem.", status: 'error', duration: 2000, isClosable: true, });
             return;
         }

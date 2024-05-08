@@ -1,30 +1,37 @@
 import { IconButtonHeader, Cadastro, DadosUser } from '.'
-import { Menu, MenuList, MenuButton } from '@chakra-ui/react'
+import { Menu, MenuList, MenuButton, useDisclosure } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import { MdOutlineSettings } from 'react-icons/md'
 import api from '@/utils/api'
 
 export default function Settings() {
 
-    const [isAdmin, setIsAdmin] = useState(false);
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const [activeModal, setActiveModal] = useState(null);
+    const [isGestor, setIsGestor] = useState(false);
     const [isComercial, setIsComercial] = useState(false);
     const [isTi, setIsTi] = useState(false)
-    const [formDados, setFormDados] = useState({ name: '', username: '', email: '', password: '', setor: '', });
+    const [formDados, setFormDados] = useState({ name: '', username: '', email: '', password: '', setor: '', info: '' });
+    const [originalData, setOriginalData] = useState({ name: '', username: '', email: '', password: '', setor: '', info: '' });
+    const [isSaved, setIsSaved] = useState(false);
 
     useEffect(() => {
         async function checkAdmin() {
             try {
-                const result = await api.get('userData')
+                const data = await api.get('userData')
+                const result = data.data.user
+              
                 setFormDados({
-                    name: result.data.user.nome,
-                    username: result.data.user.username,
-                    email: result.data.user.email,
+                    name: result.nome,
+                    username: result.username,
+                    email: result.email,
                     password: '',
-                    setor: result.data.user.setor,
+                    setor: result.setor,
+                    info: data.data.info
                 });
-                setIsAdmin(result.data.admin === 1 ? true : false)
-                setIsComercial(result.data.admin === 2 ? true : false)
-                setIsTi(result.data.admin === 3 ? true : false)
+                setIsGestor(result.admin === 1 ? true : false)
+                setIsComercial(result.admin === 2 ? true : false)
+                setIsTi(result.admin === 3 ? true : false)
 
             } catch (error) {
                 console.error('Erro no catch do settings:', error)
@@ -33,18 +40,46 @@ export default function Settings() {
         checkAdmin()
     }, [])
 
+    const handleOpenDadosUser = () => {
+        setOriginalData({ ...formDados });
+        setActiveModal('dadosUser');
+        onOpen();
+    };
+
+    const handleClose = () => {
+        if (!isSaved) {
+            setFormDados(originalData);
+        }
+        setIsSaved(false);
+        onClose();
+    };
+
+    const handleSave = () => {
+        setIsSaved(true)
+    };
+
+    const handleOpen = (modalType) => {
+        setActiveModal(modalType);
+        onOpen();
+    };
+
+    const Gestor = isGestor || isTi ? 'block' : 'none';
+    const Comercial = isComercial || isTi ? 'block' : 'none';
+    const Ti = isTi ? 'block' : 'none'
+
     return (
         <Menu >
-            <MenuButton borderRadius='20px' color='#7B809A' p='8px' _hover={{ bg: '#7b809a29' }} >
+            <MenuButton title='Configurações' borderRadius='20px' color='#7B809A' p='8px' _hover={{ bg: '#7b809a29' }} >
                 <MdOutlineSettings size={23} />
             </MenuButton>
             <MenuList align='center'  >
                 <IconButtonHeader labelBtn='Teste 1' />
                 <IconButtonHeader labelBtn='Teste 2' />
-                <IconButtonHeader labelBtn='Teste 3' />
-                <IconButtonHeader sizeModal='xl' conteudo={<DadosUser formData={formDados} setFormData={setFormDados} isDisabled={isAdmin || isTi ? false : true} />} labelBtn='Informações da conta' />
-                <IconButtonHeader sizeModal='xl' conteudo={<Cadastro isMaster={false} />} labelBtn='Cadastro' display={isAdmin || isTi ? 'block' : 'none'} />
-                <IconButtonHeader sizeModal='xl' conteudo={<Cadastro isMaster={true} />} labelBtn='Cadastro adm' display={isComercial || isTi ? 'block' : 'none'} />
+                <IconButtonHeader labelBtn='Atualizar usuarios' />
+                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'dadosUser'} onOpen={handleOpenDadosUser} onClose={handleClose} conteudo={<DadosUser formData={formDados} onClick={handleSave} setFormData={setFormDados} display={Ti} isDisabled={Gestor} />} labelBtn='Informações da conta' />
+                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastro'} onOpen={() => handleOpen('cadastro')} onClose={onClose} conteudo={<Cadastro isComercial={false} />} labelBtn='Cadastro' display={Gestor} />
+                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroGestor'} onOpen={() => handleOpen('cadastroGestor')} onClose={onClose} conteudo={<Cadastro isComercial={true} />} labelBtn='Cadastro Gestor' display={Comercial} />
+                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroComercial'} onOpen={() => handleOpen('cadastroComercial')} onClose={onClose} conteudo={<Cadastro isTi={true} />} labelBtn='Cadastro Comercial' display={Ti} />
             </MenuList>
         </Menu>
 

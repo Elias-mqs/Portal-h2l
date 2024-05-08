@@ -7,7 +7,7 @@ import { MdSearch } from 'react-icons/md';
 import Cookies from 'js-cookie'
 
 
-function PageChamadosTeste() {
+function PageChamados() {
 
     const toast = useToast()
     const router = useRouter()
@@ -117,4 +117,4 @@ function PageChamadosTeste() {
     )
 }
 
-export default PageChamadosTeste;
+export default PageChamados;

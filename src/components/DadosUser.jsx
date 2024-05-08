@@ -2,32 +2,20 @@ import {
     Button,
     Grid,
     useToast,
-    Alert,
-    AlertIcon,
     Stack,
     Flex,
     Text,
     ModalCloseButton,
     useDisclosure,
-    Modal,
-    ModalOverlay,
-    ModalContent,
 } from "@chakra-ui/react";
+import { MdEdit } from "react-icons/md";
 import { FormInput, UpdatePass } from '@/components'
-import { useState } from "react";
 import api from '../utils/api'
-import Cookies from 'js-cookie'
 
-function DadosUser({ formData, setFormData, isDisabled }) {
+function DadosUser({ formData, setFormData, display, isDisabled, onClick }) {
 
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure()
-
-    // Estado do formulário e função para atualizá-lo
-    // const [formData, setFormData] = useState({ name: '', username: '', email: '', password: '', setor: '', });
-    
-    // Estado para armazenar erros relacionados à senha
-    const [passwordError, setPasswordError] = useState('');
 
     // Função para manipular a edição de campos do formulário
     const handleFormEdit = (e) => {
@@ -41,39 +29,7 @@ function DadosUser({ formData, setFormData, isDisabled }) {
             novosDados.password = e.target.value.trim();
         }
         setFormData(novosDados);
-
     }
-
-    const validatePassword = (password) => {
-        const isLengthValid = password.length >= 10;;
-        const hasUppercase = /[A-Z]/.test(password)
-        const hasLowercase = /[a-z]/.test(password)
-        const hasNumber = /[0-9]/.test(password)
-        const hasSpecialChar = /[-!@#$%^&*(),.?":{}|<>]/.test(password);
-
-        if (!isLengthValid) {
-            setPasswordError('A senha deve ter pelo menos 10 caracteres.');
-            return false;
-        }
-        if (!hasUppercase) {
-            setPasswordError('A senha deve conter pelo menos uma letra maiúscula.');
-            return false;
-        }
-        if (!hasLowercase) {
-            setPasswordError('A senha deve conter pelo menos uma letra minúscula.');
-            return false;
-        }
-        if (!hasNumber) {
-            setPasswordError('A senha deve conter pelo menos um número.');
-            return false;
-        }
-        if (!hasSpecialChar) {
-            setPasswordError('A senha deve conter pelo menos um caractere especial.');
-            return false;
-        }
-        setPasswordError('')
-        return true;
-    };
 
     const validateEmail = (email) => {
         const emailRegex = /^[a-z0-9]+(\.[a-z0-9]+)*@[^\s@]+\.[^\s@]+$/;
@@ -86,30 +42,20 @@ function DadosUser({ formData, setFormData, isDisabled }) {
 
     const handleForm = async (event) => {
         event.preventDefault()
-        setPasswordError('')
 
-        // Verifica se algum campo do formulário está vazio 
-        const isInvalid = Object.values(formData).some(value => value.trim() === '');
-        if (isInvalid) {
-            toast({ position: 'top', title: "Erro!", description: "Por favor, preencha todos os campos corretamente. segundo", status: 'error', duration: 2000, isClosable: true, });
-            return;
-        }
+        const newFormData = { ...formData, info: formData.info }
 
         if (!validateEmail(formData.email)) {
             return;
         }
-        if (!validatePassword(formData.password)) {
-            return;
-        }
 
         try {
-            const result = await api.post('cadastro', formData)
-            const token = result?.data?.token;
-            Cookies.set('token', token);
-
-            setFormData({ name: ``, username: ``, email: ``, password: ``, setor: `` })
+            console.log(newFormData)
+            const result = await api.post('updateDataUser', newFormData)
+            console.log(result)
 
             toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
+
 
         } catch (error) {
             console.log(error)
@@ -136,25 +82,29 @@ function DadosUser({ formData, setFormData, isDisabled }) {
                 <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} >Informações da conta</Text>
             </Flex>
             <Grid gap={8} mb={5} >
-                <FormInput name={'name'} value={formData.name} variant={'flushed'} label={'Nome'} placeholder={'Nome'} onChange={handleFormEdit} isDisabled={isDisabled} required={true} />
-                <FormInput name={'email'} value={formData.email} type={'email'} variant={'flushed'} label={'Email'} placeholder={'Email'} onChange={handleFormEdit} isDisabled={isDisabled} required={true} />
-                <FormInput name={'setor'} value={formData.setor} variant={'flushed'} label={'Setor'} placeholder={'Setor'} onChange={handleFormEdit} isDisabled={isDisabled} required={true} />
-                <FormInput name={'username'} w='100%' flex='1' value={formData.username} type={'text'} variant={'flushed'} label={'Usuário'} placeholder={'Usuário'} onChange={handleFormEdit} isDisabled={isDisabled} required={true} />
-                <Flex>
-                    <FormInput name={'password'} w='100%' value={formData.password} type={'password'} variant={'flushed'} label={'Senha'} placeholder={'**********'} onChange={handleFormEdit} isDisabled={isDisabled} required={true} />
-                    <Button colorScheme='blue' m='auto' onClick={onOpen} >Atualizar</Button>
+                <Flex align='end'>
+                    <FormInput name={'name'} w='100%' value={formData.name} variant={'flushed'} label={'Nome'} placeholder={'Nome'} onChange={handleFormEdit} isDisabled={isDisabled} required={true} pointerEvents={'none'} tabIndex={'-1'} />
+                    <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={onOpen} display={display} ><MdEdit size='20px' /></Button>
                 </Flex>
-                {passwordError && (
-                    <Stack w='100%' fontSize='xs' gap='0' justify='flex-start' >
-                        <Alert p='0' bg='transparent' color='#C53030' status='error' >
-                            <AlertIcon w='13px' />
-                            {passwordError}
-                        </Alert>
-                    </Stack>
-                )}
+                <Flex align='end'>
+                    <FormInput name={'email'} w='100%' value={formData.email} type={'email'} variant={'flushed'} label={'Email'} placeholder={'Email'} onChange={handleFormEdit} isDisabled={isDisabled} required={true} pointerEvents={'none'} tabIndex={'-1'} />
+                    <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={onOpen} display={display} ><MdEdit size='20px' /></Button>
+                </Flex>
+                <Flex align='end'>
+                    <FormInput name={'setor'} w='100%' value={formData.setor} variant={'flushed'} label={'Setor'} placeholder={'Setor'} onChange={handleFormEdit} isDisabled={isDisabled} required={true} pointerEvents={'none'} tabIndex={'-1'} />
+                    <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={onOpen} display={display} ><MdEdit size='20px' /></Button>
+                </Flex>
+                <Flex align='end'>
+                    <FormInput name={'username'} w='100%' value={formData.username} type={'text'} variant={'flushed'} label={'Usuário'} placeholder={'Usuário'} onChange={handleFormEdit} isDisabled={isDisabled} required={true} pointerEvents={'none'} tabIndex={'-1'} />
+                    <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={onOpen} display={display} ><MdEdit size='20px' /></Button>
+                </Flex>
+                <Flex align='end'>
+                    <FormInput name={'password'} w='100%' value={formData.password} type={'password'} variant={'flushed'} label={'Senha'} placeholder={'**********'} onChange={handleFormEdit} required={true} readOnly={true} pointerEvents={'none'} tabIndex={'-1'} />
+                    <Button colorScheme='blue' mb={2} size='sm' onClick={onOpen} >Atualizar</Button>
+                </Flex>
             </Grid>
 
-            <Button type='submit' bg='#6699CC' color='#FFF' w='100%' h='48px' borderRadius='4px' fontSize='lg' fontWeight='500'
+            <Button type='submit' bg='#6699CC' onClick={onClick} color='#FFF' w='100%' h='48px' borderRadius='4px' fontSize='lg' fontWeight='500'
                 _hover={{ bg: `#5c7da6`, color: `#FFF`, transform: `translateY(-2px)` }} _active={{ transform: 'translateY(2px)' }} >
                 Salvar
             </Button>

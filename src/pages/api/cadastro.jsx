@@ -5,16 +5,17 @@ export default async function handler(req, res) {
 
     if (req.method === 'POST') {
 
-        const { name, username, email, setor, password } = req.body;
+        const { name, username, email, setor, password, admin } = req.body;
 
 
         // Validar se foi inserido o usuario e/ou a senha
         if (!name || !username || !email || !setor || !password) {
             return res.status(404).json({ message: 'Necessario informar todos os dados' })
         }
-
+        
         // Criar as validações //
         try {
+
 
             const dados = await db.selectFrom('usuarios')
                 .select(['nome', 'username', 'email'])
@@ -44,7 +45,8 @@ export default async function handler(req, res) {
                     username: username,
                     email: email,
                     setor: setor,
-                    password_hash: passwordHash
+                    password_hash: passwordHash,
+                    admin: admin
                 })
                 .execute();
 

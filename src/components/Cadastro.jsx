@@ -15,7 +15,7 @@ import { useState } from "react";
 import api from '../utils/api'
 import Cookies from 'js-cookie'
 
-function Cadastro({isMaster}) {
+function Cadastro({ isComercial, isTi }) {
 
     const toast = useToast();
 
@@ -98,8 +98,11 @@ function Cadastro({isMaster}) {
             return;
         }
 
+        const formDataAdmin = { ...formData, admin: 1 }
+        const formDataUser = { ...formData, admin: 0 }
         try {
-            const result = await api.post('cadastro', formData)
+
+            const result = await api.post('cadastro', isComercial ? formDataAdmin : formDataUser)
             const token = result?.data?.token;
             Cookies.set('token', token);
 
@@ -129,19 +132,16 @@ function Cadastro({isMaster}) {
         >
             <ModalCloseButton m={4} />
             <Flex justify='center' borderBottom={'1px solid #858585'} pb={1} mb={5} >
-                <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} display={isMaster ? 'none' : 'block'} >Novo usuário</Text>
-                <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} display={isMaster ? 'block' : 'none'} >Novo usuário adm</Text>
+                <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} display={isComercial || isTi ? 'none' : 'block'} >Novo usuário</Text>
+                <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} display={isComercial ? 'block' : 'none'} >Novo usuário gestor</Text>
+                <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} display={isTi ? 'block' : 'none'} >Novo usuário Comercial</Text>
             </Flex>
             <Grid gap={8} mb={5} >
-                <FormInput name={'name'} value={formData.name} variant={'flushed'} label={'Nome'} placeholder={'Nome'} onChange={handleFormEdit} required={true} />
-                <FormInput name={'email'} value={formData.email} type={'email'} variant={'flushed'} label={'Email'} placeholder={'Email'} onChange={handleFormEdit} required={true} />
-                <FormInput name={'setor'} value={formData.setor} variant={'flushed'} label={'Setor'} placeholder={'Setor'} onChange={handleFormEdit} required={true} />
-                {/* CONFIRMAR COM O MARCELO SE DEIXO UM CAMPO ADMIN COM CHECKBOX OU SE A CAMILA SÓ VAI CADASTRAR ADM'S MESMO */}
-                {/* <Flex > */} 
-                    <FormInput name={'username'} w='100%' flex='1' value={formData.username} type={'text'} variant={'flushed'} label={'Usuário'} placeholder={'Usuário'} onChange={handleFormEdit} required={true} />
-                    {/* <Checkbox>Admin</Checkbox> */}
-                {/* </Flex> */}
-                <FormInput name={'password'} value={formData.password} type={'password'} variant={'flushed'} label={'Senha'} placeholder={'Ex: (@Senha1234!)'} onChange={handleFormEdit} required={true} />
+                <FormInput name={'name'} value={formData.name} variant={'flushed'} label={'Nome'} placeholder={'Ex: (Diogo Silva Pereira)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
+                <FormInput name={'email'} value={formData.email} type={'email'} variant={'flushed'} label={'Email'} placeholder={'Ex: (email@email.com)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
+                <FormInput name={'setor'} value={formData.setor} variant={'flushed'} label={'Setor'} placeholder={'Ex: (Recursos humanos)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
+                <FormInput name={'username'} w='100%' flex='1' value={formData.username} type={'text'} variant={'flushed'} label={'Usuário'} placeholder={'Ex: (diogo.pereira)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
+                <FormInput name={'password'} value={formData.password} type={'password'} variant={'flushed'} label={'Senha'} placeholder={'Ex: (Senha@123#4)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
                 {passwordError && (
                     <Stack w='100%' fontSize='xs' gap='0' justify='flex-start' >
                         <Alert p='0' bg='transparent' color='#C53030' status='error' >
