@@ -20,6 +20,8 @@ import { FbCenter } from './Feedbacks';
 import RouteNavigation from './RouteNavigation';
 import DadosUser from './DadosUser';
 import { UpdatePass } from './UpdateData';
+import SearchUser from './SearchUser';
+import ScrollBar from './ScrollBar';
 
 // Exporte os componentes diretamente
 export {
@@ -49,5 +51,7 @@ export {
     RouteNavigation,
     DadosUser,
     UpdatePass,
+    SearchUser,
+    ScrollBar,
     
 };

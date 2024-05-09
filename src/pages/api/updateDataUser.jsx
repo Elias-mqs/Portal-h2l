@@ -5,7 +5,6 @@ export default async function handler(req, res) {
     if (req.method === 'POST') {
 
         const { name, username, email, password, setor, info } = req.body
-        console.log(req.body)
 
         if (!name || !username || !email || !setor || !password) {
             return res.status(404).json({ message: 'Necessario informar todos os dados' })
@@ -16,12 +15,10 @@ export default async function handler(req, res) {
 
         try {
 
-            console.log('tudo certo')
             const dados = await db.selectFrom('usuarios')
                 .select(['username', 'email'])
                 .where('usr_id', '=', info)
                 .executeTakeFirst();
-
 
             if (dados) {
                 if (dados.username === username) {
@@ -32,7 +29,6 @@ export default async function handler(req, res) {
             }
 
             const passwordHash = hashPassword(password)
-            console.log('passou aqui')
 
             await db
                 .updateTable('usuarios')

@@ -1,4 +1,4 @@
-import { IconButtonHeader, Cadastro, DadosUser } from '.'
+import { IconButtonHeader, Cadastro, DadosUser, SearchUser } from '.'
 import { Menu, MenuList, MenuButton, useDisclosure } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import { MdOutlineSettings } from 'react-icons/md'
@@ -75,7 +75,7 @@ export default function Settings() {
             <MenuList align='center'  >
                 <IconButtonHeader labelBtn='Teste 1' />
                 <IconButtonHeader labelBtn='Teste 2' />
-                <IconButtonHeader labelBtn='Atualizar usuarios' />
+                <IconButtonHeader sizeModal='3xl' isOpen={isOpen && activeModal === 'atualizarUser'} onOpen={() => handleOpen('atualizarUser')} onClose={onClose} conteudo={<SearchUser formData={formDados} onClick={handleSave} setFormData={setFormDados} display={Ti} isDisabled={Gestor} />} labelBtn='Atualizar usuarios' display={Gestor} />
                 <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'dadosUser'} onOpen={handleOpenDadosUser} onClose={handleClose} conteudo={<DadosUser formData={formDados} onClick={handleSave} setFormData={setFormDados} display={Ti} isDisabled={Gestor} />} labelBtn='Informações da conta' />
                 <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastro'} onOpen={() => handleOpen('cadastro')} onClose={onClose} conteudo={<Cadastro isComercial={false} />} labelBtn='Cadastro' display={Gestor} />
                 <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroGestor'} onOpen={() => handleOpen('cadastroGestor')} onClose={onClose} conteudo={<Cadastro isComercial={true} />} labelBtn='Cadastro Gestor' display={Comercial} />

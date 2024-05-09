@@ -1,22 +1,22 @@
 import { Input, Text, Flex, Textarea, InputGroup, InputRightElement, InputLeftElement } from '@chakra-ui/react'
 
-function FormInput({ label, w, maxW, name, value, type, variant, placeholder, onChange, pointerEvents, tabIndex, required, isDisabled, isInvalid, readOnly, _placeholder }) {
+function FormInput({ label, w, maxW, name, value, size, bg, border, type, variant, placeholder, onChange, pointerEvents, tabIndex, required, isDisabled, isInvalid, readOnly, _placeholder }) {
     return (
         <Flex direction='column' w={w} maxW={maxW} justify='flex-end' h='100%' >
             <Text fontWeight={500} fontSize={14} pl={2} pb={1}>{label}</Text>
-            <Input name={name} value={value} type={type} variant={variant} placeholder={placeholder}
+            <Input name={name} value={value} size={size} bg={bg} border={border} type={type} variant={variant} placeholder={placeholder}
                 onChange={onChange} pointerEvents={pointerEvents} tabIndex={tabIndex} required={required} isDisabled={isDisabled}
                 isInvalid={isInvalid} readOnly={readOnly} _placeholder={_placeholder} />
         </Flex>
     )
 }
 
-function FormInputBtn({ label, w, maxW, icon, name, value, type, variant, placeholder, onChange, pointerEvents, tabIndex, required, onClick }) {
+function FormInputBtn({ label, w, maxW, icon, name, value, size, bg, type, variant, placeholder, onChange, pointerEvents, tabIndex, required, onClick }) {
     return (
         <Flex direction='column' w={w} maxW={maxW} justify='flex-end' h='100%' >
             <Text fontWeight={500} fontSize={14} pl={2} pb={1}>{label}</Text>
             <InputGroup>
-                <Input name={name} value={value} type={type} variant={variant} border={'1px solid #C7CCD0'} placeholder={placeholder}
+                <Input name={name} value={value} size={size} bg={bg} type={type} variant={variant} border={'1px solid #C7CCD0'} placeholder={placeholder}
                     onChange={onChange} pointerEvents={pointerEvents} tabIndex={tabIndex} required={required} />
                 <InputRightElement as='button' type='submit' onClick={onClick}>
                     {icon}
