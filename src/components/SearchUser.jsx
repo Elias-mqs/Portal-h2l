@@ -102,7 +102,7 @@ function SearchUser({ formData, setFormData, display, isDisabled, onClick }) {
             bg="#EDF2FF"
             borderRadius={{ base: '0', md: "10px" }}
             boxShadow="0 0 10px rgba(0, 0, 0, 0.2)"
-            p={{ base: '35px', md: "30px 35px 50px" }}
+            p={{ base: '35px', md: "30px 35px" }}
             transition={{ base: 'max-width 0.3s ease' }}
         >
             <ModalCloseButton m={4} />
@@ -122,15 +122,17 @@ function SearchUser({ formData, setFormData, display, isDisabled, onClick }) {
                     <Flex w='20%' fontWeight={500} justify='center' >Setor</Flex>
                     <Flex w='30%' fontWeight={500} justify='center' >Email</Flex>
                 </Flex>
-                <Flex>
-                    <Box as='button' w='65px' fontSize='sm' p={2} fontWeight={500} fontStyle='italic' _hover={{ fontWeight: 700 }} >editar</Box>
-                    <Flex w='100%' bg='#1a01f74e' borderRadius='.5rem' >
-                        <Flex w='25%' maxW='25%' borderLeft='2px solid #63636342' borderLeftRadius='.5rem' p='0 10px' align='center' overflow='hidden'  >Nome</Flex>
-                        <Flex w='25%' maxW='25%' borderLeft='1px solid #636363a9' p='0 10px' align='center' overflow='hidden' >Usuário</Flex>
-                        <Flex w='20%' maxW='20%' borderLeft='1px solid #636363a9' p='0 10px' align='center' overflow='hidden' >Setor</Flex>
-                        <Flex w='30%' maxW='30%' borderLeft='1px solid #636363a9' p='0 10px' align='center' overflow='hidden' >Email</Flex>
+                {userResults.map((user, index) => (
+                    <Flex key={index}>
+                        <Box as='button' w='65px' fontSize='sm' p={2} fontWeight={500} fontStyle='italic' _hover={{ fontWeight: 700 }} >editar</Box>
+                        <Flex w='100%' bg='#D1D9FF' borderRadius='.5rem' >
+                            <Flex name='nome' w='25%' maxW='25%' borderLeft='2px solid #63636342' borderLeftRadius='.5rem' p='0 10px' align='center' overflow='hidden' >{user.nome}</Flex>
+                            <Flex name='usuario' w='25%' maxW='25%' borderLeft='1px solid #636363a9' p='0 10px' align='center' overflow='hidden' >{user.username}</Flex>
+                            <Flex name='setor' w='20%' maxW='20%' borderLeft='1px solid #636363a9' p='0 10px' align='center' overflow='hidden' >{user.setor}</Flex>
+                            <Flex name='email' w='30%' maxW='30%' borderLeft='1px solid #636363a9' p='0 10px' align='center' overflow='hidden' >{user.email}</Flex>
+                        </Flex>
                     </Flex>
-                </Flex>
+                ))}
             </Stack>
 
             <Stack aria-label='user' as='form' onSubmit={handleForm}>
@@ -170,3 +172,12 @@ function SearchUser({ formData, setFormData, display, isDisabled, onClick }) {
 }
 
 export default SearchUser;
+
+// {searchResults.map((user, index) => (
+//     <div key={index}>
+//         <h2>{user.nome}</h2>
+//         <p>Email: {user.email}</p>
+//         <p>Setor: {user.setor}</p>
+//         <p>Username: {user.username}</p>
+//     </div>
+// ))}
