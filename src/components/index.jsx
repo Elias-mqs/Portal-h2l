@@ -22,7 +22,7 @@ import DadosUser from './DadosUser';
 import { UpdatePass } from './UpdateData';
 import SearchUser from './SearchUser';
 import ScrollBar from './ScrollBar';
-
+import { debounce } from './Utils'
 // Exporte os componentes diretamente
 export {
     HeaderChamados,
@@ -53,5 +53,6 @@ export {
     UpdatePass,
     SearchUser,
     ScrollBar,
+    debounce,
     
 };

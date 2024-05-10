@@ -6,7 +6,7 @@ async function userData(req, res) {
     try {
         const token = req.headers.authorization
         const data = await authenticate(token)
-        const user = [{ email: data.email, nome: data.nome, setor: data.setor, username: data.username, admin: data.admin }];
+        const user = [{ email: data.email, name: data.nome, setor: data.setor, username: data.username, admin: data.admin }];
         const info = data.usr_id
         res.status(200).json({ user: user[0], info })
     } catch (error) {

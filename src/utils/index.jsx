@@ -56,6 +56,8 @@ function removeToken(token) {
     return Cookies.remove(token)
 }
 
+
+
 export { authenticate, hashPassword, removeToken };
 
 

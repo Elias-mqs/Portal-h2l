@@ -16,7 +16,7 @@ export default async function handler(req, res) {
             // const user = dados.dados
             const user = await db
                 .selectFrom('usuarios')
-                .select(['nome', 'email', 'setor', 'username'])
+                .select(['nome as name', 'email', 'setor', 'username', 'usr_id as info'])
                 .where((eb) => eb.or([
                     eb('nome', 'like', `%${dados.dados}%`),
                     eb('username', 'like', `%${dados.dados}%`),
