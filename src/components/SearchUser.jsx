@@ -1,3 +1,4 @@
+//src/components/SearchUser.jsx
 import {
     Button,
     Grid,
@@ -14,7 +15,7 @@ import { FormInput, FormInputBtn, UpdatePass, IconButtonHeader, DadosUser } from
 import api from '@/utils/api'
 import { useEffect, useState } from "react";
 
-function SearchUser({ formData, setFormData, display, isDisabled, onClick }) {
+function SearchUser({ formData, setFormData, levelUser }) {
 
     const toast = useToast();
     const [searchUser, setSearchUser] = useState({ dados: '' });
@@ -22,26 +23,23 @@ function SearchUser({ formData, setFormData, display, isDisabled, onClick }) {
     const [displaySearch, setDisplaySearch] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-
     // Função para manipular a edição de campos do formulário
     const handleFormEdit = (e) => {
-        // let novosDados = { ...formData };
         let novaInfo = { ...searchUser }
 
         novaInfo[e.target.name] = e.target.value
-        // novosDados[e.target.name] = e.target.value
         if (e.target.name === 'username') {
             novosDados.username = e.target.value.toLowerCase().trim();
         }
         if (e.target.name === 'password') {
             novosDados.password = e.target.value.trim();
         }
-        // setFormData(novosDados);
         setSearchUser(novaInfo);
     }
 
     const handleSearch = async (e) => {
-        e.preventDefault()
+        if (e) e.preventDefault();
+        // e.preventDefault()
         setIsSubmitting(true)
 
         if (searchUser.dados.trim() === '') {
@@ -53,18 +51,17 @@ function SearchUser({ formData, setFormData, display, isDisabled, onClick }) {
             return
         }
 
-        console.log('esta passando aqui')
-
         try {
-            const resultSearch = await api.post('searchUser', searchUser)
+
+            const searchUserAuth = { ...searchUser, levelUser: levelUser }
+
+            const resultSearch = await api.post('searchUser', searchUserAuth)
             setUserResults(resultSearch.data.user)
             setTimeout(() => {
                 setIsSubmitting(false);
               }, 1000);
         
-
             if (resultSearch.data.user.length === 0) {
-                console.log('passou aqui')
                 toast({ position: 'top', title: "Erro", description: 'Nenhum resultado encontrado. Digite outra informação.', status: 'error', duration: 3000, isClosable: true, })
                 return
             }
@@ -102,7 +99,7 @@ function SearchUser({ formData, setFormData, display, isDisabled, onClick }) {
                 </Flex>
                 {userResults.map((user, index) => (
                     <Flex key={index} >
-                        <UserRow user={user} onClick={onClick} formData={formData} setFormData={setFormData} />
+                        <UserRow user={user} formData={formData} handleSearch={handleSearch} setFormData={setFormData} />
                     </Flex>
                 ))}
             </Stack>
@@ -111,9 +108,10 @@ function SearchUser({ formData, setFormData, display, isDisabled, onClick }) {
     )
 }
 
-function UserRow({ user, onClick }) {
+function UserRow({ user, handleSearch }) {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [userDeleted, setUserDeleted] = useState(false);
     const [formData, setFormData] = useState(user)
     const [isSaved, setIsSaved] = useState(false);
     const [originalData, setOriginalData] = useState({ name: '', username: '', email: '', password: '', setor: '', info: '' });
@@ -132,7 +130,9 @@ function UserRow({ user, onClick }) {
             setFormData({...originalData, password: ''});
         }
         setIsSaved(false);
+        setUserDeleted(false);
         onClose();
+
     };
 
     const handleSave = () => {
@@ -141,7 +141,7 @@ function UserRow({ user, onClick }) {
 
     return (
         <>
-            <IconButtonHeader sizeModal='xl' isOpen={isOpen} onOpen={handleOpenDadosUser} onClose={handleClose} conteudo={<DadosUser formData={formData} onClick={handleSave} setFormData={setFormData} />} labelBtn='editar' fontSize='sm' fontWeight={500} fontStyle='italic' hover={{ fontWeight: 700, color: '#000' }}  />
+            <IconButtonHeader sizeModal='xl' isOpen={isOpen} onOpen={handleOpenDadosUser} onClose={handleClose} conteudo={<DadosUser handleSearch={handleSearch} setUserDeleted={handleClose} formData={formData} onClick={handleSave} setFormData={setFormData} />} labelBtn='editar' fontSize='sm' fontWeight={500} fontStyle='italic' hover={{ fontWeight: 700, color: '#000' }}  />
             <Flex w='100vw' bg='#D1D9FF' borderRadius='.5rem' >
                 <Flex name='nome' w='25%' borderLeft='2px solid #63636342' p='0 10px' align='center' overflow='hidden' borderLeftRadius='.5rem' >{user.name}</Flex>
                 <Flex name='usuario' w='25%' borderLeft='1px solid #636363a9' p='0 10px' align='center' overflow='hidden' >{user.username}</Flex>

@@ -14,13 +14,14 @@ export default function Settings() {
     const [formDados, setFormDados] = useState({ name: '', username: '', email: '', password: '', setor: '', info: '' });
     const [originalData, setOriginalData] = useState({ name: '', username: '', email: '', password: '', setor: '', info: '' });
     const [isSaved, setIsSaved] = useState(false);
+    const [levelUser, setLevelUser] = useState(null)
 
     useEffect(() => {
         async function checkAdmin() {
             try {
                 const data = await api.get('userData')
                 const result = data.data.user
-              
+
                 setFormDados({
                     name: result.name,
                     username: result.username,
@@ -32,6 +33,7 @@ export default function Settings() {
                 setIsGestor(result.admin === 1 ? true : false)
                 setIsComercial(result.admin === 2 ? true : false)
                 setIsTi(result.admin === 3 ? true : false)
+                setLevelUser(result.admin)
 
             } catch (error) {
                 console.error('Erro no catch do settings:', error)
@@ -42,13 +44,13 @@ export default function Settings() {
 
     const handleOpenDadosUser = () => {
         setActiveModal('dadosUser');
-        setOriginalData({ ...formDados});
+        setOriginalData({ ...formDados });
         onOpen();
     };
 
     const handleClose = () => {
         if (!isSaved) {
-            setFormDados({...originalData, password: ''});
+            setFormDados({ ...originalData, password: '' });
         }
         setIsSaved(false);
         onClose();
@@ -65,21 +67,27 @@ export default function Settings() {
 
     const Gestor = isGestor || isTi ? 'block' : 'none';
     const Comercial = isComercial || isTi ? 'block' : 'none';
-    const Ti = isTi ? 'block' : 'none'
+    const Ti = isTi ? 'block' : 'none';
+    const AllAuth = isTi || isComercial || isGestor ? 'block' : 'none';
+
+    const cadUser = true;
+    const cadGestor = true;
+    const cadComercial = true;
+    const displayNone = 'none'
 
     return (
         <Menu >
             <MenuButton title='Configurações' borderRadius='20px' color='#7B809A' p='8px' _hover={{ bg: '#7b809a29' }} >
                 <MdOutlineSettings size={23} />
             </MenuButton>
-            <MenuList align='center'  >
+            <MenuList align='center' >
                 <IconButtonHeader labelBtn='Teste 1' />
                 <IconButtonHeader labelBtn='Teste 2' />
-                <IconButtonHeader sizeModal='3xl' isOpen={isOpen && activeModal === 'atualizarUser'} onOpen={() => handleOpen('atualizarUser')} onClose={onClose} conteudo={<SearchUser formData={formDados} onClick={handleSave} setFormData={setFormDados} display={Ti} />} labelBtn='Atualizar usuarios' display={Gestor} />
-                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'dadosUser'} onOpen={handleOpenDadosUser} onClose={handleClose} conteudo={<DadosUser formData={formDados} onClick={handleSave} setFormData={setFormDados} display={Ti} isDisabled={Gestor} />} labelBtn='Informações da conta' />
-                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastro'} onOpen={() => handleOpen('cadastro')} onClose={onClose} conteudo={<Cadastro isComercial={false} />} labelBtn='Cadastro' display={Gestor} />
-                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroGestor'} onOpen={() => handleOpen('cadastroGestor')} onClose={onClose} conteudo={<Cadastro isComercial={true} />} labelBtn='Cadastro Gestor' display={Comercial} />
-                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroComercial'} onOpen={() => handleOpen('cadastroComercial')} onClose={onClose} conteudo={<Cadastro isTi={true} />} labelBtn='Cadastro Comercial' display={Ti} />
+                <IconButtonHeader sizeModal='3xl' isOpen={isOpen && activeModal === 'atualizarUser'} onOpen={() => handleOpen('atualizarUser')} onClose={onClose} conteudo={<SearchUser formData={formDados} levelUser={levelUser} onClick={handleSave} setFormData={setFormDados} display={AllAuth} />} labelBtn='Atualizar usuarios' display={AllAuth} />
+                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'dadosUser'} onOpen={handleOpenDadosUser} onClose={handleClose} conteudo={<DadosUser formData={formDados} onClick={handleSave} setFormData={setFormDados} display={Ti} displayNone={displayNone} isDisabled={Gestor} />} labelBtn='Informações da conta' />
+                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastro'} onOpen={() => handleOpen('cadastro')} onClose={onClose} conteudo={<Cadastro isComercial={false} cadUser={cadUser} levelUser={levelUser} />} labelBtn='Cadastro' display={Gestor} />
+                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroGestor'} onOpen={() => handleOpen('cadastroGestor')} onClose={onClose} conteudo={<Cadastro isComercial={true} />} levelUser={levelUser} cadGestor={cadGestor} labelBtn='Cadastro Gestor' display={Comercial} />
+                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroComercial'} onOpen={() => handleOpen('cadastroComercial')} onClose={onClose} conteudo={<Cadastro isTi={true} levelUser={levelUser} cadComercial={cadComercial} />} labelBtn='Cadastro Comercial' display={Ti} />
             </MenuList>
         </Menu>
 

@@ -15,7 +15,7 @@ import { useState } from "react";
 import api from '../utils/api'
 import Cookies from 'js-cookie'
 
-function Cadastro({ isComercial, isTi }) {
+function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUser }) {
 
     const toast = useToast();
 
@@ -98,11 +98,19 @@ function Cadastro({ isComercial, isTi }) {
             return;
         }
 
-        const formDataAdmin = { ...formData, admin: 1 }
-        const formDataUser = { ...formData, admin: 0 }
+        let formUserLevel;
+
+        if(levelUser === 1 || levelUser === 3 && cadUser){
+            formUserLevel = { ...formData, admin: 0 };
+        }else if(levelUser === 2 || levelUser === 3 && cadGestor){
+            formUserlevel = { ...formData, admin: 1 };
+        }else if(levelUser === 3 && cadComercial){
+            formUserLevel = { ...formData, admin: 2 };
+        }
+
         try {
 
-            const result = await api.post('cadastro', isComercial ? formDataAdmin : formDataUser)
+            const result = await api.post('cadastro', formUserLevel)
             const token = result?.data?.token;
             Cookies.set('token', token);
 

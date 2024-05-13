@@ -11,7 +11,7 @@ function IconButtonHeader({ ariaLabel, icon, sizeModal, conteudo, labelBtn, disp
             </Button>
             <Modal isOpen={isOpen} size={sizeModal} onClose={onClose} >
                 <ModalOverlay style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }} />
-                <ModalContent h='auto' maxH='90vh' overflow='auto' m='auto' >
+                <ModalContent h='auto' maxH='98vh' overflow='auto' m='auto' >
                     {conteudo}
                 </ModalContent>
             </Modal>

@@ -4,28 +4,41 @@ export default async function handler(req, res) {
 
     if (req.method === 'POST') {
 
-        const dados = req.body
-        console.log(dados)
+        const { dados, levelUser } = req.body
 
         if (!dados) {
             res.status(404).json({ message: 'Necessário digitar alguma informação' })
         }
 
+        if(!levelUser){
+            res.status(401).json({ message: 'Nível de usuário não permite essa ação.' })
+        }
+
+        let authLevel;
+
+        if (levelUser === 1) {
+            authLevel = 'NULL';
+        } else if (levelUser === 2) {
+            authLevel = 1;
+        }
+
         try {
 
-            // const user = dados.dados
-            const user = await db
+            let query = db
                 .selectFrom('usuarios')
                 .select(['nome as name', 'email', 'setor', 'username', 'usr_id as info'])
                 .where((eb) => eb.or([
-                    eb('nome', 'like', `%${dados.dados}%`),
-                    eb('username', 'like', `%${dados.dados}%`),
-                    eb('email', 'like', `%${dados.dados}%`),
-                    eb('setor', 'like', `%${dados.dados}%`)
+                    eb('nome', 'like', `%${dados}%`),
+                    eb('username', 'like', `%${dados}%`),
+                    eb('email', 'like', `%${dados}%`),
+                    eb('setor', 'like', `%${dados}%`)
                 ]))
-                .execute();
 
-            console.log(user)
+            if (authLevel !== undefined) {
+                query = query.where('admin', '=', authLevel);
+            }
+
+            const user = await query.execute();
 
             res.status(200).json({ user })
 
