@@ -12,11 +12,11 @@ export default async function handler(req, res) {
 
         try {
 
-            if(deleteUser === true){
+            if (deleteUser === true) {
                 await db
-                .deleteFrom('usuarios')
-                .where('usr_id', '=', info)
-                .executeTakeFirst()
+                    .deleteFrom('usuarios')
+                    .where('usr_id', '=', info)
+                    .executeTakeFirst()
 
                 res.status(200).json({ message: 'Usuário deletado!' });
             }

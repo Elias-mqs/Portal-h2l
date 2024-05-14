@@ -105,12 +105,14 @@ function PageChamados() {
                 </Grid>
             </Box>
             <Box pr={{ base: 0, lg: 8 }} >
-                <FormTextarea name={'description'} value={formChamado.description} w={{ base: '100%', lg: '50%' }} label={'Descrição:'} placeholder={'Digite aqui'} onChange={handleSaveEdit} required={true} />
+                <FormTextarea name={'description'} value={formChamado.description} w={{ base: '100%', lg: '50%' }} h={{ base: '100%', lg: '200px' }} label={'Descrição:'} placeholder={'Digite aqui'} onChange={handleSaveEdit} required={true} />
             </Box>
 
-            <Flex alignItems='center' justify='flex-end' gap={3}>
-                <ButtonCancel onClick={() => router.push('/')} />
-                <FormButtonSave type={'submit'} />
+            <Flex alignItems='flex-end' flexGrow={1} justify='flex-end' >
+                <Flex align='center' gap={3}>
+                    <ButtonCancel onClick={() => router.push('/')} />
+                    <FormButtonSave type={'submit'} />
+                </Flex>
             </Flex>
 
         </Stack >

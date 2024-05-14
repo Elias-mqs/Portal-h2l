@@ -11,14 +11,14 @@ function FormInput({ label, w, maxW, name, value, size, bg, border, type, varian
     )
 }
 
-function FormInputBtn({ label, w, maxW, icon, name, value, size, bg, type, variant, placeholder, onChange, pointerEvents, tabIndex, required, onClick, disabled }) {
+function FormInputBtn({ label, w, maxW, icon, name, value, size, bg, type, variant, placeholder, onChange, pointerEvents, tabIndex, required, onClick, disabled, boxSize, borderRadius }) {
     return (
         <Flex direction='column' w={w} maxW={maxW} justify='flex-end' h='100%' >
             <Text fontWeight={500} fontSize={14} pl={2} pb={1}>{label}</Text>
-            <InputGroup>
+            <InputGroup >
                 <Input name={name} value={value} size={size} bg={bg} type={type} variant={variant} border={'1px solid #C7CCD0'} placeholder={placeholder}
-                    onChange={onChange} pointerEvents={pointerEvents} tabIndex={tabIndex} required={required} />
-                <InputRightElement as='button' type='submit' onClick={onClick} disabled={disabled}>
+                    onChange={onChange} pointerEvents={pointerEvents} tabIndex={tabIndex} required={required} borderRadius={borderRadius} />
+                <InputRightElement as='button' type='submit' boxSize={boxSize} onClick={onClick} disabled={disabled}>
                     {icon}
                 </InputRightElement>
             </InputGroup>
@@ -41,12 +41,12 @@ function FormInputBtnL({ label, w, maxW, icon, name, value, fontSize, type, vari
     )
 }
 
-const FormTextarea = ({ w, maxW, label, name, value, variant, placeholder, onChange, required }) => {
+const FormTextarea = ({ w, h, maxW, label, name, value, variant, placeholder, onChange, required }) => {
     return (
 
-        <Flex direction='column' w={w} maxW={maxW}>
+        <Flex direction='column' w={w} h={h} maxW={maxW}>
             <Text fontWeight={500} fontSize={14} pl={2} pb={1}>{label}</Text>
-            <Textarea name={name} value={value} variant={variant} border={'1px solid #C7CCD0'} resize={'none'} placeholder={placeholder} onChange={onChange} required={required} />
+            <Textarea name={name} value={value} variant={variant} h='100%' border={'1px solid #C7CCD0'} resize={'none'} placeholder={placeholder} onChange={onChange} required={required} />
         </Flex>
 
     )

@@ -136,6 +136,8 @@ function DadosUser({ formData, setFormData, display, displayNone, onClick, setUs
                 _hover={{ bg: `#5c7da6`, color: `#FFF`, transform: `translateY(-2px)` }} _active={{ transform: 'translateY(2px)' }} >
                 Salvar
             </Button>
+
+            {/* O BOTÃO EXCLUIR ESTÁ FUNCIONANDO, PORÉM NÃO SE PODE SIMPLESMENTE EXCLUIR UM USUARIO (VERIFICAR NO CADERNO SOBRE EXCLUSÃO) */}
             <Flex w='100%' mt={1} justify='center' display='none'>
                 <Button w='50%' fontWeight='bold' bg='transparent' color='red' size='sm' onClick={deleteDialog.onOpen} display={displayNone}
                     _hover={{ bg: `red`, color: `#FFF`, transform: `translateY(-2px)` }} _active={{ transform: 'translateY(2px)' }} >

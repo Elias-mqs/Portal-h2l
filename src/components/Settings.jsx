@@ -36,7 +36,7 @@ export default function Settings() {
                 setLevelUser(result.admin)
 
             } catch (error) {
-                console.error('Erro no catch do settings:', error)
+                console.error('Erro', error)
             }
         }
         checkAdmin()

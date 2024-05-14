@@ -10,7 +10,7 @@ const secret = process.env.JWT_SECRET;
 ///////// GERAR TOKEN /////////
 export function generateToken(payload, secret) {
     return new Promise((resolve, reject) => {
-        jwt.sign(payload, secret, { expiresIn: '30m' }, (err, token) => {
+        jwt.sign(payload, secret, { expiresIn: '59m' }, (err, token) => {
             if (err) {
                 reject(err);
             } else {
