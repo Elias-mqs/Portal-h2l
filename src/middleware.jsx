@@ -36,5 +36,6 @@ export const config = {
         '/',
         '/login',
         '/novoChamado',
+        '/emAndamento',
     ],
 }

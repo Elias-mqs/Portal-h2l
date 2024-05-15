@@ -11,7 +11,8 @@ export default async function handler(req, res) {
         }
 
         if(!levelUser){
-            res.status(401).json({ message: 'Nível de usuário não permite essa ação.' })
+            console.log('Nivel de usuário não permite essa ação')
+            res.status(401).json({ message: 'Erro' })
         }
 
         let authLevel;

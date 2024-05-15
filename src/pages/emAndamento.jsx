@@ -10,6 +10,8 @@ export default function chamados() {
     const toast = useToast()
     const [searchChamado, setSearchChamado] = useState({ chamado: '' })
     const [chamadoResults, setChamadoResults] = useState([])
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
 
     const handleFormEdit = (e) => {
         let novosDados = { ...searchChamado }
@@ -19,12 +21,17 @@ export default function chamados() {
 
     const handleSearch = async (e) => {
         e.preventDefault()
+        setIsSubmitting(true)
 
         try {
             const result = await api.post('emAndamento', searchChamado)
             console.log(result)
             setChamadoResults(result.data.chamados)
+            setTimeout(() => {
+                setIsSubmitting(false);
+            }, 1000);
             toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
+
         } catch (error) {
             console.error(error)
             toast({ position: 'top', title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
@@ -40,7 +47,7 @@ export default function chamados() {
             <Stack aria-label='containerSearch' align='center' mb={4} >
                 <Flex as='form' onSubmit={handleSearch} w='100%' maxW='80em' >
                     <FormInputBtn name='chamado' type='number' value={searchChamado.chamado} w={{ base: '100%', sm: 'auto' }} size='sm' boxSize='32px' icon={<MdSearch size='24px' color='#7B809A' />}
-                        variant='filled' bg='#ffffff8d' onChange={handleFormEdit} placeholder='Nº do Chamado' borderRadius='1rem' />
+                        variant='filled' bg='#ffffff8d' onChange={handleFormEdit} placeholder='Nº do Chamado' borderRadius='1rem' disabled={isSubmitting} />
                 </Flex>
             </Stack>
 
@@ -59,12 +66,11 @@ export default function chamados() {
                         </Flex>
                     </Flex>
 
-                    {chamadoResults.map((chamados, index) => {
+                    {chamadoResults.map((chamados, index) => (
                         <Flex key={index} aria-label='chamados' direction='column' w='auto' gap={5} >
                             <ChamadoRow chamados={chamados} searchChamado={searchChamado} setSearchChamado={setSearchChamado} />
                         </Flex>
-
-                    })}
+                    ))}
 
                 </Stack>
             </Box >
