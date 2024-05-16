@@ -18,12 +18,16 @@ export default function ChamadoRow({ chamados, searchChamado, setSearchChamado }
         setOpenArrow(!openArrow)
     }
 
+    const handleDetalhes = () => {
+        const x = 12;
+    }
+
     const isOpenArrow = openArrow ? <MdOutlineKeyboardArrowUp size='24px' /> : <MdKeyboardArrowDown size='24px' />
 
     return (
         <>
             <Flex>
-                <IconButtonHeader sizeModal='xl' labelBtn='detalhes' fontSize='sm' fontWeight={500} fontStyle='italic' hover={{ fontWeight: 700, color: '#000' }} />
+                <IconButtonHeader sizeModal='xl' labelBtn='detalhes' fontSize='sm' fontWeight={500} onClick={handleDetalhes} fontStyle='italic' hover={{ fontWeight: 700, color: '#000' }} />
                 <Flex w='auto' bg='#D1D9FF' borderRadius='.5rem' >
                     <Flex name='ordemServico' w='80px' onClick={handleClick} justify='center' borderLeft='2px solid #63636342' p='0 10px' align='center' borderLeftRadius='.5rem' display={arrowOs ? 'flex' : 'none'} >{isOpenArrow}</Flex>
                     <Flex name='ordemServico' w='80px' justify='center' borderLeft='2px solid #63636342' p='0 10px' align='center' borderLeftRadius='.5rem' display={arrowOs ? 'none' : 'flex'} ><MdRemove /></Flex>
