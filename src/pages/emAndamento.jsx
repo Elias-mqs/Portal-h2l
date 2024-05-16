@@ -25,7 +25,6 @@ export default function chamados() {
 
         try {
             const result = await api.post('emAndamento', searchChamado)
-            console.log(result)
             setChamadoResults(result.data.chamados)
             setTimeout(() => {
                 setIsSubmitting(false);
