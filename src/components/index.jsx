@@ -1,13 +1,10 @@
-import HeaderChamados from './HeaderChamados';
 import Container from './Container';
 import PainelLogin from './PainelLogin';
 import SideBar from './SideBar';
-import MenuChamados from './MenuChamados';
 import MenuPedidos from './MenuPedidos';
 import HomePage from './HomePage';
 import PageChamados from './PageChamados';
 import Header from './Header';
-import PageChamadosAndamento from './PageChamadosAndamento';
 import ButtonSidebar from './ButtonSidebar';
 import NavBar from './NavBar';
 import IconButtonHeader from './IconButtonHeader';
@@ -16,7 +13,6 @@ import { FormInput, FormTextarea, FormInputBtn, FormInputBtnL } from './FormInpu
 import { FormButtonSave, ButtonCancel } from './FormButton';
 import { Cadastro } from './Cadastro';
 import Settings from './Settings';
-import { FbCenter } from './Feedbacks';
 import RouteNavigation from './RouteNavigation';
 import DadosUser from './DadosUser';
 import { UpdatePass } from './UpdateData';
@@ -26,16 +22,13 @@ import { debounce } from './Utils'
 import ChamadoRow from './ChamadoRow'
 // Exporte os componentes diretamente
 export {
-    HeaderChamados,
     Header,
     Container,
     PainelLogin,
     SideBar,
-    MenuChamados,
     MenuPedidos,
     HomePage,
     PageChamados,
-    PageChamadosAndamento,
     ButtonSidebar,
     NavBar,
     IconButtonHeader,
@@ -48,7 +41,6 @@ export {
     ButtonCancel,
     Cadastro,
     Settings,
-    FbCenter,
     RouteNavigation,
     DadosUser,
     UpdatePass,

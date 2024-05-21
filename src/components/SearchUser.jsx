@@ -87,7 +87,7 @@ function SearchUser({ formData, setFormData, levelUser }) {
 
             <Flex as='form' onSubmit={handleSearch}>
                 <FormInputBtn name='dados' value={searchUser.dados} icon={<MdSearch size='24px' color='#7B809A' />} disabled={isSubmitting} variant='filled' bg='#ffffff8d'
-                    label='Pesquisar usuário:' placeholder='Nome, usuário, email, setor' onChange={handleFormEdit} />
+                    label='Pesquisar usuário:' placeholder='Nome, usuário, email, setor' onChange={handleFormEdit} border='1px solid #C0C0C0' />
             </Flex>
 
             <Stack overflow='auto' display={viewDS} >

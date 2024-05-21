@@ -11,12 +11,12 @@ function FormInput({ label, w, maxW, name, value, size, bg, border, type, varian
     )
 }
 
-function FormInputBtn({ label, w, maxW, icon, name, value, size, bg, type, variant, placeholder, onChange, pointerEvents, tabIndex, required, onClick, disabled, boxSize, borderRadius }) {
+function FormInputBtn({ label, w, maxW, icon, name, value, size, bg, type, variant, placeholder, onChange, pointerEvents, tabIndex, required, border, onClick, disabled, boxSize, borderRadius }) {
     return (
         <Flex direction='column' w={w} maxW={maxW} justify='flex-end' h='100%' >
             <Text fontWeight={500} fontSize={14} pl={2} pb={1}>{label}</Text>
             <InputGroup >
-                <Input name={name} value={value} size={size} bg={bg} type={type} variant={variant} border={'1px solid #C7CCD0'} placeholder={placeholder}
+                <Input name={name} value={value} size={size} bg={bg} type={type} variant={variant} border={border} placeholder={placeholder}
                     onChange={onChange} pointerEvents={pointerEvents} tabIndex={tabIndex} required={required} borderRadius={borderRadius} />
                 <InputRightElement as='button' type='submit' boxSize={boxSize} onClick={onClick} disabled={disabled}>
                     {icon}

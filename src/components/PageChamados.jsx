@@ -86,7 +86,7 @@ function PageChamados() {
         <Stack as='form' onSubmit={handleSave} gap={8} >
             <Box >
                 <Grid aria-label='boxGrid' justify='flex-end' templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }} gap={8} >
-                    <FormInputBtn name={'serial'} value={formChamado.serial} variant={'filled'} label={'Série do equipamento:'} placeholder={'Número de série'} onChange={handleSaveEdit} icon={<MdSearch size='24px' onClick={searchSerial} />} required={true} />
+                    <FormInputBtn name={'serial'} value={formChamado.serial} variant={'filled'} label={'Série do equipamento:'} placeholder={'Número de série'} onChange={handleSaveEdit} icon={<MdSearch title='Pesquisar' size='24px' onClick={searchSerial} />} required={true} />
                     <FormInput name={'model'} value={formChamado.model} variant={'filled'} label={'Modelo:'} placeholder={'Modelo'} onChange={handleSaveEdit} pointerEvents={'none'} tabIndex={'-1'} />
 
                     <Flex align={'end'} gap={3}>

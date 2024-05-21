@@ -45,7 +45,7 @@ export default function chamados() {
 
             <Stack aria-label='containerSearch' align='center' mb={4} >
                 <Flex as='form' onSubmit={handleSearch} w='100%' maxW='80em' >
-                    <FormInputBtn name='chamado' type='number' value={searchChamado.chamado} w={{ base: '100%', sm: 'auto' }} size='sm' boxSize='32px' icon={<MdSearch size='24px' color='#7B809A' />}
+                    <FormInputBtn name='chamado' type='number' value={searchChamado.chamado} w={{ base: '100%', sm: 'auto' }} border='1px solid #C0C0C0' size='sm' boxSize='32px' icon={<MdSearch size='24px' color='#7B809A' />}
                         variant='filled' bg='#ffffff8d' onChange={handleFormEdit} placeholder='Nº do Chamado' borderRadius='1rem' disabled={isSubmitting} />
                 </Flex>
             </Stack>

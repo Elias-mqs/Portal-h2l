@@ -30,7 +30,7 @@ function NavBar({ onClickToggle, iconToggle, navTabs }) {
             <HStack align='center' gap={6} >
                 <Settings ariaLabel={'Settings'} />
                 {/* <IconButtonHeader icon={<MdNotifications size={22} />} option={<Cadastro/>} /> */}
-                <IconButton icon={<MdNotifications size={22} />} bg='transparent' mb={'1px'} borderRadius='20px' color='#7B809A' />
+                <IconButton title='Notificações' icon={<MdNotifications size={22} />} bg='transparent' mb={'1px'} borderRadius='20px' color='#7B809A' />
             </HStack>
 
         </HStack>
