@@ -89,7 +89,6 @@ export default function Settings() {
                 <MdOutlineSettings size={23} />
             </MenuButton>
             <MenuList align='center' >
-                <IconButtonHeader labelBtn='Teste 1' />
                 <IconButtonHeader sizeModal='3xl' isOpen={isOpen && activeModal === 'atualizarUser'} onOpen={() => handleOpen('atualizarUser')} onClose={onClose} conteudo={<SearchUser formData={formDados} levelUser={levelUser} onClick={handleSave} setFormData={setFormDados} display={AllAuth} />} labelBtn='Atualizar usuarios' display={AllAuth} />
                 <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'dadosUser'} onOpen={handleOpenDadosUser} onClose={handleClose} conteudo={<DadosUser formData={formDados} onClick={handleSave} setFormData={setFormDados} display={Ti} displayNone={displayNone} isDisabled={Gestor} />} labelBtn='Informações da conta' />
                 <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastro'} onOpen={() => handleOpen('cadastro')} onClose={onClose} conteudo={<Cadastro isComercial={false} cadUser={cadUser} levelUser={levelUser} />} labelBtn='Cadastro' display={Gestor} />

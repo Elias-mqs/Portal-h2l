@@ -40,7 +40,6 @@ export default async function handler(req, res) {
             }
 
             const user = await query.execute();
-
             res.status(200).json({ user })
 
         } catch (error) {

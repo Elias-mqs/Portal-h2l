@@ -16,9 +16,9 @@ const SideBar = ({ isOpen, transition, maxW }) => {
     const mdImgWidth = isOpen ? '200px' : '0px';
 
     const navButtons = [
-        { route: '/', label: 'Pagina inicial', icon: <MdOutlineHome size='23px' />, title:'Página inicial' },
-        { route: '/novoChamado', label: 'Chamados', icon: <SupportAgentOutlinedIcon />, title:'Chamados' },
-        { route: '/pedidos', label: 'Pedidos', icon: <PlaylistAddIcon />, title:'Pedidos' },
+        { route: '/', label: 'Pagina inicial', icon: <MdOutlineHome size='23px' />, title: 'Página inicial' },
+        { route: '/novoChamado', label: 'Chamados', icon: <SupportAgentOutlinedIcon />, title: 'Chamados' },
+        { route: '/pedidos', label: 'Pedidos', icon: <PlaylistAddIcon />, title: 'Pedidos' },
     ];
 
     const handleImg = () => {
@@ -33,11 +33,12 @@ const SideBar = ({ isOpen, transition, maxW }) => {
             h={{ base: '100%', md: 'calc(100% - 64px)' }}
             maxH={{ base: maxHeight, md: '100%' }}
             maxW={maxW}
-            overflow={{ base: `${isOpen ? 'visible' : 'hidden'}`, md: 'auto' }}
+            overflowX={{ base: `${isOpen ? 'visible' : 'hidden'}`, md: 'auto' }}
             position={{ base: 'sticky', md: 'fixed' }}
             bg='#EDF2FF'
             boxShadow={{ base: 'none', md: '0px 1px 4px 1px rgba(0, 0, 0, 0.2)' }}
             borderRadius={{ base: 0, md: '1.5rem' }}
+            sx={{ '&::-webkit-scrollbar': { display: 'none', 'msOverflowStyle': 'none', } }}
         >
             <Stack aria-label='Itens-Sidebar' align='center' w='100%' gap={{ base: 0, md: isOpen ? 5 : 0 }} >
 

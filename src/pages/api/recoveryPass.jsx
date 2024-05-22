@@ -6,7 +6,8 @@ import jwt from 'jsonwebtoken';
 
 let transport = nodemailer.createTransport({
     host: "smtp.h2l.com.br",
-    port: 587,
+    port: 465,
+    secure: true,
     auth: {
         user: process.env.USERMAIL,
         pass: process.env.PASSMAIL

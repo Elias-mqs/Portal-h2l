@@ -7,15 +7,11 @@ export default async function handler(req, res) {
 
         const { name, username, email, setor, password, admin } = req.body;
 
-
-        // Validar se foi inserido o usuario e/ou a senha
         if (!name || !username || !email || !setor || !password) {
             return res.status(404).json({ message: 'Necessario informar todos os dados' })
         }
         
-        // Criar as validações //
         try {
-
 
             const dados = await db.selectFrom('usuarios')
                 .select(['nome', 'username', 'email'])
@@ -25,7 +21,6 @@ export default async function handler(req, res) {
                     eb('email', '=', email)
                 ]))
                 .executeTakeFirst();
-
 
             if (dados) {
                 if (dados.nome === name) {
@@ -52,10 +47,6 @@ export default async function handler(req, res) {
 
             return res.status(201).json({ message: 'Usuário cadastrado com sucesso' });
 
-
-
-            // se ocorrer algum erro de comunicação ou uma forma de cadastro errada
-            // vai informar o erro
         } catch (error) {
             console.log(error)
             res.status(400).json({ message: 'Não foi possivel autenticar' })
@@ -63,7 +54,6 @@ export default async function handler(req, res) {
         }
 
     } else {
-        // Se o método HTTP não for POST, retorna um erro de método não permitido
         res.status(405).json({ message: 'Método não permitido' });
     }
 }

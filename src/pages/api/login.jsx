@@ -39,7 +39,6 @@ export default async function handler(req, res) {
                     .set({ token: token })
                     .where('usr_id', '=', usuario.usr_id)
                     .execute();
-
                 res.status(200).json({ token });
 
             } else {
