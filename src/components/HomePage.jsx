@@ -15,7 +15,7 @@ export default function HomePage() {
             </Flex> */}
 
 
-            <Stack gap={4} borderRadius='20px' bg='blue.800' boxShadow='0px 1px 4px 1px rgba(0, 0, 0, 0.2)' >
+            <Stack gap={4} borderRadius='20px' bgGradient='linear(to-b, blue.500 1%, blue.800 60%)' boxShadow='0px 1px 4px 1px rgba(0, 0, 0, 0.2)' >
 
                 <Flex w='100%' mt='15px' justify='center' color='#FFF' fontWeight={600} fontSize='25px' textShadow='0px 1px 4px 1px rgba(0, 0, 0, 0.2)'>Chamados</Flex>
 
@@ -30,7 +30,7 @@ export default function HomePage() {
                             </Flex>
                             <VStack aria-label='textos' w='100%' flex='1' gap={0} >
                                 <Flex fontWeight={600} w='100%' pl={2} mt={1} color='#6699CC' >Abertos</Flex>
-                                <Flex fontSize='25px' w='100%' h='auto' justify='flex-end' pr={6} fontWeight={800}>51/53</Flex>
+                                <Flex fontSize='25px' w='100%' h='auto' justify='flex-end' pr={6} fontWeight={800}>51</Flex>
                             </VStack>
                         </HStack>
                         <Divider />
@@ -44,7 +44,7 @@ export default function HomePage() {
                             </Flex>
                             <VStack aria-label='textos' w='100%' flex='1' gap={0} >
                                 <Flex fontWeight={600} w='100%' pl={2} mt={1} color='#FFA500' >Andamento</Flex>
-                                <Flex fontSize='25px' w='100%' h='auto' justify='flex-end' pr={6} fontWeight={800}>51/53</Flex>
+                                <Flex fontSize='25px' w='100%' h='auto' justify='flex-end' pr={6} fontWeight={800}>51</Flex>
                             </VStack>
                         </HStack>
                         <Divider />
@@ -58,7 +58,7 @@ export default function HomePage() {
                             </Flex>
                             <VStack aria-label='textos' w='100%' flex='1' gap={0} >
                                 <Flex fontWeight={600} w='100%' pl={2} mt={1} color='#4BA64F' >Encerrados</Flex>
-                                <Flex fontSize='25px' w='100%' h='auto' justify='flex-end' pr={6} fontWeight={800}>51/53</Flex>
+                                <Flex fontSize='25px' w='100%' h='auto' justify='flex-end' pr={6} fontWeight={800}>51</Flex>
                             </VStack>
                         </HStack>
                         <Divider />

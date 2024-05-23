@@ -14,5 +14,14 @@
 				"charDetails": false
 			}
 		}
-	]
+	],
+	"lastPrograms": [
+		{
+			"label": "U_Cominuc1"
+		},
+		{
+			"label": "U_Comunic1"
+		}
+	],
+	"lastProgramExecuted": "U_Comunic1"
 }
