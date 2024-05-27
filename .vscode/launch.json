@@ -21,6 +21,9 @@
 		},
 		{
 			"label": "U_Comunic1"
+		},
+		{
+			"label": "U_Comunic2"
 		}
 	],
 	"lastProgramExecuted": "U_Comunic1"

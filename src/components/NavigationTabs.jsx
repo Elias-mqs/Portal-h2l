@@ -11,8 +11,11 @@ const routeTabs = {
     { label: 'Em andamento', route: '/emAndamento' },
   ],
   '/': [
-    { label: 'Home', route: '/' }
-  ]
+    { label: 'Home', route: '/' },
+  ],
+  '/pedidos': [
+    { label: 'Novo Pedido', route: '/pedidos' },
+  ],
 };
 
 export default function NavigationTabs() {

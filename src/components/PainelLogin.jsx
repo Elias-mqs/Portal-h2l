@@ -26,16 +26,17 @@ import {
 import { IconLock, IconEyeClosed, IconEye } from '@tabler/icons-react';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import { useRouter } from 'next/router'
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef } from "react"
 import { FormInputBtnL } from '@/components'
 import api from '../utils/api'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
 
-// Componente PainelLogin
 export default function PainelLogin() {
 
+    const toast = useToast()
+    const router = useRouter()
     const [show, setShow] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingRec, setIsLoadingRec] = useState(false);
@@ -47,24 +48,13 @@ export default function PainelLogin() {
         email: ''
     })
 
-    // Hooks
-    const toast = useToast() // Hook para exibir notificações na tela
-    const router = useRouter() // Hook para manipular a navegação
-
     // Função para alternar a visibilidade da senha
     const handleClickEyes = (e) => {
         e.preventDefault();
         setShow(!show);
     };
 
-    // Impede o envio do formulário ao pressionar Enter
-    const handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-        }
-    };
-
-    ///////////// MINHA Função para lidar com o envio do formulário de login
+    //Função para lidar com o envio do formulário de login
     const handleLogin = async (e) => {
         e.preventDefault()
         setIsLoading(true);
@@ -78,16 +68,18 @@ export default function PainelLogin() {
             const token = result?.data?.token;
             Cookies.set('token', token);
             setFormulario({ username: ``, password: `` })
-
             toast({ title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
-
             router.push('/')
 
         } catch (error) {
-            toast({ title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
+            setTimeout(() => {
+                toast({ title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
+            }, 1500);
 
         } finally {
-            setIsLoading(false);
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 1500);
         }
     }
 
@@ -138,9 +130,7 @@ export default function PainelLogin() {
             const result = await axios.post('/api/recoveryPass', formRecPass)
             console.log(result)
             setFormRecPass({ email: '' })
-
             toast({ description: 'Se houver um e-mail cadastrado, você receberá uma mensagem com instruções de recuperação.', duration: 6000, isClosable: true, })
-
         } catch (error) {
             console.log(error)
             toast({ description: 'Se houver um e-mail cadastrado, você receberá uma mensagem com instruções de recuperação.', duration: 6000, isClosable: true, })
@@ -149,9 +139,7 @@ export default function PainelLogin() {
             setIsLoadingRec(false);
         }
     }
-    const handleEmailChange = (e) => {
-        setFormRecPass({ ...formRecPass, email: e.target.value })
-    }
+    const handleEmailChange = (e) => { setFormRecPass({ ...formRecPass, email: e.target.value }) }
 
 
     return (
@@ -177,9 +165,9 @@ export default function PainelLogin() {
                                         <IconLock color='#003366' />
                                     </InputLeftElement>
                                     <Input type={show ? 'text' : 'password'} name='password' fontSize='18px' variant='flushed' placeholder='Senha'
-                                        value={formulario.password} onChange={handleInputChange} onKeyDown={handleKeyDown} />
+                                        value={formulario.password} onChange={handleInputChange} />
                                     <InputRightElement>
-                                        <Box as='button' onClick={handleClickEyes}>
+                                        <Box onClick={handleClickEyes} _hover={{ cursor: 'pointer' }} >
                                             {show ? <IconEye color='#003366' />
                                                 : <IconEyeClosed color='#003366' />}
                                         </Box>

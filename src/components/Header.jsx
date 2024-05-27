@@ -12,10 +12,10 @@ export default function Header({ isOpen, toggleSidebar, navTabs }) {
         <Flex justify='space-between' transition={transition} direction={{ base: 'column', md: 'row' }} >
 
             <Box transition={transition} >
-                <SideBar alt='Sidebar' maxW={{ base: '100%', md: maxWSide }} isOpen={isOpen} transition={transition} toggle={toggleSidebar} />
+                <SideBar alt='Sidebar' maxW={{ base: '100%', md: maxWSide }} isOpen={isOpen} transition={transition} navTabs={navTabs} />
             </Box>
 
-            <Stack alt='NavBar' w={{ base: '100%', md: `calc(100% - ${maxWSide})` }} transition={transition} pl={{ base: '0', md: '10px' }} >
+            <Stack alt='NavBar' w={{ base: '100%', md: `calc(100% - ${maxWSide})` }} transition={transition} >
                 <NavBar onClickToggle={toggleSidebar} iconToggle={<MdMenu size='24px' />} navTabs={navTabs} />
             </Stack>
         </Flex >

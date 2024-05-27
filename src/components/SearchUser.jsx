@@ -1,7 +1,5 @@
 //src/components/SearchUser.jsx
 import {
-    Button,
-    Grid,
     useToast,
     Stack,
     Flex,
@@ -10,8 +8,8 @@ import {
     ModalCloseButton,
     useDisclosure,
 } from "@chakra-ui/react";
-import { MdEdit, MdSearch } from "react-icons/md";
-import { FormInput, FormInputBtn, UpdatePass, IconButtonHeader, DadosUser } from '@/components'
+import { MdSearch } from "react-icons/md";
+import { FormInputBtn, IconButtonHeader, DadosUser } from '@/components'
 import api from '@/utils/api'
 import { useEffect, useState } from "react";
 
@@ -39,7 +37,6 @@ function SearchUser({ formData, setFormData, levelUser }) {
 
     const handleSearch = async (e) => {
         if (e) e.preventDefault();
-        // e.preventDefault()
         setIsSubmitting(true)
 
         if (searchUser.dados.trim() === '') {

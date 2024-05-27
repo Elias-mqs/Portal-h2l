@@ -1,5 +1,5 @@
 import { Stack, Flex, Box, Text, useToast } from "@chakra-ui/react";
-import { FormInputBtn, ChamadoRow } from "@/components";
+import { FormInputBtn, ListaChamado } from "@/components";
 import { MdSearch } from "react-icons/md";
 import { useState } from "react";
 import api from '@/utils/api'
@@ -67,7 +67,7 @@ export default function chamados() {
 
                     {chamadoResults.map((chamados, index) => (
                         <Flex key={index} aria-label='chamados' direction='column' w='auto' gap={5} >
-                            <ChamadoRow chamados={chamados} searchChamado={searchChamado} setSearchChamado={setSearchChamado} />
+                            <ListaChamado chamados={chamados} />
                         </Flex>
                     ))}
 

@@ -7,24 +7,24 @@ function ButtonSidebar({ btnIcon, btnText, isOpen, m, onClick, title }) {
 
     return (
         <Box >
-                <Button title={title} w={'100%'} h={{ base: '100%', md: '50px' }} gap={2} maxW={isOpen ? '100%' : '45px'} borderRadius={{ base: 0, md: isOpen ? 0 : '2rem' }}
-                    p={{ base: '0 16px', md: isOpen ? '0 14px' : '16px' }} m={m} bg='transparent' transition={'max-width .4s linear'} onClick={onClick} >
+            <Button title={title} w={'100%'} h={{ base: '100%', md: '50px' }} gap={2} maxW={isOpen ? '100%' : '45px'} borderRadius={{ base: 0, md: isOpen ? 0 : '2rem' }}
+                p={{ base: '0 16px', md: isOpen ? '0 14px' : '16px' }} m={m} bg='transparent' transition={'max-width .4s linear'} onClick={onClick} >
+                    
+                <Box >
+                    <Icon w={iconBox} h={iconBox} transition={'width .5s linear, height .4s linear'} ml={isOpen ? '0' : '.5rem'} >
+                        {btnIcon}
+                    </Icon>
+                </Box>
 
+                <Flex overflow={'hidden'}>
                     <Box >
-                        <Icon w={iconBox} h={iconBox} transition={'width .5s linear, height .4s linear'} ml={isOpen ? '0' : '.5rem'} >
-                            {btnIcon}
-                        </Icon>
+                        <Text h='20px' >
+                            {btnText}
+                        </Text>
                     </Box>
+                </Flex>
 
-                    <Flex overflow={'hidden'}>
-                        <Box >
-                            <Text h='20px' >
-                                {btnText}
-                            </Text>
-                        </Box>
-                    </Flex>
-
-                </Button>
+            </Button>
         </Box>
     )
 }

@@ -19,7 +19,8 @@ import { UpdatePass } from './UpdateData';
 import SearchUser from './SearchUser';
 import ScrollBar from './ScrollBar';
 import { debounce } from './Utils'
-import ChamadoRow from './ChamadoRow'
+import ListaChamado from './ListaChamado'
+import ListaOs from './ListaOs'
 // Exporte os componentes diretamente
 export {
     Header,
@@ -47,6 +48,7 @@ export {
     SearchUser,
     ScrollBar,
     debounce,
-    ChamadoRow,
+    ListaChamado,
+    ListaOs,
     
 };
