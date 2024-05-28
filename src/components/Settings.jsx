@@ -1,4 +1,4 @@
-import { IconButtonHeader, Cadastro, DadosUser, SearchUser } from '.'
+import { IconButtonHeader, Cadastro, DadosUser, SearchUser, decript } from '.'
 import { Menu, MenuList, MenuButton, useDisclosure } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import { MdOutlineSettings } from 'react-icons/md'
@@ -23,7 +23,11 @@ export default function Settings() {
         async function checkAdmin() {
             try {
                 const data = await api.get('userData')
-                const result = data.data.user
+                const decryptedData = decript(data.data)
+                const arrDecry = decryptedData[0]
+                
+                const result = arrDecry[0]
+                const info = decryptedData[1]
 
                 setFormDados({
                     name: result.name,
@@ -31,7 +35,7 @@ export default function Settings() {
                     email: result.email,
                     password: '',
                     setor: result.setor,
-                    info: data.data.info
+                    info: info
                 });
                 setIsGestor(result.admin === 1 ? true : false)
                 setIsComercial(result.admin === 2 ? true : false)
@@ -69,7 +73,7 @@ export default function Settings() {
     };
 
     const handleSignOut = () => {
-        Cookies.remove('token')
+        Cookies.remove('ssn')
         router.push('/login')
     }
 

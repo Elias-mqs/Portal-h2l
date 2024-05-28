@@ -8,12 +8,13 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = Cookies.get('token');
-
+  const token = Cookies.get('ssn');
+  
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
+
 }, function (error) {
     console.error('Request interceptor error:', error);
     return Promise.reject(error);

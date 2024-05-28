@@ -1,14 +1,16 @@
 import { db } from '@/utils/database';
-import { generateToken, hashPassword } from '@/utils/index';
-
+import { generateToken, hashPassword, decript } from '@/utils/index';
 
 export default async function handler(req, res) {
 
     if (req.method === 'POST') {
 
-        const secret = process.env.JWT_SECRET;
 
-        const { username, password } = req.body;
+        const secret = process.env.JWT_SECRET;
+        const code = req.body.code
+        const dados = decript(code)
+
+        const { username, password } = dados;
 
         if (!username || !password) {
             return res.status(401).json({ message: 'Necessário informar usuario e senha' })
@@ -25,6 +27,7 @@ export default async function handler(req, res) {
                 return res.status(404).json({ message: 'Usuário não encontrado' })
             }
 
+
             const passwordHash = hashPassword(password);
 
             if (passwordHash === usuario.password_hash) {
@@ -33,13 +36,13 @@ export default async function handler(req, res) {
                     username: usuario.username,
                     isAdmin: usuario.admin
                 }
-                const { token } = await generateToken(payload, secret)
+                const { ssn } = await generateToken(payload, secret)
 
                 db.updateTable('usuarios')
-                    .set({ token: token })
+                    .set({ token: ssn })
                     .where('usr_id', '=', usuario.usr_id)
                     .execute();
-                res.status(200).json({ token });
+                res.status(200).json({ ssn }); // ssn de session
 
             } else {
                 res.status(401).json({ message: 'Credenciais inválidas' });

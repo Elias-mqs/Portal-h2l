@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { db } from './database';
 import crypto from 'crypto'
 import Cookies from 'js-cookie'
+import * as CryptoJS from "crypto-js";
 
 
 const secret = process.env.JWT_SECRET;
@@ -10,11 +11,11 @@ const secret = process.env.JWT_SECRET;
 ///////// GERAR TOKEN /////////
 export function generateToken(payload, secret) {
     return new Promise((resolve, reject) => {
-        jwt.sign(payload, secret, { expiresIn: '59m' }, (err, token) => {
+        jwt.sign(payload, secret, { expiresIn: '59m' }, (err, ssn) => {
             if (err) {
                 reject(err);
             } else {
-                resolve({ token });
+                resolve({ ssn });
             }
         });
     });
@@ -56,9 +57,26 @@ function removeToken(token) {
     return Cookies.remove(token)
 }
 
+///////// DESCRIPTOGRAFAR REQUISIÇÕES /////////
+function decript(dados) {
+    const passCryp = process.env.NEXT_PUBLIC_PASSCRYP
+    let bytes = CryptoJS.AES.decrypt(dados, passCryp);
+    let decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
+    return decryptedData
+}
+
+///////// CRIPTOGRAFAR REQUISIÇÕES /////////
+function cript(dados) {
+    const passCryp = process.env.NEXT_PUBLIC_PASSCRYP
+    const encryptedForm = CryptoJS.AES?.encrypt(JSON.stringify(dados), passCryp).toString()
+    const data = { code: encryptedForm }
+    return data
+}
 
 
-export { authenticate, hashPassword, removeToken };
+
+
+export { authenticate, hashPassword, removeToken, decript, cript };
 
 
 //    ANALISAR ESSA FORMA DE CRIAR SENHAS, TEM QUE VER COMO É O CAMPO NO BANCO DE DADOS REAL

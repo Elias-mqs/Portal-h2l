@@ -27,7 +27,7 @@ import { IconLock, IconEyeClosed, IconEye } from '@tabler/icons-react';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import { useRouter } from 'next/router'
 import { useState, useRef } from "react"
-import { FormInputBtnL } from '@/components'
+import { FormInputBtnL, cript } from '@/components'
 import api from '../utils/api'
 import axios from 'axios'
 import Cookies from 'js-cookie'
@@ -35,6 +35,7 @@ import Cookies from 'js-cookie'
 
 export default function PainelLogin() {
 
+    const passCryp = process.env.NEXT_PUBLIC_PASSCRYP
     const toast = useToast()
     const router = useRouter()
     const [show, setShow] = useState(false);
@@ -63,10 +64,15 @@ export default function PainelLogin() {
             return;
         }
 
+        const newForm = cript(formulario)
+        // const encryptedForm = CryptoJS.AES?.encrypt(JSON.stringify(formulario), passCryp).toString()
+        // const newForm = {code:encryptedForm}
+
         try {
-            const result = await api.post('login', formulario)
-            const token = result?.data?.token;
-            Cookies.set('token', token);
+
+            const result = await api.post('login', newForm)
+            const token = result?.data?.ssn;
+            Cookies.set('ssn', token);
             setFormulario({ username: ``, password: `` })
             toast({ title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
             router.push('/')

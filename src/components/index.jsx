@@ -18,7 +18,7 @@ import DadosUser from './DadosUser';
 import { UpdatePass } from './UpdateData';
 import SearchUser from './SearchUser';
 import ScrollBar from './ScrollBar';
-import { debounce } from './Utils'
+import { cript, decript } from './Utils'
 import ListaChamado from './ListaChamado'
 import ListaOs from './ListaOs'
 // Exporte os componentes diretamente
@@ -47,7 +47,8 @@ export {
     UpdatePass,
     SearchUser,
     ScrollBar,
-    debounce,
+    cript,
+    decript,
     ListaChamado,
     ListaOs,
     

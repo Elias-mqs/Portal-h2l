@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import fetch from 'node-fetch';
 
 export async function middleware(req) {
-    const token = req.cookies.get('token')?.value
+    const token = req.cookies.get('ssn')?.value
     const authUrl = new URL('/api/me', `http://localhost:3000`);
 
     try {

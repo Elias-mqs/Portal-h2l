@@ -1,17 +1,37 @@
 import { Stack, Flex, Box, Text, useToast } from "@chakra-ui/react";
 import { FormInputBtn, ListaChamado } from "@/components";
 import { MdSearch } from "react-icons/md";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import api from '@/utils/api'
+import * as CryptoJS from "crypto-js";
 
 
 export default function chamados() {
 
+    const passCryp = process.env.NEXT_PUBLIC_PASSCRYP
     const toast = useToast()
     const [searchChamado, setSearchChamado] = useState({ chamado: '' })
+    const [infoUser, setInfoUser] = useState({ info: '' })
     const [chamadoResults, setChamadoResults] = useState([])
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    useEffect(() => {
+        async function srcUser() {
+            try {
+                const data = await api.get('userData')
+                let bytes = CryptoJS.AES.decrypt(data.data, passCryp);
+                let decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
+                const result = decryptedData[1]
+                setInfoUser({
+                    info: result
+                });
+
+            } catch (error) {
+                console.error('Erro', error)
+            }
+        }
+        srcUser()
+    }, [])
 
     const handleFormEdit = (e) => {
         let novosDados = { ...searchChamado }
@@ -23,17 +43,25 @@ export default function chamados() {
         e.preventDefault()
         setIsSubmitting(true)
 
+        let searchChamadoInfo = { ...searchChamado, info: infoUser.info }
+
+        if (searchChamado.chamado.trim() === '') {
+            toast({ position: 'top', title: "Atenção", description: 'Digite uma informação para iniciar a busca!', status: 'error', duration: 3000, isClosable: true, })
+            setTimeout(() => {
+                setIsSubmitting(false);
+            }, 1000);
+            return
+        }
+
         try {
-            const result = await api.post('emAndamento', searchChamado)
+            const result = await api.post('emAndamento', searchChamadoInfo)
             setChamadoResults(result.data.chamados)
             setTimeout(() => {
                 setIsSubmitting(false);
             }, 1000);
-            toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
-
+            // toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
         } catch (error) {
-            console.error(error)
-            toast({ position: 'top', title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
+            console.error('Erro')
         }
     }
 

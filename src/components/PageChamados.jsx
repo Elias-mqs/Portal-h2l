@@ -1,19 +1,35 @@
 import { Box, Stack, Flex, Grid, useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/router';
-import { FormInput, FormTextarea, FormInputBtn, FormButtonSave, ButtonCancel } from '.';
-import { useState } from 'react';
+import { FormInput, FormTextarea, FormInputBtn, FormButtonSave, ButtonCancel, decript, cript } from '.';
+import { useState, useEffect } from 'react';
 import api from '../utils/api'
 import { MdSearch } from 'react-icons/md';
-import Cookies from 'js-cookie'
 
 
 function PageChamados() {
 
     const toast = useToast()
     const router = useRouter()
+    const [infoUser, setInfoUser] = useState({ info: '' })
     const [formChamado, setFormChamado] = useState({
-        serial: '', model: '', countPb: '', countCor: '', client: '', adress: '', officeHours: '', requester: '', sector: '', tel: '', incident: '', description: ''
+        serial: '', model: '', countPb: '', countCor: '', client: '', adress: '', officeHours: '', requester: '', sector: '', tel: '', incident: '', description: '', data: '', hora: ''
     })
+
+    useEffect(() => {
+        async function srcUser() {
+            try {
+                const data = await api.get('userData')
+                const result = decript(data.data)
+                setInfoUser({
+                    info: result[1]
+                });
+
+            } catch (error) {
+                console.error('Erro', error)
+            }
+        }
+        srcUser()
+    }, [])
 
     const handleSaveEdit = (e) => {
         let novosDados = { ...formChamado };
@@ -28,13 +44,13 @@ function PageChamados() {
 
     const handleSave = async (e) => {
         e.preventDefault()
+        let formChamadoInfo = { ...formChamado, info: infoUser.info }
+        const formCript = cript(formChamadoInfo)
         try {
-            const result = await api.post('chamados', formChamado)
-            const token = result?.data?.token;
-            Cookies.set('token', token)
+            const result = await api.post('chamados', formCript)
 
-            setFormChamado({ serial: '', model: '', countPb: '', countCor: '', client: '', adress: '', officeHours: '', requester: '', sector: '', tel: '', incident: '', description: '' })
-
+            setFormChamado({ serial: '', model: '', countPb: '', countCor: '', client: '', adress: '', officeHours: '', requester: '', sector: '', tel: '', incident: '', description: '', data:'', hora:'' })
+            setInfoUser({ info: '' })
             toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
 
         } catch (error) {
@@ -51,13 +67,8 @@ function PageChamados() {
     const searchSerial = async (e) => {
         e.preventDefault()
 
-
-
         try {
-            // const result = await api.post('chamados', { ...formChamado, search: true }); DESSA FORMA ENVIA TODOS OS DADOS PARA A BUSCA
-            const result = await api.post('chamados', { serial: formChamado.serial, search: true }); //DESSA FORMA ENVIA APENAS O SERIAL
-            const token = result.data.token;
-            Cookies.set('token', token)
+            const result = await api.post('chamados', { serial: formChamado.serial, search: true });
 
             if (!result || !result.data || !result.data.dados) {
                 throw new Error('Dados não encontrados.')
@@ -69,14 +80,13 @@ function PageChamados() {
                 countPb: result.data.dados.equip_contador_pb,
                 countCor: result.data.dados.equip_contador_cor
             }));
-            toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
 
         } catch (error) {
             if (error.response && error.response.status === 401) {
-                toast({ position: 'top', title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
+                toast({ position: 'top', title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 1500, isClosable: true, })
                 router.push('/login')
             } else {
-                toast({ position: 'top', title: "Erro!", description: error.message, status: 'error', duration: 2000, isClosable: true, })
+                toast({ position: 'top', title: "", description: 'Erro', status: 'error', duration: 1500, isClosable: true, })
             }
         }
     }

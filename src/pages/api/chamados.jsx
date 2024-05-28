@@ -1,12 +1,19 @@
 // src/pages/api/chamados.jsx
 
 import { db } from '@/utils/database';
+import dayjs from 'dayjs'
+import { decript } from '@/utils'
 
 export default async function handler(req, res) {
 
     if (req.method === 'POST') {
 
-        const { serial, model, countPb, countCor, client, adress, officeHours, requester, sector, tel, incident, description, search } = req.body
+        const dados = decript(req.body.code);
+
+        const { info, serial, model, countPb, countCor, client, adress, officeHours, requester, sector, tel, incident, description, search } = dados;
+
+        const hoje = dayjs().format('DD-MM-YYYY');
+        const hora = dayjs().format('HH:mm');
 
         if (!serial) {
             return res.status(404).json({ message: 'Necessário informar uma série!' })
@@ -34,8 +41,10 @@ export default async function handler(req, res) {
                 // if (busca.contador_pb >= countPb && busca.contador_cor >= countCor) {
                 //     return res.status(409).json({ message: 'Chamado já registrado para esse contador' })
                 // } else {
+
                 await db.insertInto('chamados')
                     .values({
+                        usr_id: info,
                         serie: serial,
                         modelo: model,
                         contador_pb: countPb,
@@ -48,6 +57,8 @@ export default async function handler(req, res) {
                         telefone: tel,
                         ocorrencia: incident,
                         descricao: description,
+                        data_solicitacao: hoje,
+                        hora_solicitacao: hora,
                     })
                     .execute();
 

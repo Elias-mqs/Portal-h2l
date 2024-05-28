@@ -40,11 +40,11 @@ function SearchUser({ formData, setFormData, levelUser }) {
         setIsSubmitting(true)
 
         if (searchUser.dados.trim() === '') {
-            toast({ position: 'top', title: "Erro", description: 'Digite uma informação para iniciar a busca!', status: 'error', duration: 3000, isClosable: true, })
+            toast({ position: 'top', title: "Atenção", description: 'Digite uma informação para iniciar a busca!', status: 'error', duration: 3000, isClosable: true, })
             setDisplaySearch(false)
             setTimeout(() => {
                 setIsSubmitting(false);
-              }, 1000);
+              }, 1500);
             return
         }
 
@@ -56,10 +56,10 @@ function SearchUser({ formData, setFormData, levelUser }) {
             setUserResults(resultSearch.data.user)
             setTimeout(() => {
                 setIsSubmitting(false);
-              }, 1000);
+              }, 1500);
         
             if (resultSearch.data.user.length === 0) {
-                toast({ position: 'top', title: "Erro", description: 'Nenhum resultado encontrado. Digite outra informação.', status: 'error', duration: 3000, isClosable: true, })
+                toast({ position: 'top', title: "Atenção", description: 'Nenhum resultado encontrado. Digite outra informação.', status: 'error', duration: 3000, isClosable: true, })
                 return
             }
 

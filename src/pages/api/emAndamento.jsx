@@ -4,7 +4,7 @@ export default async function handler(req, res) {
 
     if (req.method === 'POST') {
 
-        const { chamado } = req.body
+        const { chamado, info } = req.body
 
         if(!chamado){
            return res.status(404)
@@ -16,6 +16,7 @@ export default async function handler(req, res) {
             .selectFrom('chamados')
             .select([ 'ordem_servico as os', 'chamado_id as chamado', 'status', 'serie', 'ocorrencia', 'tecnico', 'data_solicitacao as data' ])
             .where('chamado_id', 'like', `%${chamado}%`)
+            .where('usr_id', '=', info )
             .execute()
 
             return res.status(200).json({ chamados })
