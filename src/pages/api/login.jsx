@@ -7,8 +7,7 @@ export default async function handler(req, res) {
 
 
         const secret = process.env.JWT_SECRET;
-        const code = req.body.code
-        const dados = decript(code)
+        const dados = decript(req.body.code)
 
         const { username, password } = dados;
 

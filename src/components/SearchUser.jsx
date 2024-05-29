@@ -3,17 +3,21 @@ import {
     useToast,
     Stack,
     Flex,
-    Box,
     Text,
     ModalCloseButton,
     useDisclosure,
 } from "@chakra-ui/react";
 import { MdSearch } from "react-icons/md";
-import { FormInputBtn, IconButtonHeader, DadosUser } from '@/components'
+import { FormInputBtn, IconButtonHeader, DadosUser, cript } from '@/components'
 import api from '@/utils/api'
 import { useEffect, useState } from "react";
 
 function SearchUser({ formData, setFormData, levelUser }) {
+
+    // NESSA TELA O MARCELO FALOU PARA QUE JÁ APAREÇA TODOS OS USUÁRIOS VINCULADOS A CONTA DO GESTOR DAQUELE DEPARTAMENTO OU 'LOJA'(NO BANCO) MAS DEIXE O CAMPO DE PESQUISA PARA
+    // QUE O USUÁRIO POSSA PESQUISAR QUANDO TIVER MUITOS RESULTADOS
+
+    // A PRIMEIRA IDEIA É CRIAR UM GET AQUI NESSE COMPONENTE PARA QUE BUSQUE OS USERS ASSIM QUE ABRIR A PÁGINA
 
     const toast = useToast();
     const [searchUser, setSearchUser] = useState({ dados: '' });
@@ -44,20 +48,21 @@ function SearchUser({ formData, setFormData, levelUser }) {
             setDisplaySearch(false)
             setTimeout(() => {
                 setIsSubmitting(false);
-              }, 1500);
+            }, 1500);
             return
         }
 
+        const searchUserAuth = { ...searchUser, lU: levelUser }
+        const searchCript = cript(searchUserAuth)
+
         try {
 
-            const searchUserAuth = { ...searchUser, levelUser: levelUser }
-
-            const resultSearch = await api.post('searchUser', searchUserAuth)
+            const resultSearch = await api.post('searchUser', searchCript)
             setUserResults(resultSearch.data.user)
             setTimeout(() => {
                 setIsSubmitting(false);
-              }, 1500);
-        
+            }, 1500);
+
             if (resultSearch.data.user.length === 0) {
                 toast({ position: 'top', title: "Atenção", description: 'Nenhum resultado encontrado. Digite outra informação.', status: 'error', duration: 3000, isClosable: true, })
                 return
@@ -124,7 +129,7 @@ function UserRow({ user, handleSearch }) {
 
     const handleClose = () => {
         if (!isSaved) {
-            setFormData({...originalData, password: ''});
+            setFormData({ ...originalData, password: '' });
         }
         setIsSaved(false);
         setUserDeleted(false);
@@ -138,7 +143,7 @@ function UserRow({ user, handleSearch }) {
 
     return (
         <>
-            <IconButtonHeader sizeModal='xl' isOpen={isOpen} onOpen={handleOpenDadosUser} onClose={handleClose} conteudo={<DadosUser handleSearch={handleSearch} setUserDeleted={handleClose} formData={formData} onClick={handleSave} setFormData={setFormData} />} labelBtn='editar' fontSize='sm' fontWeight={500} fontStyle='italic' hover={{ fontWeight: 700, color: '#000' }}  />
+            <IconButtonHeader sizeModal='xl' isOpen={isOpen} onOpen={handleOpenDadosUser} onClose={handleClose} conteudo={<DadosUser handleSearch={handleSearch} setUserDeleted={handleClose} formData={{...formData, password:''}} onClick={handleSave} setFormData={setFormData} />} labelBtn='editar' fontSize='sm' fontWeight={500} fontStyle='italic' hover={{ fontWeight: 700, color: '#000' }} />
             <Flex w='100vw' bg='#D1D9FF' borderRadius='.5rem' >
                 <Flex name='nome' w='25%' borderLeft='2px solid #63636342' p='0 10px' align='center' overflow='hidden' borderLeftRadius='.5rem' >{user.name}</Flex>
                 <Flex name='usuario' w='25%' borderLeft='1px solid #636363a9' p='0 10px' align='center' overflow='hidden' >{user.username}</Flex>

@@ -46,7 +46,7 @@ export default function chamados() {
         let searchChamadoInfo = { ...searchChamado, info: infoUser.info }
 
         if (searchChamado.chamado.trim() === '') {
-            toast({ position: 'top', title: "Atenção", description: 'Digite uma informação para iniciar a busca!', status: 'error', duration: 3000, isClosable: true, })
+            toast({ position: 'top', title: "Atenção", description: 'Digite uma informação', status: 'error', duration: 3000, isClosable: true, })
             setTimeout(() => {
                 setIsSubmitting(false);
             }, 1000);

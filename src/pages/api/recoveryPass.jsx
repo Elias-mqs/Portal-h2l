@@ -3,6 +3,7 @@ import nodemailer from 'nodemailer';
 import { db } from '@/utils/database';
 import { hashPassword } from '@/utils'
 import jwt from 'jsonwebtoken';
+import { decript } from '../../utils';
 
 let transport = nodemailer.createTransport({
     host: "smtp.h2l.com.br",
@@ -18,7 +19,10 @@ export default async function handler(req, res) {
     if (req.method === 'POST') {
 
         const secret = process.env.JWT_SECRET;
-        const { email, password, id } = req.body;
+
+        const data = decript(req.body.code)
+
+        const { email, password, id } = data;
 
         if (email && !password) {
             const result = await db

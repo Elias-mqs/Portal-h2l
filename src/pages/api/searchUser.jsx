@@ -1,10 +1,13 @@
 import { db } from '@/utils/database'
+import { decript } from '@/utils'
 
 export default async function handler(req, res) {
 
     if (req.method === 'POST') {
 
-        const { dados, levelUser } = req.body
+        const data = decript(req.body.code)
+        const { dados, lU } = data
+        const levelUser = lU
 
         if (!dados) {
             res.status(404).json({ message: 'Necessário digitar alguma informação' })

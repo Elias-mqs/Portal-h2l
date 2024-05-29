@@ -15,7 +15,7 @@ import {
 import { useState } from 'react'
 import { FormInput } from '.'
 
-function UpdatePass({ isOpen, onClose, setPassword }) {
+function UpdatePass({ isOpen, onClose, setPassword, formData }) {
 
     const toast = useToast()
     const [formPass, setFormPass] = useState({ password: '' })
@@ -23,12 +23,21 @@ function UpdatePass({ isOpen, onClose, setPassword }) {
     const [passwordError, setPasswordError] = useState('');
 
     const handleFormEdit = (e) => {
-        if (e.target.name === 'password') {
-            setFormPass({ password: e.target.value.trim() });
-        } else if (e.target.name === 'confirmPass') {
-            setConfirmPass({ confirmPass: e.target.value.trim() });
-        }
+        let novaConfirm = { ...confirmPass };
+        let novaPass = { ...formPass };
+        const { name, value } = e.target;
+
+        novaConfirm[name] = value
+        novaPass[name] = value
+        if (name === 'password') {
+            novaPass.password = value.trim()
+        } else if (name === 'confirmPass') {
+            novaConfirm.confirmPass = value.trim()
+        }    
+        setConfirmPass(novaConfirm)
+        setFormPass(novaPass)
     }
+
     const validatePassword = (password) => {
         const isLengthValid = password.length >= 10;;
         const hasUppercase = /[A-Z]/.test(password)
@@ -60,32 +69,21 @@ function UpdatePass({ isOpen, onClose, setPassword }) {
         return true;
     };
 
-    const verifyPass = () => {
-        if (formPass.password === confirmPass.confirmPass) {
-            return true
-        } else {
-            return false
-        }
-    }
-
     const handlePassUpdate = (event) => {
         event.preventDefault()
         event.stopPropagation()
         setPasswordError('')
 
-        if(!validatePassword(formPass.password)){
+        if (!validatePassword(formPass.password)) {
             return
         }
 
-        if (formPass.password != confirmPass.confirmPass) {
+        if (formPass.password !== confirmPass.confirmPass) {
             toast({ title: "Erro!", description: "As senhas não coincidem.", status: 'error', duration: 2000, isClosable: true, });
             return;
         }
-        if (!verifyPass()) {
-            return;
-        }
 
-        setPassword(formPass.password)
+        setPassword({...formData, password: formPass.password})
         setFormPass({ password: `` })
         setConfirmPass({ confirmPass: `` })
         onClose()

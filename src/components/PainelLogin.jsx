@@ -35,7 +35,6 @@ import Cookies from 'js-cookie'
 
 export default function PainelLogin() {
 
-    const passCryp = process.env.NEXT_PUBLIC_PASSCRYP
     const toast = useToast()
     const router = useRouter()
     const [show, setShow] = useState(false);
@@ -64,9 +63,15 @@ export default function PainelLogin() {
             return;
         }
 
+        if(formulario.username.trim() === '' || formulario.password.trim() === ''){
+            toast({ title: "Atenção!", description: 'Necessário informar usuário e senha', status: 'error', duration: 2000, isClosable: true, })
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 500);
+            return
+        }
+
         const newForm = cript(formulario)
-        // const encryptedForm = CryptoJS.AES?.encrypt(JSON.stringify(formulario), passCryp).toString()
-        // const newForm = {code:encryptedForm}
 
         try {
 

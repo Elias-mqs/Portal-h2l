@@ -1,5 +1,5 @@
 import { VStack, Stack, Flex, Box, Image, Button, Alert, AlertIcon, useToast } from '@chakra-ui/react'
-import { FormInput } from '../components'
+import { FormInput, cript } from '../components'
 import { useState } from 'react';
 import api from '../utils/api';
 import { authenticate } from '../utils'
@@ -16,6 +16,7 @@ export default function RecoveryPass({ pageProps: { simpleUser } }) {
     const [formPass, setFormPass] = useState({ password: '', id: simpleUser.usr_id })
     const [confirmPass, setConfirmPass] = useState({ confirmPass: '' })
     const [passwordError, setPasswordError] = useState('');
+    const [controlSend, setControlSend] = useState(false);
 
     const handleFormEdit = (e) => {
         if (e.target.name === 'password') {
@@ -66,17 +67,28 @@ export default function RecoveryPass({ pageProps: { simpleUser } }) {
     const handleForm = async (event) => {
         event.preventDefault()
         setPasswordError('')
+        setControlSend(true)
 
         if (!validatePassword(formPass.password) || formPass.password !== confirmPass.confirmPass) {
-            toast({ title: "Erro!", description: "As senhas não coincidem.", status: 'error', duration: 2000, isClosable: true, });
+            toast({ title: "Atenção!", description: "As senhas não coincidem.", status: 'error', duration: 2000, isClosable: true, });
             return;
         }
         if (!verifyPass()) {
             return;
         }
 
+        if(formPass.password.trim() === '' || confirmPass.confirmPass.trim() === ''){
+            toast({ title: "Atenção!", description: "Informe uma senha para alterar.", status: 'error', duration: 2000, isClosable: true, });
+            setTimeout(() => {
+                setControlSend(true);
+            }, 1000);
+            return;
+        }
+
+        const formCript = cript(formPass)
+
         try {
-            const result = await api.post('recoveryPass', formPass)
+            const result = await api.post('recoveryPass', formCript)
 
             setFormPass({ password: ``, id: `` })
             setConfirmPass({ confirmPass: `` })
@@ -114,7 +126,7 @@ export default function RecoveryPass({ pageProps: { simpleUser } }) {
                     </Box>
                 </Flex>
                 <Button type='submit' bg='#6699CC' color='#FFF' w='100%' h={12} fontSize={20} _hover={{ bg: `#5c7da6`, color: `#FFF`, transform: `translateY(-2px)` }}
-                    _active={{ transform: 'translateY(2px)' }} boxShadow='inset 0px 1px 4px 1px rgba(0, 0, 0, .2)' >Salvar</Button>
+                    _active={{ transform: 'translateY(2px)' }} boxShadow='inset 0px 1px 4px 1px rgba(0, 0, 0, .2)' disable={controlSend} >Salvar</Button>
 
             </VStack>
         </Stack>

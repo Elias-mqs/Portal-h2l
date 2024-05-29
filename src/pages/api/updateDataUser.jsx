@@ -1,25 +1,19 @@
 import { db } from '@/utils/database'
-import { hashPassword } from '@/utils'
+import { hashPassword, decript } from '@/utils'
+import { NoStroller } from '@mui/icons-material';
 
 export default async function handler(req, res) {
     if (req.method === 'POST') {
 
-        const { name, username, email, password, setor, info, deleteUser } = req.body
-
+        const data = decript(req.body.code);
+        const { name, username, email, password, setor, info } = data;
         if (!info) {
             return res.status(404).json({ message: 'Problema no cadastro, contate um superior!' })
         }
 
+
+
         try {
-
-            if (deleteUser === true) {
-                await db
-                    .deleteFrom('usuarios')
-                    .where('usr_id', '=', info)
-                    .executeTakeFirst()
-
-                res.status(200).json({ message: 'Usuário deletado!' });
-            }
 
             const passwordHash = password ? hashPassword(password) : null;
 
@@ -36,14 +30,14 @@ export default async function handler(req, res) {
                 if (key === 'password_hash') return acc;
                 // Se o valor foi alterado, adiciona ao objeto de atualização
                 const fieldName = Object.keys(nomesRemapeados).find(fieldName => nomesRemapeados[fieldName] === key);
-                if (dadosUser[key] !== req.body[fieldName]) {
-                    acc[key] = req.body[fieldName];
+                if (dadosUser[key] !== data[fieldName]) {
+                    acc[key] = data[fieldName];
                 }
                 return acc;
             }, {});
 
             if (Object.keys(updatedFields).length === 0 && !password) {
-                return res.status(400).json({ message: 'Por favor, altere pelo menos um campo.' });
+                return res.status(200).json({ message: 'Por favor, altere pelo menos um campo.' });
             }
 
             // Se a senha foi alterada, adiciona ao objeto de atualização

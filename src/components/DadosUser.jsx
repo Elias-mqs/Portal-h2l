@@ -17,21 +17,22 @@ import {
     AlertDialogFooter,
 } from "@chakra-ui/react";
 import { MdEdit } from "react-icons/md";
-import { FormInput, UpdatePass } from '@/components'
+import { FormInput, UpdatePass, cript } from '@/components'
 import api from '../utils/api'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-function DadosUser({ formData, setFormData, display, displayNone, onClick, setUserDeleted, handleSearch }) {
+function DadosUser({ formData, setFormData, display, displayNone, onClick, handleSearch }) {
 
     const toast = useToast();
+    const updateDialog = useDisclosure();
+    const deleteDialog = useDisclosure();
     const [disableName, setDisableName] = useState(true);
     const [disableEmail, setDisableEmail] = useState(true);
     const [disableSetor, setDisableSetor] = useState(true);
     const [disableUsername, setDisableUsername] = useState(true);
-
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const updateDialog = useDisclosure();
-    const deleteDialog = useDisclosure();
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [isAltered, setIsAltered] = useState(false)
+    const [originalData, setOriginalData] = useState({});
 
     // Função para manipular a edição de campos do formulário
     const handleFormEdit = (e) => {
@@ -45,7 +46,22 @@ function DadosUser({ formData, setFormData, display, displayNone, onClick, setUs
             novosDados.password = e.target.value.trim();
         }
         setFormData(novosDados);
+        checkForChanges(novosDados);
     }
+
+    useEffect(() => {
+        setOriginalData({ ...formData });
+    }, [formData]);
+
+    const checkForChanges = (newData) => {
+        for (let key in newData) {
+            if (newData[key] !== originalData[key]) {
+                setIsAltered(true);
+                return;
+            }
+        }
+        setIsAltered(false);
+    };
 
     const validateEmail = (email) => {
         const emailRegex = /^[a-z0-9]+(\.[a-z0-9]+)*@[^\s@]+\.[^\s@]+$/;
@@ -58,41 +74,39 @@ function DadosUser({ formData, setFormData, display, displayNone, onClick, setUs
 
     const handleForm = async (event) => {
         event.preventDefault()
+        setIsSubmitting(true)
+
+        if (!isAltered) {
+            toast({ position: 'top', title: "Nada foi alterado!", description: "Nenhum campo foi modificado.", status: 'info', duration: 2000, isClosable: true });
+            setIsSubmitting(false);
+            return;
+        }
 
         const newFormData = { ...formData, info: formData.info }
+        const formCript = cript(newFormData)
 
         if (!validateEmail(formData.email)) {
             return;
         }
 
         try {
-            const result = await api.post('updateDataUser', newFormData)
+
+            const result = await api.post('updateDataUser', formCript)
             setFormData({ ...formData, password: `` })
+            setTimeout(() => {
+                setIsSubmitting(false);
+            }, 1500);
+
+            setIsAltered(false);
+            setOriginalData(newFormData);
 
             toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
 
         } catch (error) {
-            console.log(error)
-            toast({ position: 'top', title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
-        }
-    }
-
-    const handleDelete = async (e) => {
-        e.preventDefault()
-
-        const userDelete = { ...formData, info: formData.info, deleteUser: true }
-        try {
-            const deleteResult = await api.post('updateDataUser', userDelete)
-
-            toast({ position: 'top', title: "Sucesso!", description: deleteResult?.data?.message, status: 'success', duration: 2000, isClosable: true, })
-
-            deleteDialog.onClose()
-            setUserDeleted(true)
-            handleSearch()
-
-        } catch (error) {
-            console.error(error)
-            toast({ position: 'top', title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
+            setTimeout(() => {
+                setIsSubmitting(false);
+            }, 1000);
+            toast({ position: 'top', title: "Atenção!", description: 'Revise as informações ou contate o suporte', status: 'error', duration: 2000, isClosable: true, })
         }
     }
 
@@ -100,7 +114,7 @@ function DadosUser({ formData, setFormData, display, displayNone, onClick, setUs
     const clickDisableEmail = () => { setDisableEmail(!disableEmail); }
     const clickDisableSetor = () => { setDisableSetor(!disableSetor); }
     const clickDisableUsername = () => { setDisableUsername(!disableUsername); }
-
+    console.log(formData)
     return (
 
         <Stack as='form' onSubmit={handleForm} w='100%' h='100v%' maxH='auto' bg="#EDF2FF" boxShadow="0 0 10px rgba(0, 0, 0, 0.2)" p={{ base: '35px', md: "30px 35px" }} >
@@ -133,7 +147,7 @@ function DadosUser({ formData, setFormData, display, displayNone, onClick, setUs
             </Grid>
 
             <Button type='submit' bg='#6699CC' onClick={onClick} color='#FFF' w='100%' h='48px' borderRadius='4px' fontSize='lg' fontWeight='500'
-                _hover={{ bg: `#5c7da6`, color: `#FFF`, transform: `translateY(-2px)` }} _active={{ transform: 'translateY(2px)' }} >
+                _hover={{ bg: `#5c7da6`, color: `#FFF`, transform: `translateY(-2px)` }} _active={{ transform: 'translateY(2px)' }} isDisabled={isSubmitting}>
                 Salvar
             </Button>
 
@@ -156,13 +170,13 @@ function DadosUser({ formData, setFormData, display, displayNone, onClick, setUs
                         <Button onClick={deleteDialog.onClose}>
                             Não
                         </Button>
-                        <Button colorScheme='red' onClick={handleDelete} ml={3}>
+                        <Button colorScheme='red' ml={3}>
                             Sim
                         </Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-            <UpdatePass isOpen={updateDialog.isOpen} onClose={updateDialog.onClose} setPassword={(newPassword) => setFormData({ ...formData, password: newPassword })} />
+            <UpdatePass isOpen={updateDialog.isOpen} onClose={updateDialog.onClose} formData={{ ...formData }} setPassword={(newPassword) => setFormData(newPassword)} />
         </Stack>
     )
 }

@@ -67,8 +67,16 @@ function PageChamados() {
     const searchSerial = async (e) => {
         e.preventDefault()
 
+        if(formChamado.serial.trim() === ''){
+            toast({ position: 'top', title: "Atenção!", description: 'Informe uma série.', status: 'error', duration: 1500, isClosable: true, })
+            return
+        }
+
+        let formSerialInfo = { serial: formChamado.serial, search: true }
+        const formCript = cript(formSerialInfo)
+
         try {
-            const result = await api.post('chamados', { serial: formChamado.serial, search: true });
+            const result = await api.post('chamados', formCript);
 
             if (!result || !result.data || !result.data.dados) {
                 throw new Error('Dados não encontrados.')
@@ -111,7 +119,6 @@ function PageChamados() {
                     <FormInput name={'sector'} value={formChamado.sector} variant={'filled'} label={'Setor:'} placeholder={'Setor'} onChange={handleSaveEdit} pointerEvents={'none'} tabIndex={'-1'} />
                     <FormInput name={'tel'} value={formChamado.tel} variant={'filled'} label={'Telefone:'} placeholder={'(XX) XXXXX-XXXX'} onChange={handleSaveEdit} pointerEvents={'none'} tabIndex={'-1'} />
                     <FormInput name={'incident'} value={formChamado.incident} variant={'filled'} label={'Ocorrência:'} placeholder={'Ocorrência'} onChange={handleSaveEdit} required={true} />
-                    <FormInputBtn label={'teste'} placeholder={'testando'} variant={'filled'} />
                 </Grid>
             </Box>
             <Box pr={{ base: 0, lg: 8 }} >
