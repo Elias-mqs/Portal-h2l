@@ -5,6 +5,27 @@ import { useState, useEffect } from "react";
 import api from '@/utils/api'
 import * as CryptoJS from "crypto-js";
 
+// export async function getStaticProps(){
+//     const data = await fetch('localhost:3000/api/userData')
+//     console.log(data)
+//     // const searchData = await api.post('searchChamado', data.usr_id)
+//     console.log(searchData)
+// }
+
+// export async function getServerSideProps({ query: { token }, res }) {
+
+//     try {
+//         const user = await authenticate(token);
+//         const simpleUser = JSON.parse(JSON.stringify(user))
+        
+//         return { props: { simpleUser } }
+//     } catch (err) {
+//         res.writeHead(302, { Location: '/login' });
+//         res.end();
+//         return { props: {} };
+
+//     }
+// }
 
 export default function chamados() {
 

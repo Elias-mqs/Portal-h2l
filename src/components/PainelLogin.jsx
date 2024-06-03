@@ -137,8 +137,10 @@ export default function PainelLogin() {
             return;
         }
 
+        const newRecPass = cript(formRecPass)
+
         try {
-            const result = await axios.post('/api/recoveryPass', formRecPass)
+            const result = await api.post('recoveryPass', newRecPass)
             console.log(result)
             setFormRecPass({ email: '' })
             toast({ description: 'Se houver um e-mail cadastrado, você receberá uma mensagem com instruções de recuperação.', duration: 6000, isClosable: true, })
