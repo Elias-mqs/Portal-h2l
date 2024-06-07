@@ -7,7 +7,7 @@
 			"name": "TOTVS Language Debug",
 			"program": "${command:AskForProgramName}",
 			"cwb": "${workspaceFolder}",
-			"smartclientBin": "../totvs/bin/smartclient/smartclient.exe",
+			"smartclientBin": "T:/protheus/bin/smartclient/smartclient.exe",
 			"isMultiSession": true,
 			"enableTableSync": true,
 			"extendFeatures": {
@@ -24,7 +24,10 @@
 		},
 		{
 			"label": "U_Comunic2"
+		},
+		{
+			"label": "sigatec"
 		}
 	],
-	"lastProgramExecuted": "U_Comunic1"
+	"lastProgramExecuted": "sigatec"
 }

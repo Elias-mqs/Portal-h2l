@@ -2,7 +2,7 @@ import { Box, Stack, Flex, Grid, useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/router';
 import { FormInput, FormTextarea, FormInputBtn, FormButtonSave, ButtonCancel, decript, cript } from '.';
 import { useState, useEffect } from 'react';
-import api from '../utils/api'
+import { api, api2 } from '../utils/api'
 import { MdSearch } from 'react-icons/md';
 
 
@@ -12,7 +12,8 @@ function PageChamados() {
     const router = useRouter()
     const [infoUser, setInfoUser] = useState({ info: '' })
     const [formChamado, setFormChamado] = useState({
-        serial: '', model: '', countPb: '', countCor: '', client: '', adress: '', officeHours: '', requester: '', sector: '', tel: '', incident: '', description: '', data: '', hora: ''
+        serial: '', model: '', countPb: '', countCor: '', client: '', adress: '', officeHours: '', requester: '',
+         sector: '', tel: '', incident: '', description: '', data: '', hora: ''
     })
 
     useEffect(() => {
@@ -49,7 +50,7 @@ function PageChamados() {
         try {
             const result = await api.post('chamados', formCript)
 
-            setFormChamado({ serial: '', model: '', countPb: '', countCor: '', client: '', adress: '', officeHours: '', requester: '', sector: '', tel: '', incident: '', description: '', data:'', hora:'' })
+            setFormChamado({ serial: '', model: '', countPb: '', countCor: '', client: '', adress: '', officeHours: '', requester: '', sector: '', tel: '', incident: '', description: '', data: '', hora: '' })
             setInfoUser({ info: '' })
             toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
 
@@ -67,7 +68,7 @@ function PageChamados() {
     const searchSerial = async (e) => {
         e.preventDefault()
 
-        if(formChamado.serial.trim() === ''){
+        if (formChamado.serial.trim() === '') {
             toast({ position: 'top', title: "Atenção!", description: 'Informe uma série.', status: 'error', duration: 1500, isClosable: true, })
             return
         }
@@ -76,17 +77,28 @@ function PageChamados() {
         const formCript = cript(formSerialInfo)
 
         try {
-            const result = await api.post('chamados', formCript);
+            const result = await api2.get('consulta?cserial=' + formChamado.serial);
+            const equipamento = result.data.codequi[0]
+            console.log(equipamento)
+            const result2 = await api2.get('auxil_os?ccad=loja&ccliente=' + equipamento.codcli + '&cloja=' + equipamento.loja);
+            const baseInstalada = result2.data.filiais[0]
+            console.log(baseInstalada)
+            // if(equipamento.codcli == ){
+            //     console.log('teste')
+            // } // CRIAR LOGICA PARA PRINTAR ENDEREÇO
 
-            if (!result || !result.data || !result.data.dados) {
-                throw new Error('Dados não encontrados.')
+            if (!equipamento) {
+                toast({ position: 'top', title: "", description: 'Verifique a série', status: 'info', duration: 1500, isClosable: true, })
+                return
             }
 
             setFormChamado(prevState => ({
                 ...prevState,
-                model: result.data.dados.equip_modelo,
-                countPb: result.data.dados.equip_contador_pb,
-                countCor: result.data.dados.equip_contador_cor
+                model: equipamento.desc_pro,
+                countPb: equipamento.a4pb, //NÃO ATUALIZAR ESSE CAMPO AO FAZER O GET (DEIXEI SÓ PARA VER O RESULTADO DA REQ)
+                countCor: equipamento.a4cor, //NÃO ATUALIZAR ESSE CAMPO AO FAZER O GET (DEIXEI SÓ PARA VER O RESULTADO DA REQ)
+                client: equipamento.nomcli,
+                adress: baseInstalada.end
             }));
 
         } catch (error) {
@@ -94,7 +106,7 @@ function PageChamados() {
                 toast({ position: 'top', title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 1500, isClosable: true, })
                 router.push('/login')
             } else {
-                toast({ position: 'top', title: "", description: 'Erro', status: 'error', duration: 1500, isClosable: true, })
+                toast({ position: 'top', title: "", description: 'Verifique a série.', status: 'info', duration: 1500, isClosable: true, })
             }
         }
     }

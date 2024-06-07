@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { MdSearch } from "react-icons/md";
 import { FormInputBtn, IconButtonHeader, DadosUser, cript } from '@/components'
-import api from '@/utils/api'
+import { api } from '@/utils/api'
 import { useEffect, useState } from "react";
 
 function SearchUser({ formData, setFormData, levelUser }) {
@@ -143,7 +143,7 @@ function UserRow({ user, handleSearch }) {
 
     return (
         <>
-            <IconButtonHeader sizeModal='xl' isOpen={isOpen} onOpen={handleOpenDadosUser} onClose={handleClose} conteudo={<DadosUser handleSearch={handleSearch} setUserDeleted={handleClose} formData={{...formData, password:''}} onClick={handleSave} setFormData={setFormData} />} labelBtn='editar' fontSize='sm' fontWeight={500} fontStyle='italic' hover={{ fontWeight: 700, color: '#000' }} />
+            <IconButtonHeader sizeModal='xl' isOpen={isOpen} onOpen={handleOpenDadosUser} onClose={handleClose} conteudo={<DadosUser handleSearch={handleSearch} setUserDeleted={handleClose} formData={{ ...formData, password: '' }} onClick={handleSave} setFormData={setFormData} />} labelBtn='editar' fontSize='sm' fontWeight={500} fontStyle='italic' hover={{ fontWeight: 700, color: '#000' }} />
             <Flex w='100vw' bg='#D1D9FF' borderRadius='.5rem' >
                 <Flex name='nome' w='25%' borderLeft='2px solid #63636342' p='0 10px' align='center' overflow='hidden' borderLeftRadius='.5rem' >{user.name}</Flex>
                 <Flex name='usuario' w='25%' borderLeft='1px solid #636363a9' p='0 10px' align='center' overflow='hidden' >{user.username}</Flex>

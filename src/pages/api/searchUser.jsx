@@ -5,8 +5,10 @@ export default async function handler(req, res) {
 
     if (req.method === 'POST') {
 
+        
         const data = decript(req.body.code)
         const { dados, lU } = data
+        console.log(data)
         const levelUser = lU
 
         if (!dados) {

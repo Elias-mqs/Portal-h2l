@@ -6,6 +6,9 @@ import Cookies from 'js-cookie'
 const api = axios.create({
   baseURL: '/api/'
 });
+const api2 = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_URLAPI
+});
 
 api.interceptors.request.use((config) => {
   const token = Cookies.get('ssn');
@@ -32,4 +35,4 @@ api.interceptors.response.use((response) => {
 );
 
 
-export default api;
+export {api, api2 };

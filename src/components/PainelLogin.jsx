@@ -28,7 +28,7 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import { useRouter } from 'next/router'
 import { useState, useRef } from "react"
 import { FormInputBtnL, cript } from '@/components'
-import api from '../utils/api'
+import { api } from '../utils/api'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 

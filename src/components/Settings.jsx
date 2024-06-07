@@ -2,7 +2,7 @@ import { IconButtonHeader, Cadastro, DadosUser, SearchUser, decript } from '.'
 import { Menu, MenuList, MenuButton, useDisclosure } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import { MdOutlineSettings } from 'react-icons/md'
-import api from '@/utils/api'
+import { api } from '@/utils/api'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router';
 
@@ -25,7 +25,7 @@ export default function Settings() {
                 const data = await api.get('userData')
                 const decryptedData = decript(data.data)
                 const arrDecry = decryptedData[0]
-                
+
                 const result = arrDecry[0]
                 const info = decryptedData[1]
 
