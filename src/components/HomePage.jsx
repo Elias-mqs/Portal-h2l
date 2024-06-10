@@ -33,7 +33,7 @@ export default function HomePage() {
             // const results = await axios.get("http://192.168.1.6:9106/rest/lista_chamado_os?cCliente=000028&CCODOS=" + OS)
             // const results = await axios.get("http://192.168.1.6:9106/rest/AST_PESQCLIENTE?CNUMSERIEL=CNCRQ6W43L")
             // const results = await axios.get("http://192.168.1.6:9106/rest/AUXIL_OS?CCAD=produtos&CCLIENTE=000028&CLOJA=01")
-            const results = await axios.get("http://appti.h2l.com.br/rest/AUXIL_OS?CCAD=loja&CCLIENTE=000004&CLOJA=AO")
+            const results = await axios.get("https://appti.h2l.com.br/rest/AUXIL_OS?CCAD=loja&CCLIENTE=000004&CLOJA=AO")
                                                                           
             // const results = await axios.get("http://atendimento.h2l.com.br:9106/rest/AUXIL_OS?CCAD=loja&CCLIENTE=000004&CLOJA=AO") // link da api?
             console.log(results)
