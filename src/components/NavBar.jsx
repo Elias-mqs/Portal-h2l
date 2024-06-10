@@ -3,7 +3,7 @@ import { IconButtonHeader, Cadastro, Settings } from '.'
 import { MdOutlineSettings, MdNotifications } from 'react-icons/md'
 import { useRouter } from 'next/router';
 
-function NavBar({ onClickToggle, iconToggle, navTabs }) {
+function NavBar({ onClickToggle, iconToggle, navTabs, data }) {
 
     const router = useRouter();
 
@@ -27,7 +27,7 @@ function NavBar({ onClickToggle, iconToggle, navTabs }) {
             </Flex>
 
             <HStack align='center' gap={6} >
-                <Settings ariaLabel={'Settings'} />
+                <Settings title='Configurações' data={data} />
                 <IconButton title='Notificações' icon={<MdNotifications size={22} />} bg='transparent' mb={'1px'} borderRadius='20px' color='#7B809A' />
             </HStack>
 

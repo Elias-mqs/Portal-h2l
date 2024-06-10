@@ -3,7 +3,7 @@ import { Flex, Box, Stack } from '@chakra-ui/react'
 import { MdMenu } from "react-icons/md"
 import { SideBar, NavBar } from '.'
 
-export default function Header({ isOpen, toggleSidebar, navTabs }) {
+export default function Header({ isOpen, toggleSidebar, navTabs, data }) {
 
     const transition = 'all .4s linear';
     const maxWSide = isOpen ? '170px' : '50px';
@@ -16,7 +16,7 @@ export default function Header({ isOpen, toggleSidebar, navTabs }) {
             </Box>
 
             <Stack alt='NavBar' w={{ base: '100%', md: `calc(100% - ${maxWSide})` }} transition={transition} >
-                <NavBar onClickToggle={toggleSidebar} iconToggle={<MdMenu size='24px' />} navTabs={navTabs} />
+                <NavBar onClickToggle={toggleSidebar} iconToggle={<MdMenu size='24px' />} navTabs={navTabs} data={data} />
             </Stack>
         </Flex >
     )

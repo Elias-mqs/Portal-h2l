@@ -6,7 +6,7 @@ import { api } from '@/utils/api'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router';
 
-export default function Settings() {
+export default function Settings({ data }) {
 
     const router = useRouter()
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -19,35 +19,65 @@ export default function Settings() {
     const [isSaved, setIsSaved] = useState(false);
     const [levelUser, setLevelUser] = useState(null)
 
+
     useEffect(() => {
-        async function checkAdmin() {
-            try {
-                const data = await api.get('userData')
-                const decryptedData = decript(data.data)
-                const arrDecry = decryptedData[0]
-
-                const result = arrDecry[0]
-                const info = decryptedData[1]
-
-                setFormDados({
-                    name: result.name,
-                    username: result.username,
-                    email: result.email,
-                    password: '',
-                    setor: result.setor,
-                    info: info
-                });
-                setIsGestor(result.admin === 1 ? true : false)
-                setIsComercial(result.admin === 2 ? true : false)
-                setIsTi(result.admin === 3 ? true : false)
-                setLevelUser(result.admin)
-
-            } catch (error) {
-                console.error('Erro', error)
-            }
+        if (!data || !data.data) {
+            return;
         }
-        checkAdmin()
-    }, [])
+        if (data.isLoading) {
+            return;
+        }
+        if (data.isError) {
+            return;
+        }
+
+        const result = { ...data.data[0][0], info: data.data[1] };
+
+        setFormDados({
+            name: result.name,
+            username: result.username,
+            email: result.email,
+            password: '',
+            setor: result.setor,
+            info: result.info
+        });
+
+        setIsGestor(result.admin === 1);
+        setIsComercial(result.admin === 2);
+        setIsTi(result.admin === 3);
+        setLevelUser(result.admin);
+    }, [data]);
+
+
+    // useEffect(() => {
+    //     async function checkAdmin() {
+    //         try {
+    //             const data = await api.get('userData')
+    //             const decryptedData = decript(data.data)
+    //             const arrDecry = decryptedData[0]
+
+    //             const result = arrDecry[0]
+    //             const info = decryptedData[1]
+
+    //             setFormDados({
+    //                 name: result.name,
+    //                 username: result.username,
+    //                 email: result.email,
+    //                 password: '',
+    //                 setor: result.setor,
+    //                 info: info
+    //             });
+    //             setIsGestor(result.admin === 1 ? true : false)
+    //             setIsComercial(result.admin === 2 ? true : false)
+    //             setIsTi(result.admin === 3 ? true : false)
+    //             setLevelUser(result.admin)
+
+    //         } catch (error) {
+    //             console.error('Erro', error)
+    //         }
+    //     }
+    //     checkAdmin()
+    // }, [])
 
     const handleOpenDadosUser = () => {
         setActiveModal('dadosUser');

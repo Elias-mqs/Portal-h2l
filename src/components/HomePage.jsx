@@ -3,14 +3,17 @@ import { MdHeadphones, MdOutlineCheckCircle, MdSearch } from "react-icons/md";
 import { FaHourglassHalf } from "react-icons/fa6";
 import { AiOutlineTool } from "react-icons/ai";
 import { FormInputBtn } from '@/components'
-import { useState } from "react";
-import api from '@/utils/api'
+import { useState, useEffect } from "react";
+import { api, api2 } from '@/utils/api'
 import axios from 'axios';
+import { useQuery } from "@tanstack/react-query";
 
 export default function HomePage() {
 
     const [searchUser, setSearchUser] = useState({ nome: '' })
     const [result, setResult] = useState({ user: '' })
+
+    const [shouldFetch, setShouldFetch] = useState(false);
 
     const handleFormEdit = (e) => {
         const novosDados = { ...searchUser }
@@ -22,27 +25,36 @@ export default function HomePage() {
         setSearchUser(novosDados);
     }
 
+    const { data, error, isLoading, refetch } = useQuery({
+        queryKey: ['searchUser', searchUser.nome],
+        queryFn: async () => {
+            const response = await api2.get("http://192.168.1.6:9106/rest/AUXIL_OS?CCAD=loja&CCLIENTE=000004&CLOJA=AO");
+            console.log(response.data.filiais[0])
+            console.log('teste')
+            return response.data.filiais[0];
+        },
+        enabled: false,
+    });
+
     const handleSearch = async (e) => {
-        e.preventDefault()
-
-        const OS = '558747'
-
-        try {
-            // const results = await axios.get("http://192.168.1.6:9106/rest/CONSULTA?CCODIGOB=CNCRQ6W43L")
-            // const results = await axios.get("http://192.168.1.6:9106/rest/OSS?cCliente=000028&CCODOS=558747&cLoja=01&cItem=")
-            // const results = await axios.get("http://192.168.1.6:9106/rest/lista_chamado_os?cCliente=000028&CCODOS=" + OS)
-            // const results = await axios.get("http://192.168.1.6:9106/rest/AST_PESQCLIENTE?CNUMSERIEL=CNCRQ6W43L")
-            // const results = await axios.get("http://192.168.1.6:9106/rest/AUXIL_OS?CCAD=produtos&CCLIENTE=000028&CLOJA=01")
-            const results = await axios.get("https://appti.h2l.com.br/rest/AUXIL_OS?CCAD=loja&CCLIENTE=000004&CLOJA=AO")
-                                                                          
-            // const results = await axios.get("http://atendimento.h2l.com.br:9106/rest/AUXIL_OS?CCAD=loja&CCLIENTE=000004&CLOJA=AO") // link da api?
-            console.log(results)
-
-
-        } catch (error) {
-            console.log(error)
-        }
+        e.preventDefault();
+        refetch();
     }
+
+
+    // const handleSearch = async (e) => {
+    //     e.preventDefault()
+
+    //     try {
+    //         const results = await api2.get("http://192.168.1.6:9106/rest/AUXIL_OS?CCAD=loja&CCLIENTE=000004&CLOJA=AO")
+    //         console.log(results)
+
+
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+
 
 
 
@@ -58,8 +70,14 @@ export default function HomePage() {
                 <FormInputBtn name='nome' value={searchUser.nome} icon={<MdSearch size='24px' color='#7B809A' />} variant='filled' bg='#ffffff8d'
                     label='Pesquisar usuário:' placeholder='Nome' onChange={handleFormEdit} border='1px solid #C0C0C0' />
 
-                <Box w='200px' h='40px' border='2px solid #000' >
-                    <Text>{result.user}</Text>
+                <Box w='auto' h='40px' border='2px solid #000' >
+                    {isLoading ? (
+                        <Text>Loading...</Text>
+                    ) : error ? (
+                        <Text>Error: {error.message}</Text>
+                    ) : (
+                        <Text>{data?.nome}</Text>
+                    )}
                 </Box>
                 <Button colorScheme="teal" size='sm' type='submit' >Enviar</Button>
             </Stack>
