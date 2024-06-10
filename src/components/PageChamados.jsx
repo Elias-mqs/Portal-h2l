@@ -98,7 +98,9 @@ function PageChamados() {
                 countPb: equipamento.a4pb, //NÃO ATUALIZAR ESSE CAMPO AO FAZER O GET (DEIXEI SÓ PARA VER O RESULTADO DA REQ)
                 countCor: equipamento.a4cor, //NÃO ATUALIZAR ESSE CAMPO AO FAZER O GET (DEIXEI SÓ PARA VER O RESULTADO DA REQ)
                 client: equipamento.nomcli,
-                adress: baseInstalada.end
+                adress: baseInstalada.end,
+                // officeHours: aa3
+
             }));
 
         } catch (error) {
