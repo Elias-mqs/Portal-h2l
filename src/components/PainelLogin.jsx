@@ -29,30 +29,33 @@ import { useRouter } from 'next/router'
 import { useState, useRef } from "react"
 import { FormInputBtnL, cript } from '@/components'
 import { api } from '../utils/api'
-import axios from 'axios'
 import Cookies from 'js-cookie'
+import { useAuth } from '@/context/AuthContext';
 
 
 export default function PainelLogin() {
 
-    const toast = useToast()
-    const router = useRouter()
+    const toast = useToast();
+    const router = useRouter();
+    const { login } = useAuth();
     const [show, setShow] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingRec, setIsLoadingRec] = useState(false);
     const [formulario, setFormulario] = useState({
         username: '',
         password: ''
-    })
+    });
     const [formRecPass, setFormRecPass] = useState({
         email: ''
-    })
+    });
+
 
     // Função para alternar a visibilidade da senha
     const handleClickEyes = (e) => {
         e.preventDefault();
         setShow(!show);
     };
+
 
     //Função para lidar com o envio do formulário de login
     const handleLogin = async (e) => {
@@ -63,7 +66,7 @@ export default function PainelLogin() {
             return;
         }
 
-        if(formulario.username.trim() === '' || formulario.password.trim() === ''){
+        if (formulario.username.trim() === '' || formulario.password.trim() === '') {
             toast({ title: "Atenção!", description: 'Necessário informar usuário e senha', status: 'error', duration: 2000, isClosable: true, })
             setTimeout(() => {
                 setIsLoading(false);
@@ -78,8 +81,12 @@ export default function PainelLogin() {
             const result = await api.post('login', newForm)
             const token = result?.data?.ssn;
             Cookies.set('ssn', token);
+
             setFormulario({ username: ``, password: `` })
+
             toast({ title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
+            
+            login();
             router.push('/')
 
         } catch (error) {
@@ -93,6 +100,7 @@ export default function PainelLogin() {
             }, 1500);
         }
     }
+
 
     // Função para lidar com a mudança nos campos de entrada do formulário
     const handleInputChange = (e) => {
@@ -109,6 +117,7 @@ export default function PainelLogin() {
         setFormulario(novosDados);
     }
 
+
     // Modal Recuperação de senha
     const initialRef = useRef();
     const { isOpen, onOpen, onClose: chakraOnClose } = useDisclosure();
@@ -117,6 +126,7 @@ export default function PainelLogin() {
         chakraOnClose();
     }
 
+    // Função para validação de email
     const validateEmail = (email) => {
         const emailRegex = /^[a-z0-9]+(\.[a-z0-9]+)*@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
@@ -126,6 +136,7 @@ export default function PainelLogin() {
         return true;
     }
 
+    // Função para recuperação de senha
     const handleRecoverPass = async (e) => {
         e.preventDefault()
         setIsLoadingRec(true);

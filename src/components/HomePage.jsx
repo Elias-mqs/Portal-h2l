@@ -1,19 +1,14 @@
 import { Button, VStack, HStack, Stack, Flex, Box, Divider, Text } from "@chakra-ui/react";
 import { MdHeadphones, MdOutlineCheckCircle, MdSearch } from "react-icons/md";
-import { FaHourglassHalf } from "react-icons/fa6";
 import { AiOutlineTool } from "react-icons/ai";
 import { FormInputBtn } from '@/components'
-import { useState, useEffect } from "react";
-import { api, api2 } from '@/utils/api'
-import axios from 'axios';
+import { useState } from "react";
+import { api2 } from '@/utils/api'
 import { useQuery } from "@tanstack/react-query";
 
 export default function HomePage() {
 
     const [searchUser, setSearchUser] = useState({ nome: '' })
-    const [result, setResult] = useState({ user: '' })
-
-    const [shouldFetch, setShouldFetch] = useState(false);
 
     const handleFormEdit = (e) => {
         const novosDados = { ...searchUser }
@@ -26,9 +21,9 @@ export default function HomePage() {
     }
 
     const { data, error, isLoading, refetch } = useQuery({
-        queryKey: ['searchUser', searchUser.nome],
+        queryKey: ['searchUser'],
         queryFn: async () => {
-            const response = await api2.get("http://192.168.1.6:9106/rest/AUXIL_OS?CCAD=loja&CCLIENTE=000004&CLOJA=AO");
+            const response = await api2.get("http://192.168.1.6:9106/rest/AUXIL_OS?CCAD=loja&CCLIENTE=" + searchUser.name + "&CLOJA=AO");
             console.log(response.data.filiais[0])
             console.log('teste')
             return response.data.filiais[0];
@@ -38,22 +33,9 @@ export default function HomePage() {
 
     const handleSearch = async (e) => {
         e.preventDefault();
+        setSearchUser({name: searchUser.name})
         refetch();
     }
-
-
-    // const handleSearch = async (e) => {
-    //     e.preventDefault()
-
-    //     try {
-    //         const results = await api2.get("http://192.168.1.6:9106/rest/AUXIL_OS?CCAD=loja&CCLIENTE=000004&CLOJA=AO")
-    //         console.log(results)
-
-
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
 
 
 

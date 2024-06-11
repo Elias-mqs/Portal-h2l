@@ -8,16 +8,18 @@ import {
     Flex,
     Text,
     ModalCloseButton,
-    Checkbox,
 } from "@chakra-ui/react";
-import { FormInput } from '@/components'
+import { FormInput, FormInputBtn } from '@/components'
+import { useSearchCli } from "../context/ResearchesContext";
 import { useState } from "react";
-import api from '../utils/api'
+import { api } from '../utils/api'
 import Cookies from 'js-cookie'
+import { MdSearch } from "react-icons/md";
 
 function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUser }) {
 
     const toast = useToast();
+    const useSearch = useSearchCli()
 
     // Estado do formulário e função para atualizá-lo
     const [formData, setFormData] = useState({ name: '', username: '', email: '', password: '', setor: '', });
@@ -80,6 +82,7 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
         return true;
     }
 
+
     const handleForm = async (event) => {
         event.preventDefault()
         setPasswordError('')
@@ -103,7 +106,7 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
         if(levelUser === 1 || levelUser === 3 && cadUser){
             formUserLevel = { ...formData, admin: 0 };
         }else if(levelUser === 2 || levelUser === 3 && cadGestor){
-            formUserlevel = { ...formData, admin: 1 };
+            formUserLevel = { ...formData, admin: 1 };
         }else if(levelUser === 3 && cadComercial){
             formUserLevel = { ...formData, admin: 2 };
         }
@@ -147,6 +150,7 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
             <Grid gap={8} mb={5} >
                 <FormInput name={'name'} value={formData.name} variant={'flushed'} label={'Nome'} placeholder={'Ex: (Diogo Silva Pereira)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
                 <FormInput name={'email'} value={formData.email} type={'email'} variant={'flushed'} label={'Email'} placeholder={'Ex: (email@email.com)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
+                <FormInputBtn name={'empresa'} value={formData.nomecli} icon={<MdSearch title='pesquisar' size='24px' color='#7B809A' />} onCLick={() => useSearch.modal.isOpen} variant={'flushed'} label={'Empresa'} placeholder={'Ex: (H2L Soluções para documentos )'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} display={isComercial || isTi ? 'block' : 'none'} />
                 <FormInput name={'setor'} value={formData.setor} variant={'flushed'} label={'Setor'} placeholder={'Ex: (Recursos humanos)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
                 <FormInput name={'username'} w='100%' flex='1' value={formData.username} type={'text'} variant={'flushed'} label={'Usuário'} placeholder={'Ex: (diogo.pereira)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
                 <FormInput name={'password'} value={formData.password} type={'password'} variant={'flushed'} label={'Senha'} placeholder={'Ex: (Senha@123#4)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />

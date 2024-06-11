@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { MdEdit } from "react-icons/md";
 import { FormInput, UpdatePass, cript } from '@/components'
-import api from '../utils/api'
+import { api } from '../utils/api'
 import { useState, useEffect } from "react";
 
 function DadosUser({ formData, setFormData, display, displayNone, onClick, handleSearch }) {
@@ -33,6 +33,7 @@ function DadosUser({ formData, setFormData, display, displayNone, onClick, handl
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isAltered, setIsAltered] = useState(false)
     const [originalData, setOriginalData] = useState({});
+
 
     // Função para manipular a edição de campos do formulário
     const handleFormEdit = (e) => {
@@ -49,9 +50,12 @@ function DadosUser({ formData, setFormData, display, displayNone, onClick, handl
         checkForChanges(novosDados);
     }
 
+
     useEffect(() => {
-        setOriginalData({ ...formData });
-    }, [formData]);
+        if (!originalData || Object.keys(originalData).length === 0) {
+            setOriginalData({ ...formData });
+        }
+    }, [formData, originalData]);
 
     const checkForChanges = (newData) => {
         for (let key in newData) {
@@ -63,6 +67,7 @@ function DadosUser({ formData, setFormData, display, displayNone, onClick, handl
         setIsAltered(false);
     };
 
+
     const validateEmail = (email) => {
         const emailRegex = /^[a-z0-9]+(\.[a-z0-9]+)*@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
@@ -72,13 +77,17 @@ function DadosUser({ formData, setFormData, display, displayNone, onClick, handl
         return true;
     }
 
+
+
     const handleForm = async (event) => {
         event.preventDefault()
         setIsSubmitting(true)
 
         if (!isAltered) {
             toast({ position: 'top', title: "Nada foi alterado!", description: "Nenhum campo foi modificado.", status: 'info', duration: 2000, isClosable: true });
-            setIsSubmitting(false);
+            setTimeout(() => {
+                setIsSubmitting(false);
+            }, 1500);
             return;
         }
 
@@ -90,7 +99,6 @@ function DadosUser({ formData, setFormData, display, displayNone, onClick, handl
         }
 
         try {
-
             const result = await api.post('updateDataUser', formCript)
             setFormData({ ...formData, password: `` })
             setTimeout(() => {
@@ -110,11 +118,13 @@ function DadosUser({ formData, setFormData, display, displayNone, onClick, handl
         }
     }
 
+
     const clickDisableName = () => { setDisableName(!disableName); }
     const clickDisableEmail = () => { setDisableEmail(!disableEmail); }
     const clickDisableSetor = () => { setDisableSetor(!disableSetor); }
     const clickDisableUsername = () => { setDisableUsername(!disableUsername); }
-    console.log(formData)
+
+
     return (
 
         <Stack as='form' onSubmit={handleForm} w='100%' h='100v%' maxH='auto' bg="#EDF2FF" boxShadow="0 0 10px rgba(0, 0, 0, 0.2)" p={{ base: '35px', md: "30px 35px" }} >
@@ -176,6 +186,7 @@ function DadosUser({ formData, setFormData, display, displayNone, onClick, handl
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
+
             <UpdatePass isOpen={updateDialog.isOpen} onClose={updateDialog.onClose} formData={{ ...formData }} setPassword={(newPassword) => setFormData(newPassword)} />
         </Stack>
     )

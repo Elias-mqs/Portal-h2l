@@ -1,59 +1,23 @@
 import { Box, Stack, Flex, Grid, useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/router';
-import { FormInput, FormTextarea, FormInputBtn, FormButtonSave, ButtonCancel, decript, cript } from '.';
-import { useState, useEffect } from 'react';
+import { FormInput, FormTextarea, FormInputBtn, FormButtonSave, ButtonCancel, cript } from '.';
+import { useState } from 'react';
 import { api, api2 } from '@/utils/api'
 import { MdSearch } from 'react-icons/md';
-import { useQuery } from "@tanstack/react-query";
+import { userContext } from '@/context/userContext';
 
 
 function PageChamados() {
 
+    
     const toast = useToast()
     const router = useRouter()
-    const [infoUser, setInfoUser] = useState({ info: '' })
-
+    const userDataContext = userContext()
+    
     const [formChamado, setFormChamado] = useState({
         serial: '', model: '', countPb: '', countCor: '', client: '', adress: '', officeHours: '',
         requester: '', sector: '', tel: '', incident: '', description: '', data: '', hora: ''
     })
-
-    // const { data, error, isLoading } = useQuery({
-    //     queryKey: ['srcUser'],
-    //     queryFn: async function srcUser() {
-
-    //         const data = await api.get('userData');
-    //         const result = decript(data.data);
-    //         setInfoUser({ info: result[1] });
-
-    //         return result
-
-    //     }
-    // });
-
-
-
-    // console.log(data)
-    // console.log(error)
-    // console.log(isLoading)
-
-    // useEffect(() => {
-    //     async function srcUser() {
-    //         try {
-
-    //             const data = await api.get('userData')
-    //             const result = decript(data.data)
-    //             setInfoUser({
-    //                 info: result[1]
-    //             });
-
-    //         } catch (error) {
-    //             console.error('Erro', error)
-    //         }
-    //     }
-    //     srcUser()
-    // }, [])
-
 
 
     const handleSaveEdit = (e) => {
@@ -72,7 +36,7 @@ function PageChamados() {
     const handleSave = async (e) => {
 
         e.preventDefault()
-        let formChamadoInfo = { ...formChamado, info: infoUser.info }
+        let formChamadoInfo = { ...formChamado, info: userDataContext.data.data[1] }
         const formCript = cript(formChamadoInfo)
 
         try {
@@ -80,7 +44,6 @@ function PageChamados() {
             const result = await api.post('chamados', formCript)
 
             setFormChamado({ serial: '', model: '', countPb: '', countCor: '', client: '', adress: '', officeHours: '', requester: '', sector: '', tel: '', incident: '', description: '', data: '', hora: '' })
-            setInfoUser({ info: '' })
 
             toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
 
@@ -99,8 +62,6 @@ function PageChamados() {
     }
 
 
-    // useEffect(() => {
-
     const searchSerial = async (e) => {
         e.preventDefault()
 
@@ -108,9 +69,6 @@ function PageChamados() {
             toast({ position: 'top', title: "Atenção!", description: 'Informe uma série.', status: 'error', duration: 1500, isClosable: true, })
             return
         }
-
-        let formSerialInfo = { serial: formChamado.serial, search: true }
-        const formCript = cript(formSerialInfo)
 
         try {
 
@@ -151,7 +109,6 @@ function PageChamados() {
             }
         }
     }
-    // })
 
 
     return (

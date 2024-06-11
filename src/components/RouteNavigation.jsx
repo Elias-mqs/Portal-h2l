@@ -4,9 +4,10 @@ import { Header, NavigationTabs, Container } from "@/components";
 import { Stack, Box, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { api } from '@/utils/api'
-import { decript } from "@/components";
+import { UserProvider } from '@/context/userContext'
+import { AuthProvider } from '@/context/AuthContext';
+import { SearchCliProvider } from '@/context/ResearchesContext';
+
 
 export default function RouteNavigation({ children }) {
 
@@ -18,43 +19,35 @@ export default function RouteNavigation({ children }) {
     const hideOnRoutes = ['/login', '/recoveryPass'];
     const validRoutes = ['/novoChamado', '/teste', '/users', '/', '/emAndamento', '/pedidos', '/reqProtheus']
 
-
-        const query = useQuery({
-            queryKey: ['srcUser'],
-            queryFn: async function srcUser() {
-
-                const data = await api.get('userData');
-                const result = decript(data.data);
-                return result
-
-            },
-            enabled: true,
-            refetchOnWindowFocus: false
-
-        });
-
-
     return (
-        <Stack>
+        <AuthProvider>
+            <SearchCliProvider>
 
-            {hideOnRoutes.includes(router.pathname) || !validRoutes.includes(router.pathname) ? (
-                children
-            ) : (
+                <Stack>
 
-                <Flex w='100%' h='100%' position={'fixed'} direction='column' bg='#F0F2F5' p={{ base: 0, md: '32px' }} >
-                    <Box aria-label='container-header'>
-                        <Header isOpen={isOpen} toggleSidebar={toggleHeader} navTabs={navTabs} activeTab={activeTab} data={query} />
-                    </Box>
-                    <Flex aria-label='container-page' justify={'flex-end'} flex='1' sx={{ '&::-webkit-scrollbar': { display: 'none', 'msOverflowStyle': 'none', } }} overflow='auto'  >
-                        <Container isOpen={isOpen} data={query} >
-                            {children}
-                        </Container>
-                    </Flex>
-                </Flex>
+                    {hideOnRoutes.includes(router.pathname) || !validRoutes.includes(router.pathname) ? (
+                        children
+                    ) : (
 
-            )}
+                        <UserProvider>
+                            <Flex w='100%' h='100%' position={'fixed'} direction='column' bg='#F0F2F5' p={{ base: 0, md: '32px' }} >
+                                <Box aria-label='container-header'>
+                                    <Header isOpen={isOpen} toggleSidebar={toggleHeader} navTabs={navTabs} activeTab={activeTab} />
+                                </Box>
+                                <Flex aria-label='container-page' justify={'flex-end'} flex='1' sx={{ '&::-webkit-scrollbar': { display: 'none', 'msOverflowStyle': 'none', } }} overflow='auto'  >
+                                    <Container isOpen={isOpen} >
+                                        {children}
+                                    </Container>
+                                </Flex>
+                            </Flex>
+                        </UserProvider>
 
-        </Stack>
+                    )}
+
+                </Stack>
+                
+            </SearchCliProvider>
+        </AuthProvider>
     )
 }
 
