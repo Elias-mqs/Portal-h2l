@@ -1,4 +1,4 @@
-import { Button } from "@chakra-ui/react";
+import { Button, IconButton } from "@chakra-ui/react";
 
 const FormButtonSave = ({type}) => {
     return (
@@ -16,6 +16,12 @@ const FormButtonSave = ({type}) => {
 const ButtonCancel = ({onClick}) => {
     return(
         <Button bg='transparent' p={0} _hover={{ bg: `none`, textDecoration: `underline` }} onClick={onClick} >cancelar</Button>
+    )
+}
+
+const IconButtonX = () => {
+    return(
+        <IconButton></IconButton>
     )
 }
 

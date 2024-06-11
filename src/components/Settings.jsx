@@ -5,7 +5,6 @@ import { MdOutlineSettings } from 'react-icons/md'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router';
 import { userContext } from '@/context/userContext';
-import { SearchCliProvider } from '@/context/ResearchesContext';
 
 
 export default function Settings() {
@@ -42,7 +41,7 @@ export default function Settings() {
         setOriginalData({ ...formDados });
         onOpen();
     };
-
+    
 
     const handleClose = () => {
         if (!isSaved) {
@@ -77,23 +76,21 @@ export default function Settings() {
     const displayNone = 'none'
 
     return (
-        <SearchCliProvider>
+        
+        <Menu >
+            <MenuButton title='Configurações' borderRadius='20px' color='#7B809A' p='8px' _hover={{ bg: '#7b809a29' }} >
+                <MdOutlineSettings size={23} />
+            </MenuButton>
+            <MenuList align='center' >
+                <IconButtonHeader sizeModal='3xl' isOpen={isOpen && activeModal === 'atualizarUser'} onOpen={() => handleOpen('atualizarUser')} onClose={onClose} conteudo={<SearchUser formData={formDados} levelUser={levelUser} onClick={handleSave} setFormData={setFormDados} display={AllAuth} />} labelBtn='Atualizar usuarios' display={AllAuth} />
+                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'dadosUser'} onOpen={handleOpenDadosUser} onClose={handleClose} conteudo={<DadosUser formData={formDados} onClick={handleSave} setFormData={setFormDados} display={Ti} displayNone={displayNone} isDisabled={Gestor} />} labelBtn='Informações da conta' />
+                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastro'} onOpen={() => handleOpen('cadastro')} onClose={onClose} conteudo={<Cadastro isComercial={false} cadUser={cadUser} levelUser={levelUser} />} labelBtn='Cadastro' display={Gestor} />
+                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroGestor'} onOpen={() => handleOpen('cadastroGestor')} onClose={onClose} conteudo={<Cadastro isComercial={true} />} levelUser={levelUser} cadGestor={cadGestor} labelBtn='Cadastro Gestor' display={Comercial} />
+                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroComercial'} onOpen={() => handleOpen('cadastroComercial')} onClose={onClose} conteudo={<Cadastro isTi={true} levelUser={levelUser} cadComercial={cadComercial} />} labelBtn='Cadastro Comercial' display={Ti} />
+                <IconButtonHeader onOpen={handleSignOut} labelBtn='Sair' />
+            </MenuList>
+        </Menu>
 
-            <Menu >
-                <MenuButton title='Configurações' borderRadius='20px' color='#7B809A' p='8px' _hover={{ bg: '#7b809a29' }} >
-                    <MdOutlineSettings size={23} />
-                </MenuButton>
-                <MenuList align='center' >
-                    <IconButtonHeader sizeModal='3xl' isOpen={isOpen && activeModal === 'atualizarUser'} onOpen={() => handleOpen('atualizarUser')} onClose={onClose} conteudo={<SearchUser formData={formDados} levelUser={levelUser} onClick={handleSave} setFormData={setFormDados} display={AllAuth} />} labelBtn='Atualizar usuarios' display={AllAuth} />
-                    <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'dadosUser'} onOpen={handleOpenDadosUser} onClose={handleClose} conteudo={<DadosUser formData={formDados} onClick={handleSave} setFormData={setFormDados} display={Ti} displayNone={displayNone} isDisabled={Gestor} />} labelBtn='Informações da conta' />
-                    <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastro'} onOpen={() => handleOpen('cadastro')} onClose={onClose} conteudo={<Cadastro isComercial={false} cadUser={cadUser} levelUser={levelUser} />} labelBtn='Cadastro' display={Gestor} />
-                    <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroGestor'} onOpen={() => handleOpen('cadastroGestor')} onClose={onClose} conteudo={<Cadastro isComercial={true} />} levelUser={levelUser} cadGestor={cadGestor} labelBtn='Cadastro Gestor' display={Comercial} />
-                    <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroComercial'} onOpen={() => handleOpen('cadastroComercial')} onClose={onClose} conteudo={<Cadastro isTi={true} levelUser={levelUser} cadComercial={cadComercial} />} labelBtn='Cadastro Comercial' display={Ti} />
-                    <IconButtonHeader onOpen={handleSignOut} labelBtn='Sair' />
-                </MenuList>
-            </Menu>
-
-        </SearchCliProvider>
     )
 }
 

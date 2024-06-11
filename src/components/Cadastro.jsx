@@ -142,15 +142,22 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
             transition={{ base: 'max-width 0.3s ease' }}
         >
             <ModalCloseButton m={4} />
+
             <Flex justify='center' borderBottom={'1px solid #858585'} pb={1} mb={5} >
                 <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} display={isComercial || isTi ? 'none' : 'block'} >Novo usuário</Text>
                 <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} display={isComercial ? 'block' : 'none'} >Novo usuário gestor</Text>
                 <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} display={isTi ? 'block' : 'none'} >Novo usuário Comercial</Text>
             </Flex>
+
             <Grid gap={8} mb={5} >
+
                 <FormInput name={'name'} value={formData.name} variant={'flushed'} label={'Nome'} placeholder={'Ex: (Diogo Silva Pereira)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
                 <FormInput name={'email'} value={formData.email} type={'email'} variant={'flushed'} label={'Email'} placeholder={'Ex: (email@email.com)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
+
+                
                 <FormInputBtn name={'empresa'} value={formData.nomecli} icon={<MdSearch title='pesquisar' size='24px' color='#7B809A' />} onCLick={() => useSearch.modal.isOpen} variant={'flushed'} label={'Empresa'} placeholder={'Ex: (H2L Soluções para documentos )'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} display={isComercial || isTi ? 'block' : 'none'} />
+
+
                 <FormInput name={'setor'} value={formData.setor} variant={'flushed'} label={'Setor'} placeholder={'Ex: (Recursos humanos)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
                 <FormInput name={'username'} w='100%' flex='1' value={formData.username} type={'text'} variant={'flushed'} label={'Usuário'} placeholder={'Ex: (diogo.pereira)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
                 <FormInput name={'password'} value={formData.password} type={'password'} variant={'flushed'} label={'Senha'} placeholder={'Ex: (Senha@123#4)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
@@ -162,6 +169,7 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
                         </Alert>
                     </Stack>
                 )}
+                
             </Grid>
 
             <Button type='submit' bg='#6699CC' color='#FFF' w='100%' h='48px' borderRadius='4px' fontSize='lg' fontWeight='500'
