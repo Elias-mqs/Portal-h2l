@@ -31,10 +31,10 @@ function SearchUser({ formData, setFormData, levelUser }) {
 
         novaInfo[e.target.name] = e.target.value
         if (e.target.name === 'username') {
-            novosDados.username = e.target.value.toLowerCase().trim();
+            novaInfo.username = e.target.value.toLowerCase().trim();
         }
         if (e.target.name === 'password') {
-            novosDados.password = e.target.value.trim();
+            novaInfo.password = e.target.value.trim();
         }
         setSearchUser(novaInfo);
     }

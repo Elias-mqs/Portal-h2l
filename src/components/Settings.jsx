@@ -1,10 +1,11 @@
 import { IconButtonHeader, Cadastro, DadosUser, SearchUser } from '.'
-import { Menu, MenuList, MenuButton, useDisclosure } from '@chakra-ui/react'
+import { Menu, MenuList, MenuButton, useDisclosure, Box } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import { MdOutlineSettings } from 'react-icons/md'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router';
 import { userContext } from '@/context/userContext';
+import { useSearchCli } from "../context/ResearchesContext";
 
 
 export default function Settings() {
@@ -12,6 +13,7 @@ export default function Settings() {
 
     const userDataContext = userContext()
     const router = useRouter()
+    const { modal } = useSearchCli();
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [activeModal, setActiveModal] = useState(null);
     const [isGestor, setIsGestor] = useState(false);
@@ -48,6 +50,7 @@ export default function Settings() {
             setFormDados({ ...originalData, password: '' });
         }
         setIsSaved(false);
+        modal.onClose
         onClose();
     };
 

@@ -9,7 +9,7 @@ import ButtonSidebar from './ButtonSidebar';
 import NavBar from './NavBar';
 import IconButtonHeader from './IconButtonHeader';
 import NavigationTabs from './NavigationTabs';
-import { FormInput, FormTextarea, FormInputBtn, FormInputBtnL } from './FormInputs';
+import { FormInput, FormTextarea, FormInputBtn, FormInputBtnL, InputSrc } from './FormInputs';
 import { FormButtonSave, ButtonCancel } from './FormButton';
 import { Cadastro } from './Cadastro';
 import Settings from './Settings';
@@ -21,6 +21,7 @@ import ScrollBar from './ScrollBar';
 import { cript, decript } from './Utils'
 import ListaChamado from './ListaChamado'
 import ListaOs from './ListaOs'
+import SearchEmpresa from './SearchEmpresa'
 // Exporte os componentes diretamente
 export {
     Header,
@@ -38,6 +39,7 @@ export {
     FormTextarea,
     FormInputBtn,
     FormInputBtnL,
+    InputSrc,
     FormButtonSave,
     ButtonCancel,
     Cadastro,
@@ -51,5 +53,7 @@ export {
     decript,
     ListaChamado,
     ListaOs,
+    SearchEmpresa,
+
     
 };

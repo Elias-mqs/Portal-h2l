@@ -9,7 +9,7 @@ import {
     Text,
     ModalCloseButton,
 } from "@chakra-ui/react";
-import { FormInput, FormInputBtn } from '@/components'
+import { FormInput, InputSrc, SearchEmpresa } from '@/components'
 import { useSearchCli } from "../context/ResearchesContext";
 import { useState } from "react";
 import { api } from '../utils/api'
@@ -19,10 +19,11 @@ import { MdSearch } from "react-icons/md";
 function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUser }) {
 
     const toast = useToast();
-    const useSearch = useSearchCli()
+    const { modal } = useSearchCli()
+
 
     // Estado do formulário e função para atualizá-lo
-    const [formData, setFormData] = useState({ name: '', username: '', email: '', password: '', setor: '', });
+    const [formData, setFormData] = useState({ name: '', username: '', email: '', nomeCli: '', password: '', setor: '', });
 
     // Estado para armazenar erros relacionados à senha
     const [passwordError, setPasswordError] = useState('');
@@ -103,11 +104,11 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
 
         let formUserLevel;
 
-        if(levelUser === 1 || levelUser === 3 && cadUser){
+        if (levelUser === 1 || levelUser === 3 && cadUser) {
             formUserLevel = { ...formData, admin: 0 };
-        }else if(levelUser === 2 || levelUser === 3 && cadGestor){
+        } else if (levelUser === 2 || levelUser === 3 && cadGestor) {
             formUserLevel = { ...formData, admin: 1 };
-        }else if(levelUser === 3 && cadComercial){
+        } else if (levelUser === 3 && cadComercial) {
             formUserLevel = { ...formData, admin: 2 };
         }
 
@@ -117,7 +118,7 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
             const token = result?.data?.token;
             Cookies.set('token', token);
 
-            setFormData({ name: ``, username: ``, email: ``, password: ``, setor: `` })
+            setFormData({ name: ``, username: ``, email: ``, nomeCli: ``, password: ``, setor: `` })
 
             toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
 
@@ -126,6 +127,15 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
             toast({ position: 'top', title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
         }
     }
+
+
+    const handleOpen = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        modal.onOpen()
+    }
+
+    console.log(formData)
 
     return (
 
@@ -154,9 +164,9 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
                 <FormInput name={'name'} value={formData.name} variant={'flushed'} label={'Nome'} placeholder={'Ex: (Diogo Silva Pereira)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
                 <FormInput name={'email'} value={formData.email} type={'email'} variant={'flushed'} label={'Email'} placeholder={'Ex: (email@email.com)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
 
-                
-                <FormInputBtn name={'empresa'} value={formData.nomecli} icon={<MdSearch title='pesquisar' size='24px' color='#7B809A' />} onCLick={() => useSearch.modal.isOpen} variant={'flushed'} label={'Empresa'} placeholder={'Ex: (H2L Soluções para documentos )'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} display={isComercial || isTi ? 'block' : 'none'} />
-
+                <InputSrc name={'empresa'} value={formData.nomecli} typeBtn='button' icon={<MdSearch title='pesquisar' size='24px' color='#7B809A' />} onClick={handleOpen}
+                    variant={'flushed'} label={'Empresa'} placeholder={'Ex: (H2L Soluções para documentos )'} onChange={handleFormEdit} required={true}
+                    _placeholder={{ color: '#b0c0d4' }} display={isComercial || isTi ? 'block' : 'none'} readOnly={true} pointerEvents={'none'} tabIndex={'-1'} />
 
                 <FormInput name={'setor'} value={formData.setor} variant={'flushed'} label={'Setor'} placeholder={'Ex: (Recursos humanos)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
                 <FormInput name={'username'} w='100%' flex='1' value={formData.username} type={'text'} variant={'flushed'} label={'Usuário'} placeholder={'Ex: (diogo.pereira)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
@@ -169,7 +179,7 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
                         </Alert>
                     </Stack>
                 )}
-                
+
             </Grid>
 
             <Button type='submit' bg='#6699CC' color='#FFF' w='100%' h='48px' borderRadius='4px' fontSize='lg' fontWeight='500'
@@ -177,8 +187,12 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
                 Cadastrar
             </Button>
 
+            <SearchEmpresa setFormData={setFormData} formData={formData} />
         </Stack>
+
     )
 }
 
 export { Cadastro };
+
+// VALORES ESTÃO VINDO CERTOS, PORÉM SÓ NÃO ESTÁ SENDO APRESENTADO NO INPUTSRC, PROVAVELMENTE SÓ PRECISA ADICIONAR {formData.nomeCli} ENTRE O INPUT

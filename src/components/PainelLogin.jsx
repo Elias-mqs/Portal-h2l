@@ -91,7 +91,7 @@ export default function PainelLogin() {
 
         } catch (error) {
             setTimeout(() => {
-                toast({ title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
+                toast({ title: "", description: 'Verifique seu usuário ou senha.', status: 'info', duration: 2000, isClosable: true, })
             }, 1500);
 
         } finally {
@@ -151,14 +151,18 @@ export default function PainelLogin() {
         const newRecPass = cript(formRecPass)
 
         try {
+
             const result = await api.post('recoveryPass', newRecPass)
-            console.log(result)
+
             setFormRecPass({ email: '' })
             toast({ description: 'Se houver um e-mail cadastrado, você receberá uma mensagem com instruções de recuperação.', duration: 6000, isClosable: true, })
+
         } catch (error) {
-            console.log(error)
+
             toast({ description: 'Se houver um e-mail cadastrado, você receberá uma mensagem com instruções de recuperação.', duration: 6000, isClosable: true, })
+
         } finally {
+            
             onClose()
             setIsLoadingRec(false);
         }

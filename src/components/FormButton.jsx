@@ -19,12 +19,6 @@ const ButtonCancel = ({onClick}) => {
     )
 }
 
-const IconButtonX = () => {
-    return(
-        <IconButton></IconButton>
-    )
-}
-
 export { FormButtonSave, ButtonCancel };
 
 

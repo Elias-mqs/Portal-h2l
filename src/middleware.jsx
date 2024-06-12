@@ -22,7 +22,6 @@ export async function middleware(req) {
         return NextResponse.next()
 
     } catch (error) {
-        console.log(error)
         if (error.message === 'Token expirado ou não fornecido') {
             if (req.nextUrl.pathname == '/login') {
                 return NextResponse.next()
