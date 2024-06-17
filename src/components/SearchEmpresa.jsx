@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSearchCli } from "../context/ResearchesContext";
-import { FormInput } from '@/components'
+import { FormInput } from '@/components';
 import { Modal, ModalOverlay, ModalContent, ModalCloseButton, Stack, Flex, Text, IconButton, Input } from "@chakra-ui/react";
 import { MdSearch } from 'react-icons/md';
 
@@ -29,12 +29,18 @@ export default function SearchEmpresa({ setFormData, formData }) {
     }
 
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setIsSubmitting(true)
-        setResultView(true)
+    const handleSubmitForm = (data) => {
+        data.preventDefault();
+        data.stopPropagation();
+        
+        setIsSubmitting(true);
+
+        setTimeout(() => {
+            setResultView(true);
+            }, 300);
+
         handleSearch(dados);
+        
         setTimeout(() => {
             setIsSubmitting(false);
         }, 800);
@@ -51,10 +57,14 @@ export default function SearchEmpresa({ setFormData, formData }) {
 
 
     const handleSelect = () => {
-        setFormData({...formData, nomeCli: nomeCli})
+        setFormData({ ...formData, nomeCli: nomeCli.nome, codCli: nomeCli.codCli, loja: nomeCli.loja });
+
         setDados({ codCli: '', loja: '' });
-        setFilialCli({ nome: 'Cliente' })
-        setResultView(false)
+
+        setFilialCli({ nome: 'Cliente', codCli:'', loja:'' });
+        
+        setResultView(false);
+
         modal.onClose();
     }
 
@@ -75,11 +85,13 @@ export default function SearchEmpresa({ setFormData, formData }) {
                         <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} >Pesquisar Empresa</Text>
                     </Flex>
 
-                    <Flex as='form' direction='column' onSubmit={handleSubmit}>
-                        <Flex gap={5} justify='start'>
+                    <Flex direction='column'>
+
+                        <Flex as='form' onSubmit={handleSubmitForm} gap={5} justify='start'>
 
                             <FormInput name='codCli' w='35%' value={dados.codCli} maxLength='6' bg='#ffffff8d' variant='filled' border='1px solid #C0C0C0' label='Código Cliente:' placeholder='999999' onChange={handleFormEdit} />
                             <FormInput name='loja' w='35%' value={dados.loja} maxLength='2' bg='#ffffff8d' variant='filled' border='1px solid #C0C0C0' label='Código Loja:' placeholder='99' onChange={handleFormEdit} />
+
                             <IconButton marginTop='auto' type='submit' icon={<MdSearch size='24px' color='#FFF' />}
                                 borderRadius='3rem' w='60px' bg='blue.400' _hover={{ bg: 'blue.500', transform: `translateY(-2px)` }} _active={{ transform: 'translateY(2px)' }} isDisabled={isSubmitting} />
 
@@ -88,7 +100,9 @@ export default function SearchEmpresa({ setFormData, formData }) {
 
                     <Stack mt='15px' display={viewResults} onClick={handleSelect} >
                         <Flex w='100%' h='auto' bg='#D1D9FF' borderRadius='.5rem' _hover={{ cursor: 'pointer' }} >
-                            <Flex name='email' w='100%' p='10px' align='center' overflow='auto' ><Input variant='none' bg='transparent' value={nomeCli} readOnly={true} pointerEvents={'none'} tabIndex={'-1'} /></Flex>
+                            <Flex w='100%' p='10px' align='center' overflow='auto' >
+                                <Input variant='none' bg='transparent' value={nomeCli.nome} readOnly={true} pointerEvents={'none'} tabIndex={'-1'} />
+                            </Flex>
                         </Flex>
                     </Stack>
 

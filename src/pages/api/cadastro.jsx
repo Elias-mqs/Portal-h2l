@@ -2,15 +2,20 @@ import { db } from '@/utils/database';
 import { hashPassword } from '@/utils'
 
 export default async function handler(req, res) {
-
+    
     if (req.method === 'POST') {
 
-        const { name, username, email, setor, password, admin } = req.body;
+        const { name, username, email, setor, password, admin, codCli, loja, nomeCli  } = req.body;
 
-        if (!name || !username || !email || !setor || !password) {
+        if(!codCli || !loja){
+            return res.status(404).json({ message: 'Nome da empresa inválido' })
+        }
+
+        if (!name || !username || !email || !setor || !password || !nomeCli) {
             return res.status(404).json({ message: 'Necessario informar todos os dados' })
         }
         
+
         try {
 
             const dados = await db.selectFrom('usuarios')
@@ -41,7 +46,10 @@ export default async function handler(req, res) {
                     email: email,
                     setor: setor,
                     password_hash: passwordHash,
-                    admin: admin
+                    admin: admin,
+                    usr_nomecli: nomeCli,
+                    usr_codcli: codCli,
+                    usr_loja: loja,
                 })
                 .execute();
 
@@ -49,7 +57,9 @@ export default async function handler(req, res) {
 
         } catch (error) {
             console.log(error)
+
             res.status(400).json({ message: 'Não foi possivel autenticar' })
+
             return
         }
 

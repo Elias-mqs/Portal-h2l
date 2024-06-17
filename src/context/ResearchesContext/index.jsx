@@ -8,7 +8,7 @@ export function SearchCliProvider({ children }) {
 
     const isOpenSearch = useDisclosure()
     const toast = useToast();
-    const [filialCli, setFilialCli] = useState({ nome: '' })
+    const [filialCli, setFilialCli] = useState({ nome: '', codCli:'', loja:'' })
 
 
     const handleSearch = async (datas) => {
@@ -27,7 +27,8 @@ export function SearchCliProvider({ children }) {
 
         try {
             const { data } = await api2.get('auxil_os?ccad=loja&ccliente=' + dataCli.codCli + '&cloja=' + dataCli.loja);
-            setFilialCli(data.filiais[0].nome)
+            setFilialCli({nome: data.filiais[0].nome, codCli: dataCli.codCli, loja: dataCli.loja})
+            // return {nome: datafiliais[0].nome, codCli: dataCli.codCli, loja:dataCli.loja}
 
         } catch (error) {
             toast({ position: 'top', title: "", description: "Verifique os campos e tente novamente.", status: 'info', duration: 2000, isClosable: true, });

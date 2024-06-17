@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { FormInput, InputSrc, SearchEmpresa } from '@/components'
 import { useSearchCli } from "../context/ResearchesContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from '../utils/api'
 import Cookies from 'js-cookie'
 import { MdSearch } from "react-icons/md";
@@ -43,6 +43,7 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
 
     }
 
+    
     const validatePassword = (password) => {
         const isLengthValid = password.length >= 10;;
         const hasUppercase = /[A-Z]/.test(password)
@@ -73,6 +74,7 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
         setPasswordError('')
         return true;
     };
+
 
     const validateEmail = (email) => {
         const emailRegex = /^[a-z0-9]+(\.[a-z0-9]+)*@[^\s@]+\.[^\s@]+$/;
@@ -112,6 +114,9 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
             formUserLevel = { ...formData, admin: 2 };
         }
 
+        console.log(formData)
+        console.log(formUserLevel)
+
         try {
 
             const result = await api.post('cadastro', formUserLevel)
@@ -135,7 +140,6 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
         modal.onOpen()
     }
 
-    console.log(formData)
 
     return (
 
@@ -164,7 +168,7 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
                 <FormInput name={'name'} value={formData.name} variant={'flushed'} label={'Nome'} placeholder={'Ex: (Diogo Silva Pereira)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
                 <FormInput name={'email'} value={formData.email} type={'email'} variant={'flushed'} label={'Email'} placeholder={'Ex: (email@email.com)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
 
-                <InputSrc name={'empresa'} value={formData.nomecli} typeBtn='button' icon={<MdSearch title='pesquisar' size='24px' color='#7B809A' />} onClick={handleOpen}
+                <InputSrc name={'empresa'} value={formData.nomeCli} typeBtn='button' icon={<MdSearch title='pesquisar' size='24px' color='#7B809A' />} onClick={handleOpen}
                     variant={'flushed'} label={'Empresa'} placeholder={'Ex: (H2L Soluções para documentos )'} onChange={handleFormEdit} required={true}
                     _placeholder={{ color: '#b0c0d4' }} display={isComercial || isTi ? 'block' : 'none'} readOnly={true} pointerEvents={'none'} tabIndex={'-1'} />
 
@@ -194,5 +198,3 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
 }
 
 export { Cadastro };
-
-// VALORES ESTÃO VINDO CERTOS, PORÉM SÓ NÃO ESTÁ SENDO APRESENTADO NO INPUTSRC, PROVAVELMENTE SÓ PRECISA ADICIONAR {formData.nomeCli} ENTRE O INPUT
