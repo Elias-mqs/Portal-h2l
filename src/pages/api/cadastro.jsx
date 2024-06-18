@@ -5,13 +5,13 @@ export default async function handler(req, res) {
     
     if (req.method === 'POST') {
 
-        const { name, username, email, setor, password, admin, codCli, loja, nomeCli  } = req.body;
+        const { name, username, email, setor, password, admin, codCli, loja, nomeCli, typeUser  } = req.body;
 
         if(!codCli || !loja){
             return res.status(404).json({ message: 'Nome da empresa inválido' })
         }
 
-        if (!name || !username || !email || !setor || !password || !nomeCli) {
+        if (!name || !username || !email || !setor || !password || !nomeCli || !typeUser) {
             return res.status(404).json({ message: 'Necessario informar todos os dados' })
         }
         
@@ -50,6 +50,7 @@ export default async function handler(req, res) {
                     usr_nomecli: nomeCli,
                     usr_codcli: codCli,
                     usr_loja: loja,
+                    usr_typeUser: typeUser,
                 })
                 .execute();
 

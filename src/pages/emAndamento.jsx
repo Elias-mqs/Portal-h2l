@@ -1,31 +1,10 @@
 import { Stack, Flex, Box, Text, useToast } from "@chakra-ui/react";
-import { FormInputBtn, ListaChamado } from "@/components";
+import { FormInputBtn, ListaChamado, decript } from "@/components";
 import { MdSearch } from "react-icons/md";
 import { useState, useEffect } from "react";
-import api from '@/utils/api'
-import * as CryptoJS from "crypto-js";
+import { api } from '@/utils/api'
 
-// export async function getStaticProps(){
-//     const data = await fetch('localhost:3000/api/userData')
-//     console.log(data)
-//     // const searchData = await api.post('searchChamado', data.usr_id)
-//     console.log(searchData)
-// }
 
-// export async function getServerSideProps({ query: { token }, res }) {
-
-//     try {
-//         const user = await authenticate(token);
-//         const simpleUser = JSON.parse(JSON.stringify(user))
-        
-//         return { props: { simpleUser } }
-//     } catch (err) {
-//         res.writeHead(302, { Location: '/login' });
-//         res.end();
-//         return { props: {} };
-
-//     }
-// }
 
 export default function chamados() {
 
@@ -40,11 +19,9 @@ export default function chamados() {
         async function srcUser() {
             try {
                 const data = await api.get('userData')
-                let bytes = CryptoJS.AES.decrypt(data.data, passCryp);
-                let decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
-                const result = decryptedData[1]
+                const result = decript(data.data)
                 setInfoUser({
-                    info: result
+                    info: result[1]
                 });
 
             } catch (error) {
@@ -75,12 +52,15 @@ export default function chamados() {
         }
 
         try {
+            
             const result = await api.post('emAndamento', searchChamadoInfo)
+
             setChamadoResults(result.data.chamados)
+
             setTimeout(() => {
                 setIsSubmitting(false);
             }, 1000);
-            // toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
+
         } catch (error) {
             console.error('Erro')
         }

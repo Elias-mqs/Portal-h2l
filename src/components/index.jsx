@@ -18,10 +18,11 @@ import DadosUser from './DadosUser';
 import { UpdatePass } from './UpdateData';
 import SearchUser from './SearchUser';
 import ScrollBar from './ScrollBar';
-import { cript, decript } from './Utils'
-import ListaChamado from './ListaChamado'
-import ListaOs from './ListaOs'
-import SearchEmpresa from './SearchEmpresa'
+import { cript, decript } from './Utils';
+import ListaChamado from './ListaChamado';
+import ListaOs from './ListaOs';
+import SearchEmpresa from './SearchEmpresa';
+import { CadastroAdm } from './CadastroAdm';
 // Exporte os componentes diretamente
 export {
     Header,
@@ -54,6 +55,6 @@ export {
     ListaChamado,
     ListaOs,
     SearchEmpresa,
-
+    CadastroAdm,
     
 };

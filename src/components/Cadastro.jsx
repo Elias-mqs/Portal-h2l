@@ -8,6 +8,8 @@ import {
     Flex,
     Text,
     ModalCloseButton,
+    RadioGroup,
+    Radio,
 } from "@chakra-ui/react";
 import { FormInput, InputSrc, SearchEmpresa } from '@/components'
 import { useSearchCli } from "../context/ResearchesContext";
@@ -20,12 +22,7 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
 
     const toast = useToast();
     const { modal } = useSearchCli()
-
-
-    // Estado do formulário e função para atualizá-lo
-    const [formData, setFormData] = useState({ name: '', username: '', email: '', nomeCli: '', password: '', setor: '', });
-
-    // Estado para armazenar erros relacionados à senha
+    const [formData, setFormData] = useState({ name: '', username: '', email: '', nomeCli: '', password: '', setor: '', typeUser: '' });
     const [passwordError, setPasswordError] = useState('');
 
     // Função para manipular a edição de campos do formulário
@@ -43,7 +40,7 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
 
     }
 
-    
+
     const validatePassword = (password) => {
         const isLengthValid = password.length >= 10;;
         const hasUppercase = /[A-Z]/.test(password)
@@ -114,8 +111,6 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
             formUserLevel = { ...formData, admin: 2 };
         }
 
-        console.log(formData)
-        console.log(formUserLevel)
 
         try {
 
@@ -139,6 +134,11 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
         e.stopPropagation()
         modal.onOpen()
     }
+
+    const selectTypeUser = (data) => {
+        setFormData({ ...formData, typeUser: data })
+    }
+
 
 
     return (
@@ -173,6 +173,19 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
                     _placeholder={{ color: '#b0c0d4' }} display={isComercial || isTi ? 'block' : 'none'} readOnly={true} pointerEvents={'none'} tabIndex={'-1'} />
 
                 <FormInput name={'setor'} value={formData.setor} variant={'flushed'} label={'Setor'} placeholder={'Ex: (Recursos humanos)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
+
+                <Flex direction='column'>
+                    <Text fontWeight={500} fontSize={14} pl={2} pb={1}>Tipo de usuário</Text>
+                    <RadioGroup onChange={selectTypeUser} value={formData.typeUser}>
+                        <Stack direction='column'>
+                            <Radio value='1'>Abrir atendimento/chamados e pedidos.</Radio>
+                            <Radio value='2'>Somente abrir atendimento/chamado.</Radio>
+                            <Radio value='3'>Somente fazer pedidos.</Radio>
+                            <Radio value='4'>Somente consulta.</Radio>
+                        </Stack>
+                    </RadioGroup>
+                </Flex>
+
                 <FormInput name={'username'} w='100%' flex='1' value={formData.username} type={'text'} variant={'flushed'} label={'Usuário'} placeholder={'Ex: (diogo.pereira)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
                 <FormInput name={'password'} value={formData.password} type={'password'} variant={'flushed'} label={'Senha'} placeholder={'Ex: (Senha@123#4)'} onChange={handleFormEdit} required={true} _placeholder={{ color: '#b0c0d4' }} />
                 {passwordError && (
@@ -183,6 +196,8 @@ function Cadastro({ isComercial, cadUser, cadGestor, cadComercial, isTi, levelUs
                         </Alert>
                     </Stack>
                 )}
+
+
 
             </Grid>
 

@@ -1,75 +1,74 @@
 import { useState } from "react";
 import { useSearchCli } from "../context/ResearchesContext";
 import { FormInput } from '@/components';
-import { Modal, ModalOverlay, ModalContent, ModalCloseButton, Stack, Flex, Text, IconButton, Input } from "@chakra-ui/react";
+import { Modal, ModalOverlay, ModalContent, ModalCloseButton, Stack, Flex, Text, IconButton, Input, Box } from "@chakra-ui/react";
 import { MdSearch } from 'react-icons/md';
+import { useForm, Controller } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 
-export default function SearchEmpresa({ setFormData, formData }) {
+const schema = z.object({
+    codCli: z.coerce.string().max(6, 'máximo de 6 digitos'),
+    loja: z.coerce.string().max(2)
+})
 
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const { modal, handleSearch, nomeCli, setFilialCli } = useSearchCli();
-    const [dados, setDados] = useState({ codCli: '', loja: '' });
-    const [resultView, setResultView] = useState(false)
+export default function SearchEmpresa({ setValue }) {
 
-
-    const handleFormEdit = (e) => {
-        let novaInfo = { ...dados };
-        const { name, value } = e.target;
-
-        if (name === 'codCli') {
-            const newValue = value.replace(/\D/g, '');
-            novaInfo.codCli = newValue;
+    const [dataCliente, setDataCliente] = useState({})
+    const { control, handleSubmit, resetField, formState: { errors, isSubmitting } } = useForm({
+        resolver: zodResolver(schema),
+        defaultValues: {
+            codCli: '',
+            loja: '',
         }
-        if (name === 'loja') {
-            novaInfo.loja = value.toUpperCase()
-        }
+    })
 
-        setDados(novaInfo)
-    }
+    const { modal, handleSearch } = useSearchCli();
 
 
-    const handleSubmitForm = (data) => {
-        data.preventDefault();
-        data.stopPropagation();
-        
-        setIsSubmitting(true);
 
-        setTimeout(() => {
-            setResultView(true);
-            }, 300);
+    const handleSubmitForm = async (data) => {
+        console.log(data)
+        console.log(handleSubmit)
 
-        handleSearch(dados);
-        
-        setTimeout(() => {
-            setIsSubmitting(false);
-        }, 800);
+        if (data.codCli === '' || data.loja === '') { return }
+
+        const result = await handleSearch(data);
+
+        setDataCliente(result)
 
     };
 
+    const stopPropagation = (e) => {
+        console.log(e)
+        e.stopPropagation();
+        handleSubmit(handleSubmitForm)(e);
+      }
 
     const handleClose = () => {
-        setDados({ codCli: '', loja: '' });
-        setFilialCli({ nome: '' })
-        setResultView(false)
+        resetField('codCli');
+        resetField('loja');
         modal.onClose();
     }
 
 
     const handleSelect = () => {
-        setFormData({ ...formData, nomeCli: nomeCli.nome, codCli: nomeCli.codCli, loja: nomeCli.loja });
 
-        setDados({ codCli: '', loja: '' });
+        setValue(dataCliente);
 
-        setFilialCli({ nome: 'Cliente', codCli:'', loja:'' });
-        
-        setResultView(false);
+        resetField('codCli');
+        resetField('loja');
 
         modal.onClose();
+
     }
 
+    console.log(dataCliente)
+    console.log('renderizou o SearhEmpresa')
+    console.log('----------------------------------------')
 
-    const viewResults = resultView ? 'block' : 'none'
+
 
 
     return (
@@ -87,24 +86,51 @@ export default function SearchEmpresa({ setFormData, formData }) {
 
                     <Flex direction='column'>
 
-                        <Flex as='form' onSubmit={handleSubmitForm} gap={5} justify='start'>
+                        <Flex as='form' onSubmit={stopPropagation} gap={5} justify='start'>
 
-                            <FormInput name='codCli' w='35%' value={dados.codCli} maxLength='6' bg='#ffffff8d' variant='filled' border='1px solid #C0C0C0' label='Código Cliente:' placeholder='999999' onChange={handleFormEdit} />
-                            <FormInput name='loja' w='35%' value={dados.loja} maxLength='2' bg='#ffffff8d' variant='filled' border='1px solid #C0C0C0' label='Código Loja:' placeholder='99' onChange={handleFormEdit} />
+                            <Flex w='35%' direction='column' mb='auto'>
 
-                            <IconButton marginTop='auto' type='submit' icon={<MdSearch size='24px' color='#FFF' />}
-                                borderRadius='3rem' w='60px' bg='blue.400' _hover={{ bg: 'blue.500', transform: `translateY(-2px)` }} _active={{ transform: 'translateY(2px)' }} isDisabled={isSubmitting} />
+                                <Controller
+                                    name='codCli'
+                                    control={control}
+                                    render={({ field: { value, onChange } }) => (
+                                        <FormInput w='100%' type='number' value={value} maxLength='6' bg='#ffffff8d' variant='filled' border={errors.codCli ? '1px solid red' : '1px solid #C0C0C0'} label='Código Cliente:' placeholder='999999' onChange={onChange} />
+                                    )}
+                                />
+                                {errors.codCli && <Text color='red' pt={1} pl={2}>{errors.codCli.message}</Text>}
+                            </Flex>
+
+                            <Flex w='35%' direction='column' mb='auto'>
+                                <Controller
+                                    name='loja'
+                                    control={control}
+                                    render={({ field: { value, onChange } }) => (
+                                        <FormInput w='100%' value={value} maxLength='2' bg='#ffffff8d' variant='filled' border='1px solid #C0C0C0' label='Código Loja:' placeholder='99' onChange={onChange} />
+                                    )}
+                                />
+                                {errors.loja && <Text color='red' pt={1} pl={2}>{errors.loja.message}</Text>}
+                            </Flex>
+
+                            <Flex align={errors.codCli || errors.loja ? 'center' : 'end'} mb={errors.codCli || errors.loja ? 1 : 0}>
+
+                                <IconButton type='submit' icon={<MdSearch size='24px' color='#FFF' />}
+                                    borderRadius='3rem' w='60px' bg='blue.400' _hover={{ bg: 'blue.500', transform: `translateY(-2px)` }} _active={{ transform: 'translateY(2px)' }} isDisabled={isSubmitting} />
+
+                            </Flex>
 
                         </Flex>
                     </Flex>
 
-                    <Stack mt='15px' display={viewResults} onClick={handleSelect} >
-                        <Flex w='100%' h='auto' bg='#D1D9FF' borderRadius='.5rem' _hover={{ cursor: 'pointer' }} >
-                            <Flex w='100%' p='10px' align='center' overflow='auto' >
-                                <Input variant='none' bg='transparent' value={nomeCli.nome} readOnly={true} pointerEvents={'none'} tabIndex={'-1'} />
+
+                    {dataCliente.nome &&
+                        <Stack title='resultadosClientes' mt='15px' onClick={handleSelect} >
+                            <Flex w='100%' h='auto' bg='#D1D9FF' borderRadius='.5rem' _hover={{ cursor: 'pointer' }} >
+                                <Flex w='100%' p='10px' align='center' overflow='auto' >
+                                    <Input variant='none' bg='transparent' value={dataCliente.nome} readOnly={true} pointerEvents={'none'} tabIndex={'-1'} />
+                                </Flex>
                             </Flex>
-                        </Flex>
-                    </Stack>
+                        </Stack>
+                    }
 
                 </Stack>
 
@@ -113,3 +139,4 @@ export default function SearchEmpresa({ setFormData, formData }) {
         </Modal>
     )
 }
+
