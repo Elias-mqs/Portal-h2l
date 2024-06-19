@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSearchCli } from "../context/ResearchesContext";
 import { FormInput } from '@/components';
-import { Modal, ModalOverlay, ModalContent, ModalCloseButton, Stack, Flex, Text, IconButton, Input, Box } from "@chakra-ui/react";
+import { Modal, ModalOverlay, ModalContent, ModalCloseButton, Stack, Flex, Text, IconButton, Input } from "@chakra-ui/react";
 import { MdSearch } from 'react-icons/md';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
@@ -15,8 +15,10 @@ const schema = z.object({
 
 export default function SearchEmpresa({ setValue }) {
 
+
     const [dataCliente, setDataCliente] = useState({})
-    const { control, handleSubmit, resetField, formState: { errors, isSubmitting } } = useForm({
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const { control, handleSubmit, formState: { errors } } = useForm({
         resolver: zodResolver(schema),
         defaultValues: {
             codCli: '',
@@ -29,50 +31,48 @@ export default function SearchEmpresa({ setValue }) {
 
 
     const handleSubmitForm = async (data) => {
-        console.log(data)
-        console.log(handleSubmit)
 
-        if (data.codCli === '' || data.loja === '') { return }
+        setIsSubmitting(true);
+
+        if (data.codCli === '' || data.loja === '') {
+            setTimeout(() => {
+                setIsSubmitting(false);
+            }, 1000);
+            return
+        }
 
         const result = await handleSearch(data);
 
-        setDataCliente(result)
+        setDataCliente(result);
+
+        setTimeout(() => {
+            setIsSubmitting(false);
+        }, 1000);
 
     };
 
+
+
     const stopPropagation = (e) => {
-        console.log(e)
         e.stopPropagation();
         handleSubmit(handleSubmitForm)(e);
-      }
-
-    const handleClose = () => {
-        resetField('codCli');
-        resetField('loja');
-        modal.onClose();
     }
+
 
 
     const handleSelect = () => {
 
         setValue(dataCliente);
 
-        resetField('codCli');
-        resetField('loja');
-
         modal.onClose();
 
     }
-
-    console.log(dataCliente)
-    console.log('renderizou o SearhEmpresa')
-    console.log('----------------------------------------')
 
 
 
 
     return (
-        <Modal isOpen={modal.isOpen} size='lg' onClose={handleClose} >
+        <Modal isOpen={modal.isOpen} size='lg' onClose={modal.onClose} >
             <ModalOverlay style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }} />
             <ModalContent h='auto' maxH='98vh' overflow='auto' m='auto' >
 
@@ -94,7 +94,8 @@ export default function SearchEmpresa({ setValue }) {
                                     name='codCli'
                                     control={control}
                                     render={({ field: { value, onChange } }) => (
-                                        <FormInput w='100%' type='number' value={value} maxLength='6' bg='#ffffff8d' variant='filled' border={errors.codCli ? '1px solid red' : '1px solid #C0C0C0'} label='Código Cliente:' placeholder='999999' onChange={onChange} />
+                                        <FormInput w='100%' type='number' value={value} maxLength='6' bg='#ffffff8d' variant='filled' border='1px solid #C0C0C0' label='Código Cliente:'
+                                            placeholder='999999' onChange={(e) => onChange(e.target.value.trim().slice(0, 6))} isInvalid={errors.codCli} />
                                     )}
                                 />
                                 {errors.codCli && <Text color='red' pt={1} pl={2}>{errors.codCli.message}</Text>}
@@ -105,7 +106,8 @@ export default function SearchEmpresa({ setValue }) {
                                     name='loja'
                                     control={control}
                                     render={({ field: { value, onChange } }) => (
-                                        <FormInput w='100%' value={value} maxLength='2' bg='#ffffff8d' variant='filled' border='1px solid #C0C0C0' label='Código Loja:' placeholder='99' onChange={onChange} />
+                                        <FormInput w='100%' value={value} maxLength='2' bg='#ffffff8d' variant='filled' border='1px solid #C0C0C0' label='Código Loja:'
+                                            placeholder='99' onChange={(e) => onChange(e.target.value.trim().toUpperCase())} isInvalid={errors.loja} />
                                     )}
                                 />
                                 {errors.loja && <Text color='red' pt={1} pl={2}>{errors.loja.message}</Text>}
@@ -114,7 +116,8 @@ export default function SearchEmpresa({ setValue }) {
                             <Flex align={errors.codCli || errors.loja ? 'center' : 'end'} mb={errors.codCli || errors.loja ? 1 : 0}>
 
                                 <IconButton type='submit' icon={<MdSearch size='24px' color='#FFF' />}
-                                    borderRadius='3rem' w='60px' bg='blue.400' _hover={{ bg: 'blue.500', transform: `translateY(-2px)` }} _active={{ transform: 'translateY(2px)' }} isDisabled={isSubmitting} />
+                                    borderRadius='3rem' w='60px' bg='blue.400' _hover={{ bg: 'blue.500', transform: `translateY(-2px)`, cursor: 'pointer' }}
+                                    _active={{ transform: 'translateY(2px)' }} isDisabled={isSubmitting} />
 
                             </Flex>
 
@@ -139,4 +142,3 @@ export default function SearchEmpresa({ setValue }) {
         </Modal>
     )
 }
-
