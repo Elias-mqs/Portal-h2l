@@ -23,6 +23,10 @@ import ListaChamado from './ListaChamado';
 import ListaOs from './ListaOs';
 import SearchEmpresa from './SearchEmpresa';
 import { CadastroAdm } from './CadastroAdm';
+import { CadastroOp } from './CadastroOp';
+import SrcCliNome from './SrcCliNome';
+import { CadastroGestor } from './CadastroGes'
+
 // Exporte os componentes diretamente
 export {
     Header,
@@ -56,5 +60,8 @@ export {
     ListaOs,
     SearchEmpresa,
     CadastroAdm,
+    CadastroOp,
+    SrcCliNome,
+    CadastroGestor,
     
 };

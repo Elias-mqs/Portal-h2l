@@ -184,7 +184,7 @@ export default function PainelLogin() {
                         <Stack spacing={8}>
 
                             <FormInputBtnL name={'username'} value={formulario.username} fontSize={'18px'} variant={'flushed'} label={'Usuário'}
-                                icon={<PersonOutlineOutlinedIcon sx={{ color: `#003366` }} />} placeholder={'Nome de usuário'} onChange={handleInputChange} />
+                                icon={<PersonOutlineOutlinedIcon sx={{ color: `#003366` }} />} placeholder={'Nome de usuário'} onChange={handleInputChange} autoComplete='username' />
 
                             <Box >
                                 <Text pb={1} pl={2} fontSize={14} fontWeight={500}>Senha</Text>
@@ -193,7 +193,7 @@ export default function PainelLogin() {
                                         <IconLock color='#003366' />
                                     </InputLeftElement>
                                     <Input type={show ? 'text' : 'password'} name='password' fontSize='18px' variant='flushed' placeholder='Senha'
-                                        value={formulario.password} onChange={handleInputChange} />
+                                        value={formulario.password} onChange={handleInputChange} autoComplete='new-password' />
                                     <InputRightElement>
                                         <Box onClick={handleClickEyes} _hover={{ cursor: 'pointer' }} >
                                             {show ? <IconEye color='#003366' />

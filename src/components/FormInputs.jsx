@@ -48,7 +48,7 @@ function FormInputBtn({ label, w, maxW, icon, name, value, size, bg, type, varia
     )
 }
 
-function FormInputBtnL({ label, w, maxW, icon, name, value, fontSize, type, variant, placeholder, onChange, pointerEvents, tabIndex, required, border }) {
+function FormInputBtnL({ label, w, maxW, icon, name, value, fontSize, type, variant, placeholder, onChange, pointerEvents, tabIndex, required, border, autoComplete}) {
     return (
         <Flex direction='column' w={w} maxW={maxW} justify='flex-end' h='100%' >
             <Text fontWeight={500} fontSize={14} pl={2} pb={1}>{label}</Text>
@@ -57,7 +57,7 @@ function FormInputBtnL({ label, w, maxW, icon, name, value, fontSize, type, vari
                     {icon}
                 </InputLeftElement>
                 <Input name={name} value={value} fontSize={fontSize} type={type} variant={variant} border={border} placeholder={placeholder}
-                    onChange={onChange} pointerEvents={pointerEvents} tabIndex={tabIndex} required={required} />
+                    onChange={onChange} pointerEvents={pointerEvents} tabIndex={tabIndex} required={required} autoComplete={autoComplete} />
             </InputGroup>
         </Flex>
     )

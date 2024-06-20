@@ -1,4 +1,4 @@
-import { IconButtonHeader, Cadastro, DadosUser, SearchUser, CadastroAdm } from '.'
+import { IconButtonHeader, Cadastro, DadosUser, SearchUser, CadastroAdm, CadastroOp, CadastroGestor } from '.'
 import { Menu, MenuList, MenuButton, useDisclosure, Box } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import { MdOutlineSettings } from 'react-icons/md'
@@ -98,16 +98,19 @@ export default function Settings() {
                     labelBtn='Cadastro' display={Gestor} /> 
 
                 <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroGestor'} onOpen={() => handleOpen('cadastroGestor')} onClose={onClose}
-                    conteudo={<Cadastro isComercial={true} levelUser={levelUser} cadGestor={cadGestor} />} // COMPONENTE AQUI
-                    labelBtn='Cadastro Gestor' display={Comercial} />
+                    conteudo={<CadastroGestor />} // COMPONENTE AQUI
+                    labelBtn='Cadastro Gestor'  />
 
-                {/* <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroComercial'} onOpen={() => handleOpen('cadastroComercial')} onClose={onClose}
-                    conteudo={<Cadastro isTi={true} levelUser={levelUser} cadComercial={cadComercial} />} // COMPONENTE AQUI 
-                    labelBtn='Cadastro Comercial' display={Ti} /> */}
+                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroOp'} onOpen={() => handleOpen('cadastroOp')} onClose={onClose}
+                    conteudo={<CadastroOp />} // COMPONENTE AQUI 
+                    labelBtn='Cadastro Operador H2L' />
 
+
+
+                {/* NÃO USAR display={ti} PARA ESCONDER O ACESSO. USAR { Ti && <CODIGO... /> } */}
                 <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroComercial'} onOpen={() => handleOpen('cadastroComercial')} onClose={onClose}
-                    conteudo={<CadastroAdm isTi={true} levelUser={levelUser} cadComercial={cadComercial} />} // COMPONENTE AQUI 
-                    labelBtn='Cadastro Comercial' display={Ti} />
+                    conteudo={<CadastroAdm />} // COMPONENTE AQUI 
+                    labelBtn='Cadastro Adm Básico' display={Ti} />
 
                 <IconButtonHeader onOpen={handleSignOut} labelBtn='Sair' />
             </MenuList>

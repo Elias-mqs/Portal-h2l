@@ -1,6 +1,7 @@
 import { Button, Grid, useToast, Stack, Flex, Text, ModalCloseButton, } from "@chakra-ui/react";
-import { FormInput, InputSrc, SearchEmpresa, cript } from '@/components'
+import { FormInput, InputSrc, SearchEmpresa, SrcCliNome, cript } from '@/components'
 import { useForm, Controller } from 'react-hook-form';
+import { userContext } from '@/context/userContext';
 import { useSearchCli } from "../context/ResearchesContext";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { MdSearch } from "react-icons/md";
@@ -18,12 +19,14 @@ const schema = z.object({
     username: z.coerce.string().min(3, 'Mínimo de 3 caracteres'),
 })
 
-function CadastroAdm() {
+function CadastroGestor() {
 
 
     const toast = useToast();
 
     const { modal } = useSearchCli()
+    const { data } = userContext()
+    const dataUser = { ...data.data[0][0], info: data.data[1] };
 
     const { control, handleSubmit, setValue, resetField, formState: { errors } } = useForm({
         resolver: zodResolver(schema),
@@ -34,7 +37,7 @@ function CadastroAdm() {
 
     const handleForm = async (data) => {
 
-        const dataCrypt = cript({...data, admin:2})
+        const dataCrypt = cript({ ...data, admin: 1 })
 
         try {
 
@@ -79,9 +82,9 @@ function CadastroAdm() {
             <ModalCloseButton m={4} />
 
             <Flex justify='center' borderBottom={'1px solid #858585'} pb={1} mb={5} >
-                <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} >Novo Administrador Básico</Text>
+                <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} >Novo Gestor</Text>
             </Flex>
-            
+
             <Grid gap={8} mb={5} >
 
                 {/* /////////////////// NOME ///////////////////// */}
@@ -164,13 +167,18 @@ function CadastroAdm() {
             <Text pt={3} pl={2} fontSize='14' fontWeight={600} >Usuário receberá a senha no e-mail cadastrado.</Text>
 
 
-            {modal.isOpen &&
+            {/* FAZER A RENDERIZAÇÃO DESSA FORMA */}
+            {(dataUser.admin === 3 || dataUser.admin === 2) && modal.isOpen &&
                 <SearchEmpresa setValue={dataEmpresa} />
             }
+            {dataUser.admin === 4 && modal.isOpen &&
+                <SrcCliNome dataUser={dataUser.codCli} setValue={dataEmpresa} />
+            }
+
 
         </Stack>
 
     )
 }
 
-export { CadastroAdm };
+export { CadastroGestor };

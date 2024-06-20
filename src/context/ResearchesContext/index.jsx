@@ -1,6 +1,7 @@
 import { useDisclosure, useToast } from '@chakra-ui/react';
 import React, { createContext, useContext, useState } from 'react';
-import { api2 } from '@/utils/api'
+import { api, api2 } from '@/utils/api'
+import { cript, decript } from '@/components';
 
 const SearchCliContext = createContext();
 
@@ -10,6 +11,9 @@ export function SearchCliProvider({ children }) {
     const toast = useToast();
 
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////// ESSA FUNÇÃO É PARA FAZER A BUSCA DO NOME DA EMPRESA PESQUISANDO PELO codCli E loja //////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const handleSearch = async (datas) => {
 
         const dataCli = { ...datas }
@@ -26,20 +30,58 @@ export function SearchCliProvider({ children }) {
 
         try {
             const { data } = await api2.get('auxil_os?ccad=loja&ccliente=' + dataCli.codCli + '&cloja=' + dataCli.loja.toUpperCase());
-            const filialCliente = {nome: data.filiais[0].nome, codCli: dataCli.codCli, loja: dataCli.loja}
+            const filialCliente = { nome: data.filiais[0].nome, codCli: dataCli.codCli, loja: dataCli.loja }
             return filialCliente
 
         } catch (error) {
             toast({ position: 'top', title: "", description: "Verifique os campos e tente novamente.", status: 'info', duration: 2000, isClosable: true, });
         }
 
-        console.log('renderizou a consulta')
+
     }
 
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////// ESSA FUNÇÃO É PARA FAZER A BUSCA DO NOME DA EMPRESA PESQUISANDO PELO NOME ///////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    const srcNomeCli = async (datas) => {
+
+        if (!datas || !datas.codCli) {
+            toast({ position: 'top', title: "Erro", description: "Código do cliente não fornecido.", status: 'error', duration: 2000, isClosable: true });
+            return;
+        }
+
+        try {
+
+            const getUrl = cript(`auxil_os?ccad=loja&ccliente=${datas.codCli}`);
+
+            const response = await api.get(`srcNomeCli/${getUrl.code}`);
+
+            const { dtCli } = response.data;
+
+            const { filiais } = decript(dtCli);
+
+            return filiais;
+
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+
+            let errorMessage = 'Verifique os campos e tente novamente.';
+            if (error.response) {
+                // Erro de resposta do servidor
+                errorMessage = error.response.data.message || errorMessage;
+            } else if (error.request) {
+                // Erro de requisição, sem resposta
+                errorMessage = 'Erro de rede, por favor, tente novamente mais tarde.';
+            }
+
+            toast({ position: 'top', title: "Erro", description: errorMessage, status: 'error', duration: 2000, isClosable: true, });
+        }
+    };
+
 
     return (
-        <SearchCliContext.Provider value={{ modal: isOpenSearch, handleSearch }}>
+        <SearchCliContext.Provider value={{ modal: isOpenSearch, handleSearch, srcNomeCli }}>
             {children}
         </SearchCliContext.Provider>
     );

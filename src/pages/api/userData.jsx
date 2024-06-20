@@ -10,7 +10,15 @@ async function userData(req, res) {
 
             const token = req.headers.authorization
             const data = await authenticate(token)
-            const user = [{ email: data.email, name: data.nome, setor: data.setor, username: data.username, admin: data.admin }];
+            const user = [{
+                email: data.email,
+                name: data.nome,
+                setor: data.setor,
+                username: data.username,
+                admin: data.admin,
+                codCli: data.usr_codcli,
+                loja: data.usr_loja
+            }];
             const info = data.usr_id
             const dataCrypt = [user, info]
             const newData = cript(dataCrypt)

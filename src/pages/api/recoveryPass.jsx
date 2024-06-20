@@ -31,8 +31,9 @@ export default async function handler(req, res) {
                 .where('email', '=', email)
                 .execute()
 
+            //Email não encontrado
             if (!result || result.length === 0) {
-                return res.status(404).json({ message: 'Erro' }) //Email não encontrado
+                return res.status(404).json({ message: 'Erro' })
             }
 
             const user = result[0]

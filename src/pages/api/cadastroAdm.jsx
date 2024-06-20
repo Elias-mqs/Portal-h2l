@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 
 
         const dataDecypt = decript(req.body.code)
-        const { name, username, email, setor, codCli, loja, nomeCli } = dataDecypt;
+        const { name, username, email, setor, codCli, loja, nomeCli, admin } = dataDecypt;
 
 
         if (!codCli || !loja) {
@@ -148,7 +148,7 @@ export default async function handler(req, res) {
                     email: email,
                     setor: setor,
                     password_hash: passwordHash,
-                    admin: '2',
+                    admin: admin,
                     usr_nomecli: nomeCli,
                     usr_codcli: codCli,
                     usr_loja: loja,
