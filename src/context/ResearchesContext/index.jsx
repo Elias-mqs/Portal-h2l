@@ -46,6 +46,7 @@ export function SearchCliProvider({ children }) {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const srcNomeCli = async (datas) => {
 
+        
         if (!datas || !datas.codCli) {
             toast({ position: 'top', title: "Erro", description: "Código do cliente não fornecido.", status: 'error', duration: 2000, isClosable: true });
             return;

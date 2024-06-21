@@ -10,6 +10,8 @@ const api2 = axios.create({
   baseURL: process.env.NEXT_PUBLIC_URLAPI
 });
 
+
+
 api.interceptors.request.use((config) => {
   const token = Cookies.get('ssn');
   

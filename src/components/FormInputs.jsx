@@ -1,12 +1,12 @@
 import { Input, Text, Flex, Textarea, InputGroup, InputRightElement, InputLeftElement } from '@chakra-ui/react'
 
 function FormInput({ label, w, maxW, name, value, size, bg, border, type, variant, placeholder, onChange, pointerEvents, tabIndex, required, isDisabled,
-     isInvalid, readOnly, _placeholder, display, maxLength, autoComplete }) {
+     isInvalid, readOnly, _placeholder, display, maxLength, autoComplete, ref }) {
     return (
         <Flex direction='column' w={w} maxW={maxW} justify='flex-end' h='100%' display={display} >
             <Text fontWeight={500} fontSize={14} pl={2} pb={1}>{label}</Text>
             <Input name={name} value={value} size={size} bg={bg} border={border} type={type} variant={variant} placeholder={placeholder}
-                onChange={onChange} pointerEvents={pointerEvents} tabIndex={tabIndex} required={required} isDisabled={isDisabled}
+                onChange={onChange} pointerEvents={pointerEvents} tabIndex={tabIndex} required={required} isDisabled={isDisabled} ref={ref}
                 isInvalid={isInvalid} readOnly={readOnly} _placeholder={_placeholder} maxLength={maxLength} autoComplete={autoComplete} />
         </Flex>
     )

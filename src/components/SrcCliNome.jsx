@@ -1,10 +1,10 @@
-import { Modal, ModalOverlay, ModalContent, ModalCloseButton, Stack, Flex, Text, IconButton, Input } from "@chakra-ui/react";
+import { Modal, ModalOverlay, ModalContent, ModalCloseButton, Stack, Flex, Text, IconButton, Input, Button, Box, Grid } from "@chakra-ui/react";
 import { useSearchCli } from "../context/ResearchesContext";
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { MdSearch } from 'react-icons/md';
 import { FormInput } from '@/components';
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { z } from 'zod';
 
 
@@ -19,76 +19,45 @@ import { z } from 'zod';
 
 
 const schema = z.object({
-    nome: z.coerce.string(),
+    search: z.coerce.string(),
 })
 
 
-export default function SrsCliNome({ setValue, dataUser }) {
+export default function SrcCliNome({ setValue, dataCliente }) {
 
 
-    const [dataCliente, setDataCliente] = useState([])
-    const [isSubmitting, setIsSubmitting] = useState(false)
-    const { control, handleSubmit, formState: { errors } } = useForm({
+    const { modal } = useSearchCli();
+    const { control } = useForm({
         resolver: zodResolver(schema),
         defaultValues: {
-            nome: '',
+            search: '',
         }
     })
 
-    const { modal, srcNomeCli } = useSearchCli();
+    console.log(dataCliente)
 
+    const handleSelect = (cliente) => {
 
-
-    const handleSubmitForm = async (data) => {
-
-
-        setIsSubmitting(true);
-
-        if (data.nome === '') {
-            setTimeout(() => {
-                setIsSubmitting(false);
-            }, 1000);
-            return
-        }
-
-        const result = await srcNomeCli({ ...data, codCli: dataUser });
-
-        setDataCliente(result);
-        console.log(dataCliente[0])
-
-        setTimeout(() => {
-            setIsSubmitting(false);
-        }, 1000);
-
-    };
-
-
-
-    const stopPropagation = (e) => {
-        e.stopPropagation();
-        handleSubmit(handleSubmitForm)(e);
-    }
-
-
-
-    const handleSelect = () => {
-
-        setValue(dataCliente);
+        setValue(cliente);
 
         modal.onClose();
 
     }
 
+    const [busca, setBusca] = useState('')
+
+    console.log('renderizou o filho')
 
 
 
     return (
-        <Modal isOpen={modal.isOpen} size='2xl' onClose={modal.onClose} >
+        <Modal isOpen={modal.isOpen} size='6xl' onClose={modal.onClose} >
             <ModalOverlay style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }} />
-            <ModalContent h='auto' maxH='98vh' overflow='auto' m='auto' >
+            <ModalContent h='auto' maxH='98vh' m='auto' >
 
 
-                <Stack w='100%' bg="#EDF2FF" borderRadius={{ base: '0', md: "10px" }} boxShadow="0 0 10px rgba(0, 0, 0, 0.2)" p={{ base: '35px', md: "30px 35px" }} transition={{ base: 'max-width 0.3s ease' }} >
+                <Stack w='100%' bg="#EDF2FF" h='100%' maxH='70vh' borderRadius={{ base: '0', md: "10px" }} boxShadow="0 0 10px rgba(0, 0, 0, 0.2)"
+                    p={{ base: '35px', md: "30px 35px" }} transition={{ base: 'max-width 0.3s ease' }} >
 
                     <ModalCloseButton m={4} />
                     <Flex justify='center' borderBottom={'1px solid #858585'} pb={1} mb={3} >
@@ -96,28 +65,25 @@ export default function SrsCliNome({ setValue, dataUser }) {
                     </Flex>
 
                     <Flex direction='column' align='center'>
-
-                        <Flex as='form' w='100%' onSubmit={stopPropagation} gap={5} >
-
+                        <Flex w='100%' justify='start' gap={5} >
                             <Flex w='100%' direction='column' mb='auto'>
 
-                                <Controller
-                                    name='nome'
-                                    control={control}
-                                    render={({ field: { value, onChange } }) => (
-                                        <FormInput value={value} maxLength='6' bg='#ffffff8d' variant='filled' border='1px solid #C0C0C0' label='Nome da Loja:'
-                                            placeholder='Nome da unidade/loja da empresa' onChange={(e) => onChange(e.target.value.trim().slice(0, 6))} isInvalid={errors.codCli} />
-                                    )}
-                                />
-                                {errors.nome && <Text color='red' pt={1} pl={2}>{errors.nome.message}</Text>}
+                                <Input name='search' value={busca} onChange={(e) => { const testandoo = e.target.value }} bg='#ffffff8d' variant='filled'
+                                    border='1px solid #C0C0C0' placeholder='Nome da unidade/loja da empresa' />
+
+
                             </Flex>
 
+                            <Flex >
 
-                            <Flex align={errors.nome ? 'center' : 'end'} mb={errors.nome ? 1 : 0}>
+                                <Button bg='blue.400' color='#FFF' rightIcon={<MdSearch size='24px' color='#FFF' />} _active={{ transform: 'translateY(2px)' }}
+                                    _hover={{ bg: 'blue.500', transform: `translateY(-2px)`, cursor: 'pointer' }} borderRadius='1rem' >
+                                    Buscar
+                                </Button>
 
-                                <IconButton type='submit' icon={<MdSearch size='24px' color='#FFF' />}
-                                    borderRadius='3rem' w='60px' bg='blue.400' _hover={{ bg: 'blue.500', transform: `translateY(-2px)`, cursor: 'pointer' }}
-                                    _active={{ transform: 'translateY(2px)' }} isDisabled={isSubmitting} />
+                                {/* <IconButton type='submit' icon={<MdSearch size='24px' color='#FFF' />} borderRadius='3rem' w='60px' bg='blue.400'
+                                    _hover={{ bg: 'blue.500', transform: `translateY(-2px)`, cursor: 'pointer' }}
+                                    _active={{ transform: 'translateY(2px)' }} /> */}
 
                             </Flex>
 
@@ -125,27 +91,49 @@ export default function SrsCliNome({ setValue, dataUser }) {
                     </Flex>
 
 
-
-                    <Stack>
-
-                        <Flex direction='column' overflow='auto' gap={5}>
+                    <Stack w='100%'>
 
 
-                            {dataCliente[0]?.nome &&
-                                dataCliente.map((cliente, index) => (
-                                    cliente.nome && (
-                                        <Stack key={index} title='resultadosClientes' onClick={() => handleSelect(cliente)}>
-                                            <Flex w='100%' h='auto' bg='#D1D9FF' borderRadius='.5rem' _hover={{ cursor: 'pointer' }}>
-                                                <Flex w='100%' p='10px' align='center' overflow='auto'>
-                                                    <Input variant='none' bg='transparent' value={cliente.nome} readOnly={true} pointerEvents={'none'} tabIndex={'-1'} />
-                                                </Flex>
-                                            </Flex>
-                                        </Stack>
-                                    )
-                                ))
-                            }
+                        <Flex direction="column" maxW="100%" maxH="40vh" py="20px" gap={5} >
+                            {dataCliente[0]?.nome && (
+                                <Flex overflowX='auto' direction='column' w='100%'>
 
+                                    <Flex title='titulo' gap="150px">
+                                        <Grid w='100%' templateColumns='repeat(3, 1fr)' p='10px' align='center' gap={5}>
+                                            <Flex w='400px' fontWeight={500} justify="center">Nome</Flex>
+                                            <Flex w='400px' fontWeight={500} justify="center">Endereço</Flex>
+                                            <Flex w='180px' fontWeight={500} justify="center">Municipio</Flex>
+                                        </Grid>
+                                    </Flex>
+
+
+
+
+                                        <Flex direction='column' w='100%' gap={3}>
+                                            {dataCliente[0]?.nome &&
+                                                dataCliente.map((cliente, index) => (
+                                                    cliente.nome && (
+
+                                                        <Stack key={index} title="resultadosClientes" onClick={() => handleSelect(cliente)}>
+                                                            <Flex w='100%' _hover={{ cursor: "pointer" }}>
+                                                                <Flex direction='column' bg='#D1D9FF' borderLeft='3px solid #636363a9' borderRadius=".5rem">
+
+                                                                    <Grid templateColumns='repeat(3, 1fr)' p='12px' align='center' gap={5}>
+                                                                        <Flex w='400px' pl='20px'>{cliente.nome}</Flex>
+                                                                        <Flex w='400px' pl='20px' borderLeft='1px solid #636363a9'>{cliente.end}</Flex>
+                                                                        <Flex w='180px' pl='20px' borderLeft='1px solid #636363a9'>{cliente.cid}</Flex>
+
+                                                                    </Grid>
+                                                                </Flex>
+                                                            </Flex>
+                                                        </Stack>
+                                                    )
+                                                ))}
+                                        </Flex>
+                                </Flex>
+                            )}
                         </Flex>
+
                     </Stack>
 
 
@@ -155,5 +143,20 @@ export default function SrsCliNome({ setValue, dataUser }) {
 
             </ModalContent>
         </Modal>
+    )
+}
+
+const ListCli = () => {
+
+    return (
+        <>
+            <IconButtonHeader sizeModal='xl' isOpen={isOpen} onOpen={handleOpenDadosUser} onClose={handleClose} conteudo={<DadosUser handleSearch={handleSearch} setUserDeleted={handleClose} formData={{ ...formData, password: '' }} onClick={handleSave} setFormData={setFormData} />} labelBtn='editar' fontSize='sm' fontWeight={500} fontStyle='italic' hover={{ fontWeight: 700, color: '#000' }} />
+            <Flex w='100vw' bg='#D1D9FF' borderRadius='.5rem' >
+                <Flex name='nome' w='25%' borderLeft='2px solid #63636342' p='0 10px' align='center' overflow='hidden' borderLeftRadius='.5rem' >{user.name}</Flex>
+                <Flex name='usuario' w='25%' borderLeft='1px solid #636363a9' p='0 10px' align='center' overflow='hidden' >{user.username}</Flex>
+                <Flex name='setor' w='20%' borderLeft='1px solid #636363a9' p='0 10px' align='center' overflow='hidden' >{user.setor}</Flex>
+                <Flex name='email' w='30%' borderLeft='1px solid #636363a9' p='0 10px' align='center' overflow='hidden' >{user.email}</Flex>
+            </Flex>
+        </>
     )
 }

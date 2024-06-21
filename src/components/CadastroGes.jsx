@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { MdSearch } from "react-icons/md";
 import { api } from '../utils/api'
 import { z } from 'zod';
+import { useCallback, useState } from "react";
 
 
 const schema = z.object({
@@ -24,9 +25,9 @@ function CadastroGestor() {
 
     const toast = useToast();
 
-    const { modal } = useSearchCli()
-    const { data } = userContext()
-    const dataUser = { ...data.data[0][0], info: data.data[1] };
+    const { modal, srcNomeCli } = useSearchCli()
+    const { data: { data: { [0]: [dataUser], [1]: info } } } = userContext()
+    const [dataCliente, setDataCliente] = useState([])
 
     const { control, handleSubmit, setValue, resetField, formState: { errors } } = useForm({
         resolver: zodResolver(schema),
@@ -58,12 +59,22 @@ function CadastroGestor() {
 
 
 
-    const handleOpen = (e) => {
+    const handleOpen = useCallback(async (e) => {
+
         e.preventDefault()
         e.stopPropagation()
+
+        try {
+            const result = await srcNomeCli({ codCli: dataUser.codCli });
+            setDataCliente(result)
+        } catch (error) {
+            console.log(error)
+        }
+
         resetField('')
         modal.onOpen()
-    }
+
+    }, [dataCliente])
 
 
 
@@ -73,7 +84,7 @@ function CadastroGestor() {
         setValue('loja', data.loja || '');
     };
 
-
+console.log('renderizou o pai')
 
     return (
 
@@ -172,7 +183,7 @@ function CadastroGestor() {
                 <SearchEmpresa setValue={dataEmpresa} />
             }
             {dataUser.admin === 4 && modal.isOpen &&
-                <SrcCliNome dataUser={dataUser.codCli} setValue={dataEmpresa} />
+                <SrcCliNome dataCliente={dataCliente} setValue={dataEmpresa} />
             }
 
 
