@@ -17,7 +17,8 @@ async function userData(req, res) {
                 username: data.username,
                 admin: data.admin,
                 codCli: data.usr_codcli,
-                loja: data.usr_loja
+                loja: data.usr_loja,
+                nomeCli: data.usr_nomecli
             }];
             const info = data.usr_id
             const dataCrypt = [user, info]

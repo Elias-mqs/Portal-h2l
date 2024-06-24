@@ -18,7 +18,7 @@ const schema = z.object({
     username: z.coerce.string().min(3, 'Mínimo de 3 caracteres'),
 })
 
-function CadastroAdm() {
+function CadastroAdmG() {
 
 
     const toast = useToast();
@@ -34,7 +34,7 @@ function CadastroAdm() {
 
     const handleForm = async (data) => {
 
-        const dataCrypt = cript({ ...data, admin: '2' })
+        const dataCrypt = cript({ ...data, admin: '3' })
 
         try {
 
@@ -79,7 +79,7 @@ function CadastroAdm() {
             <ModalCloseButton m={4} />
 
             <Flex justify='center' borderBottom={'1px solid #858585'} pb={1} mb={5} >
-                <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} >Novo Administrador Básico</Text>
+                <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} >Novo Administrador Geral</Text>
             </Flex>
 
             <Grid gap={8} mb={5} >
@@ -173,4 +173,4 @@ function CadastroAdm() {
     )
 }
 
-export { CadastroAdm };
+export { CadastroAdmG };

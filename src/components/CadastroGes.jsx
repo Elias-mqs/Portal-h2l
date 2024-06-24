@@ -38,7 +38,7 @@ function CadastroGestor() {
 
     const handleForm = async (data) => {
 
-        const dataCrypt = cript({ ...data, admin: 1 })
+        const dataCrypt = cript({ ...data, admin: '1' })
 
         try {
 
@@ -84,7 +84,7 @@ function CadastroGestor() {
         setValue('loja', data.loja || '');
     };
 
-console.log('renderizou o pai')
+
 
     return (
 

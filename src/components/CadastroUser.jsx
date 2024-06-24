@@ -1,11 +1,13 @@
-import { Button, Grid, useToast, Stack, Flex, Text, ModalCloseButton, } from "@chakra-ui/react";
-import { FormInput, InputSrc, SearchEmpresa, cript } from '@/components'
+import { Button, Grid, useToast, Stack, Flex, Text, ModalCloseButton, RadioGroup, Radio } from "@chakra-ui/react";
+import { FormInput, InputSrc, SearchEmpresa, SrcCliNome, cript } from '@/components'
 import { useForm, Controller } from 'react-hook-form';
+import { userContext } from '@/context/userContext';
 import { useSearchCli } from "../context/ResearchesContext";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { MdSearch } from "react-icons/md";
 import { api } from '../utils/api'
 import { z } from 'zod';
+import { useCallback, useState } from "react";
 
 
 const schema = z.object({
@@ -15,60 +17,48 @@ const schema = z.object({
     codCli: z.coerce.string(),
     loja: z.coerce.string(),
     setor: z.coerce.string().min(3, 'Mínimo de 3 caracteres'),
+    typeUser: z.coerce.string().min(1, 'Selecione um tipo de usuário'),
     username: z.coerce.string().min(3, 'Mínimo de 3 caracteres'),
 })
 
-function CadastroAdm() {
+function CadastroUser() {
 
 
     const toast = useToast();
 
-    const { modal } = useSearchCli()
+    const { data: { data: { [0]: [dataUser], [1]: info } } } = userContext()
 
-    const { control, handleSubmit, setValue, resetField, formState: { errors } } = useForm({
+    const { control, handleSubmit, resetField, formState: { errors } } = useForm({
         resolver: zodResolver(schema),
-        defaultValues: { name: '', email: '', nomeCli: '', codCli: '', loja: '', setor: '', username: '', },
+        defaultValues: { name: '', email: '', nomeCli: dataUser.nomeCli, codCli: dataUser.codCli, loja: dataUser.loja, setor: '', username: '', typeUser: '' },
     })
 
 
 
     const handleForm = async (data) => {
 
-        const dataCrypt = cript({ ...data, admin: '2' })
+        console.log(data)
+
+        const dataCrypt = cript({ ...data, admin: '0' })
 
         try {
 
-            const result = await api.post('cadastroAdm', dataCrypt)
+            const result = await api.post('cadastroUser', dataCrypt)
 
             resetField('name');
             resetField('email');
-            resetField('nomeCli');
             resetField('setor');
             resetField('username');
+            resetField('typeUser')
 
             toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
+
 
         } catch (error) {
             toast({ position: 'top', title: "Atenção", description: error?.response?.data?.message, status: 'info', duration: 2000, isClosable: true, })
         }
     }
 
-
-
-    const handleOpen = (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        resetField('')
-        modal.onOpen()
-    }
-
-
-
-    const dataEmpresa = (data) => {
-        setValue('nomeCli', data.nome || '');
-        setValue('codCli', data.codCli || '');
-        setValue('loja', data.loja || '');
-    };
 
 
 
@@ -79,7 +69,7 @@ function CadastroAdm() {
             <ModalCloseButton m={4} />
 
             <Flex justify='center' borderBottom={'1px solid #858585'} pb={1} mb={5} >
-                <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} >Novo Administrador Básico</Text>
+                <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} >Novo Usuário</Text>
             </Flex>
 
             <Grid gap={8} mb={5} >
@@ -114,23 +104,12 @@ function CadastroAdm() {
 
 
 
-                {/* /////////////////// EMPRESA ///////////////////// */}
-                <Controller
-                    name='nomeCli'
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                        <InputSrc value={value || ''} typeBtn='button' icon={<MdSearch title='pesquisar' size='24px' color='#7B809A' />} onClick={handleOpen}
-                            variant={'flushed'} label={'Empresa'} placeholder={'Ex: (H2L Soluções para documentos )'} onChange={onChange}
-                            _placeholder={{ color: '#b0c0d4' }} readOnly={true} pointerEvents={'none'} tabIndex={'-1'} />
-                    )}
-                />
-
-
                 {/* /////////////////// SETOR ///////////////////// */}
                 <Flex direction='column'>
                     <Controller
                         name='setor'
                         control={control}
+                        rules={{ required: 'Este campo é obrigatório' }}
                         render={({ field: { onChange, value } }) => (
                             <FormInput value={value} variant={'flushed'} label={'Setor'} placeholder={'Ex: (Recursos humanos)'} onChange={onChange}
                                 _placeholder={{ color: '#b0c0d4' }} isInvalid={errors.setor} />
@@ -138,6 +117,32 @@ function CadastroAdm() {
                     />
                     {errors.setor && <Text color='red' pt={1} pl={2} >{errors.setor.message}</Text>}
                 </Flex>
+
+
+
+                {/* /////////////////// TYPEUSER ///////////////////// */}
+                <Flex direction='column'>
+                    <Controller
+                        name='typeUser'
+                        control={control}
+                        rules={{ required: 'Este campo é obrigatório' }}
+                        render={({ field: { onChange, value } }) => (
+                            <Flex direction='column'>
+                                <Text fontWeight={500} fontSize={14} pl={2} pb={1}>Tipo de usuário</Text>
+                                <RadioGroup onChange={onChange} value={value} >
+                                    <Stack direction='column'>
+                                        <Radio value='1'>Abrir atendimento/chamados e pedidos.</Radio>
+                                        <Radio value='2'>Somente abrir atendimento/chamado.</Radio>
+                                        <Radio value='3'>Somente fazer pedidos.</Radio>
+                                        <Radio value='4'>Somente consulta.</Radio>
+                                    </Stack>
+                                </RadioGroup>
+                            </Flex>
+                        )}
+                    />
+                    {errors.typeUser && <Text color='red' pt={1} pl={2} >{errors.typeUser.message}</Text>}
+                </Flex>
+
 
 
                 {/* /////////////////// USERNAME ///////////////////// */}
@@ -164,13 +169,9 @@ function CadastroAdm() {
             <Text pt={3} pl={2} fontSize='14' fontWeight={600} >Usuário receberá a senha no e-mail cadastrado.</Text>
 
 
-            {modal.isOpen &&
-                <SearchEmpresa setValue={dataEmpresa} />
-            }
-
         </Stack>
 
     )
 }
 
-export { CadastroAdm };
+export { CadastroUser };

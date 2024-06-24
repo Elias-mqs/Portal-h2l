@@ -34,7 +34,7 @@ function CadastroOp() {
 
     const handleForm = async (data) => {
 
-        const dataCrypt = cript({...data, admin: 4})
+        const dataCrypt = cript({ ...data, admin: '4' })
 
         try {
 
@@ -81,7 +81,7 @@ function CadastroOp() {
             <Flex justify='center' borderBottom={'1px solid #858585'} pb={1} mb={5} >
                 <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} >Novo Operador H2L</Text>
             </Flex>
-            
+
             <Grid gap={8} mb={5} >
 
                 {/* /////////////////// NOME ///////////////////// */}

@@ -1,4 +1,4 @@
-import { IconButtonHeader, Cadastro, DadosUser, SearchUser, CadastroAdm, CadastroOp, CadastroGestor } from '.'
+import { IconButtonHeader, Cadastro, DadosUser, SearchUser, CadastroAdm, CadastroOp, CadastroGestor, CadastroUser, CadastroAdmG } from '.'
 import { Menu, MenuList, MenuButton, useDisclosure, Box } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import { MdOutlineSettings } from 'react-icons/md'
@@ -8,12 +8,24 @@ import { userContext } from '@/context/userContext';
 import { useSearchCli } from "../context/ResearchesContext";
 
 
+
 export default function Settings() {
 
 
     const userDataContext = userContext()
+    console.log(userDataContext.data.data)
+
+    const { data: { data: { [0]: [dataUser], [1]: info } } } = userContext()
+    console.log(dataUser)
+
+
     const router = useRouter()
     const { modal } = useSearchCli();
+
+
+
+
+
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [activeModal, setActiveModal] = useState(null);
     const [isGestor, setIsGestor] = useState(false);
@@ -93,24 +105,39 @@ export default function Settings() {
                     conteudo={<DadosUser formData={formDados} onClick={handleSave} setFormData={setFormDados} display={Ti} displayNone={displayNone} isDisabled={Gestor} />} // COMPONENTE AQUI
                     labelBtn='Informações da conta' />
 
-                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastro'} onOpen={() => handleOpen('cadastro')} onClose={onClose} 
-                    conteudo={<Cadastro isComercial={false} cadUser={cadUser} levelUser={levelUser} />} // COMPONENTE AQUI
-                    labelBtn='Cadastro' display={Gestor} /> 
-
-                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroGestor'} onOpen={() => handleOpen('cadastroGestor')} onClose={onClose}
-                    conteudo={<CadastroGestor />} // COMPONENTE AQUI
-                    labelBtn='Cadastro Gestor'  />
-
-                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroOp'} onOpen={() => handleOpen('cadastroOp')} onClose={onClose}
-                    conteudo={<CadastroOp />} // COMPONENTE AQUI 
-                    labelBtn='Cadastro Operador H2L' />
 
 
+                {/* PAINEIS DE CADASTRO ABAIXO ESTÃO PRONTOS */}
 
-                {/* NÃO USAR display={ti} PARA ESCONDER O ACESSO. USAR { Ti && <CODIGO... /> } */}
-                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroComercial'} onOpen={() => handleOpen('cadastroComercial')} onClose={onClose}
-                    conteudo={<CadastroAdm />} // COMPONENTE AQUI 
-                    labelBtn='Cadastro Adm Básico' display={Ti} />
+                {(dataUser.admin === 3 || dataUser.admin === 2 || dataUser.admin === 4 || dataUser.admin === 1) &&
+                    <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroUser'} onOpen={() => handleOpen('cadastroUser')} onClose={onClose}
+                        conteudo={<CadastroUser />} // COMPONENTE AQUI
+                        labelBtn='Cadastrar Usuário' />
+                }
+
+                {(dataUser.admin === 3 || dataUser.admin === 2 || dataUser.admin === 4) &&
+                    <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroGestor'} onOpen={() => handleOpen('cadastroGestor')} onClose={onClose}
+                        conteudo={<CadastroGestor />} // COMPONENTE AQUI
+                        labelBtn='Cadastrar Gestor' />
+                }
+
+                {(dataUser.admin === 3 || dataUser.admin === 2) &&
+                    <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroOp'} onOpen={() => handleOpen('cadastroOp')} onClose={onClose}
+                        conteudo={<CadastroOp />} // COMPONENTE AQUI 
+                        labelBtn='Cadastrar Operador H2L' />
+                }
+
+                {dataUser.admin === 3 &&
+                    <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroAdmB'} onOpen={() => handleOpen('cadastroAdmB')} onClose={onClose}
+                        conteudo={<CadastroAdm />} // COMPONENTE AQUI 
+                        labelBtn='Cadastrar Adm Básico' />
+                }
+
+                {dataUser.admin === 3 &&
+                    <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroAdmG'} onOpen={() => handleOpen('cadastroAdmG')} onClose={onClose}
+                        conteudo={<CadastroAdmG />} // COMPONENTE AQUI 
+                        labelBtn='Cadastrar Adm Geral' />
+                }
 
                 <IconButtonHeader onOpen={handleSignOut} labelBtn='Sair' />
             </MenuList>
