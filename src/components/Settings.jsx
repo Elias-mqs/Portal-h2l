@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { MdOutlineSettings } from 'react-icons/md';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-import { userContext } from '../context/UserContext';
-import { useSearchCli } from "../context/ResearchesContext";
+import { userContext } from '@/context/UserContext';
+import { useSearchCli } from "@/context/ResearchesContext";
 
 
 
@@ -13,10 +13,8 @@ export default function Settings() {
 
 
     const userDataContext = userContext()
-    console.log(userDataContext.data.data)
 
     const { data: { data: { [0]: [dataUser], [1]: info } } } = userContext()
-    console.log(dataUser)
 
 
     const router = useRouter()

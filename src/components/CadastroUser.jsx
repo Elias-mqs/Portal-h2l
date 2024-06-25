@@ -1,9 +1,9 @@
 import { Button, Grid, useToast, Stack, Flex, Text, ModalCloseButton, RadioGroup, Radio } from "@chakra-ui/react";
 import { FormInput, cript } from '@/components';
 import { useForm, Controller } from 'react-hook-form';
-import { userContext } from '../context/UserContext';
+import { userContext } from '@/context/UserContext';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { api } from '../utils/api';
+import { api } from '@/utils/api';
 import { z } from 'zod';
 
 

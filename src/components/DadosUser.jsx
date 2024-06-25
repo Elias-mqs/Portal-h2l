@@ -7,187 +7,215 @@ import {
     Flex,
     Text,
     ModalCloseButton,
-    useDisclosure,
-    AlertDialog,
-    AlertDialogCloseButton,
-    AlertDialogOverlay,
-    AlertDialogContent,
-    AlertDialogHeader,
-    AlertDialogBody,
-    AlertDialogFooter,
+    useDisclosure
 } from "@chakra-ui/react";
 import { MdEdit } from "react-icons/md";
-import { FormInput, UpdatePass, cript } from '@/components'
-import { api } from '../utils/api'
-import { useState, useEffect } from "react";
+import { FormInput, UpdatePass, cript } from '@/components';
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useSearchCli } from "@/context/ResearchesContext";
+import { userContext } from "@/context/UserContext";
 
-function DadosUser({ formData, setFormData, display, displayNone, onClick, handleSearch }) {
+
+
+
+
+
+//// CRIAR LÓGICA PARA ENVIAR O FORM SOMENTE QUANDO FOR ALTERADO ALGUM CAMPO E ATIVAR E DESATIVAR OS CAMPOS
+
+
+
+
+const schema = z.object({
+    name: z.coerce.string().min(5, 'Mínimo de 5 caracteres'),
+    email: z.coerce.string().email('Formato de e-mail inválido').min(3, 'Mínimo de caracteres não permitido'),
+    setor: z.coerce.string().min(3, 'Mínimo de 3 caracteres'),
+    username: z.coerce.string().min(3, 'Mínimo de 3 caracteres'),
+    password: z.coerce.string()
+})
+
+
+function DadosUser({ onClick }) {
 
     const toast = useToast();
+    const { modal } = useSearchCli();
+
+    const { data: { data: { [0]: [dataUser], [1]: info } } } = userContext()
+
+    const { control, handleSubmit, setValue } = useForm({
+        resolver: zodResolver(schema),
+        defaultValues: { name: dataUser.name, email: dataUser.email, setor: dataUser.setor, username: dataUser.username, password: '' },
+    })
+    console.log(dataUser)
+
+
+    const [isFieldModified, setIsFieldModified] = useState({ name: false, email: false, setor: false, username: false, password: false });
+
+
     const updateDialog = useDisclosure();
-    const deleteDialog = useDisclosure();
     const [disableName, setDisableName] = useState(true);
     const [disableEmail, setDisableEmail] = useState(true);
     const [disableSetor, setDisableSetor] = useState(true);
     const [disableUsername, setDisableUsername] = useState(true);
-    const [isSubmitting, setIsSubmitting] = useState(false)
-    const [isAltered, setIsAltered] = useState(false)
-    const [originalData, setOriginalData] = useState({});
 
 
-    // Função para manipular a edição de campos do formulário
-    const handleFormEdit = (e) => {
-        let novosDados = { ...formData };
 
-        novosDados[e.target.name] = e.target.value
-        if (e.target.name === 'username') {
-            novosDados.username = e.target.value.toLowerCase().trim();
+
+
+    const handleForm = async (data) => {
+        console.log(data)
+        console.log('enviu form pai')
+
+        if (!Object.values(isFieldModified).some(modified => modified)) {
+            toast({ position: 'top', title: "Sem alteração!", description: "Nenhum campo foi modificado.", status: 'info', duration: 2000, isClosable: true });
+            return;
         }
-        if (e.target.name === 'password') {
-            novosDados.password = e.target.value.trim();
-        }
-        setFormData(novosDados);
-        checkForChanges(novosDados);
+
+        const newFormData = { ...data, info: info }
+        const formCript = cript(newFormData)
+
+        console.log('enviu form pai')
+
+        // try {
+        //     // const result = await api.post('updateDataUser', formCript)
+        //     // setFormData({ ...formData, password: `` })
+
+
+        //     toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
+
+        // } catch (error) {
+        //     toast({ position: 'top', title: "Atenção!", description: 'Revise as informações ou contate o suporte', status: 'error', duration: 2000, isClosable: true, })
+        // }
     }
 
 
-    useEffect(() => {
-        if (!originalData || Object.keys(originalData).length === 0) {
-            setOriginalData({ ...formData });
-        }
-    }, [formData, originalData]);
 
-    const checkForChanges = (newData) => {
-        for (let key in newData) {
-            if (newData[key] !== originalData[key]) {
-                setIsAltered(true);
-                return;
-            }
-        }
-        setIsAltered(false);
+    const stopPropagation = (e) => {
+        e.stopPropagation();
+        handleSubmit(handleForm)(e);
+    }
+
+
+
+    const toggleFieldModified = (fieldName) => {
+        console.log(fieldName)
+        setIsFieldModified(prevState => ({
+            ...prevState,
+            [fieldName]: true
+        }));
+    };
+
+    const clickDisableField = (fieldName) => {
+        toggleFieldModified(fieldName);
+        // Lógica para alternar a desativação do campo aqui
     };
 
 
-    const validateEmail = (email) => {
-        const emailRegex = /^[a-z0-9]+(\.[a-z0-9]+)*@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            toast({ position: 'top', title: "Erro!", description: "Por favor, preencha todos os campos corretamente. primeiro", status: 'error', duration: 2000, isClosable: true, });
-            return false;
-        }
-        return true;
-    }
+
+    const dataEmpresa = (data) => {
+        setValue('password', data || '');
+    };
 
 
 
-    const handleForm = async (event) => {
-        event.preventDefault()
-        setIsSubmitting(true)
-
-        if (!isAltered) {
-            toast({ position: 'top', title: "Nada foi alterado!", description: "Nenhum campo foi modificado.", status: 'info', duration: 2000, isClosable: true });
-            setTimeout(() => {
-                setIsSubmitting(false);
-            }, 1500);
-            return;
-        }
-
-        const newFormData = { ...formData, info: formData.info }
-        const formCript = cript(newFormData)
-
-        if (!validateEmail(formData.email)) {
-            return;
-        }
-
-        try {
-            const result = await api.post('updateDataUser', formCript)
-            setFormData({ ...formData, password: `` })
-            setTimeout(() => {
-                setIsSubmitting(false);
-            }, 1500);
-
-            setIsAltered(false);
-            setOriginalData(newFormData);
-
-            toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
-
-        } catch (error) {
-            setTimeout(() => {
-                setIsSubmitting(false);
-            }, 1000);
-            toast({ position: 'top', title: "Atenção!", description: 'Revise as informações ou contate o suporte', status: 'error', duration: 2000, isClosable: true, })
-        }
-    }
-
-
-    const clickDisableName = () => { setDisableName(!disableName); }
-    const clickDisableEmail = () => { setDisableEmail(!disableEmail); }
-    const clickDisableSetor = () => { setDisableSetor(!disableSetor); }
-    const clickDisableUsername = () => { setDisableUsername(!disableUsername); }
-
+    console.log('renderizando pai')
 
     return (
 
-        <Stack as='form' onSubmit={handleForm} w='100%' h='100v%' maxH='auto' bg="#EDF2FF" boxShadow="0 0 10px rgba(0, 0, 0, 0.2)" p={{ base: '35px', md: "30px 35px" }} >
+        <Stack as='form' onSubmit={stopPropagation} w='100%' h='100v%' maxH='auto' bg="#EDF2FF" boxShadow="0 0 10px rgba(0, 0, 0, 0.2)" p={{ base: '35px', md: "30px 35px" }} >
 
             <ModalCloseButton m={4} />
+
             <Flex justify='center' borderBottom={'1px solid #858585'} pb={1} mb={5} >
                 <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} >Informações da conta</Text>
             </Flex>
+
             <Grid gap={8} mb={5} >
-                <Flex align='end'>
-                    <FormInput name={'name'} w='100%' value={formData.name} variant={'flushed'} label={'Nome'} placeholder={'Nome'} onChange={handleFormEdit} isDisabled={disableName} required={true} />
-                    <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={clickDisableName} display={display} ><MdEdit size='20px' /></Button>
-                </Flex>
-                <Flex align='end'>
-                    <FormInput name={'email'} w='100%' value={formData.email} type={'email'} variant={'flushed'} label={'Email'} placeholder={'Email'} onChange={handleFormEdit} isDisabled={disableEmail} required={true} />
-                    <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={clickDisableEmail} display={display} ><MdEdit size='20px' /></Button>
-                </Flex>
-                <Flex align='end'>
-                    <FormInput name={'setor'} w='100%' value={formData.setor} variant={'flushed'} label={'Setor'} placeholder={'Setor'} onChange={handleFormEdit} isDisabled={disableSetor} required={true} />
-                    <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={clickDisableSetor} display={display} ><MdEdit size='20px' /></Button>
-                </Flex>
-                <Flex align='end'>
-                    <FormInput name={'username'} w='100%' value={formData.username} type={'text'} variant={'flushed'} label={'Usuário'} placeholder={'Usuário'} onChange={handleFormEdit} isDisabled={disableUsername} required={true} />
-                    <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={clickDisableUsername} display={display} ><MdEdit size='20px' /></Button>
-                </Flex>
-                <Flex align='end'>
-                    <FormInput name={'password'} w='100%' value={formData.password} type={'password'} variant={'flushed'} label={'Senha'} placeholder={'**********'} onChange={handleFormEdit} required={true} readOnly={true} pointerEvents={'none'} tabIndex={'-1'} />
-                    <Button colorScheme='blue' mb={2} size='sm' onClick={updateDialog.onOpen} >Atualizar</Button>
-                </Flex>
+
+                <Controller
+                    name='name'
+                    control={control}
+                    render={({ field: { value, onChange } }) => (
+                        <Flex align='end'>
+                            <FormInput w='100%' value={value} variant={'flushed'} label={'Nome'} placeholder={'Nome'} onChange={(e) => { onChange(e); toggleFieldModified('name'); }}
+                            isDisabled={isFieldModified.name} />
+                            {dataUser.admin === 3 &&
+                                <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={() => clickDisableField('name')} ><MdEdit size='20px' /></Button>
+                            }
+                        </Flex>
+                    )}
+                />
+
+
+                <Controller
+                    name='email'
+                    control={control}
+                    render={({ field: { value, onChange } }) => (
+                        <Flex align='end'>
+                            <FormInput w='100%' value={value} type={'email'} variant={'flushed'} label={'Email'} placeholder={'Email'}
+                                onChange={(e) => { onChange(e); toggleFieldModified('email'); }} />
+                            {dataUser.admin === 3 &&
+                                <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={() => clickDisableField('email')} ><MdEdit size='20px' /></Button>
+                            }
+                        </Flex>
+                    )}
+                />
+
+
+                <Controller
+                    name='setor'
+                    control={control}
+                    render={({ field: { value, onChange } }) => (
+                        <Flex align='end'>
+                            <FormInput w='100%' value={value} variant={'flushed'} label={'Setor'} placeholder={'Setor'} onChange={(e) => { onChange(e); toggleFieldModified('setor'); }}
+                            />
+                            {dataUser.admin === 3 &&
+                                <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={() => clickDisableField('setor')} ><MdEdit size='20px' /></Button>
+                            }
+                        </Flex>
+                    )}
+                />
+
+
+                <Controller
+                    name='username'
+                    control={control}
+                    render={({ field: { value, onChange } }) => (
+                        <Flex align='end'>
+                            <FormInput name={'username'} w='100%' value={value} type={'text'} variant={'flushed'} label={'Usuário'} placeholder={'Usuário'}
+                                onChange={(e) => { onChange(e.target.value.trim().toLowerCase()); toggleFieldModified('username'); }} />
+                            {dataUser.admin === 3 &&
+                                <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={() => clickDisableField('username')} ><MdEdit size='20px' /></Button>
+                            }
+                        </Flex>
+                    )}
+                />
+
+
+                <Controller
+                    name='password'
+                    control={control}
+                    render={({ field: { value, onChange } }) => (
+                        <Flex align='end'>
+                            <FormInput w='100%' value={value} type={'password'} variant={'flushed'} label={'Senha'} placeholder={'**********'} onChange={onChange}
+                                readOnly={true} pointerEvents={'none'} tabIndex={'-1'} />
+                            <Button colorScheme='blue' mb={2} size='sm' onClick={modal.onOpen} >Atualizar</Button>
+                        </Flex>
+                    )}
+                />
+
             </Grid>
 
+
             <Button type='submit' bg='#6699CC' onClick={onClick} color='#FFF' w='100%' h='48px' borderRadius='4px' fontSize='lg' fontWeight='500'
-                _hover={{ bg: `#5c7da6`, color: `#FFF`, transform: `translateY(-2px)` }} _active={{ transform: 'translateY(2px)' }} isDisabled={isSubmitting}>
+                _hover={{ bg: `#5c7da6`, color: `#FFF`, transform: `translateY(-2px)` }} _active={{ transform: 'translateY(2px)' }} >
                 Salvar
             </Button>
 
-            {/* O BOTÃO EXCLUIR ESTÁ FUNCIONANDO, PORÉM NÃO SE PODE SIMPLESMENTE EXCLUIR UM USUARIO (VERIFICAR NO CADERNO SOBRE EXCLUSÃO) */}
-            <Flex w='100%' mt={1} justify='center' display='none'>
-                <Button w='50%' fontWeight='bold' bg='transparent' color='red' size='sm' onClick={deleteDialog.onOpen} display={displayNone}
-                    _hover={{ bg: `red`, color: `#FFF`, transform: `translateY(-2px)` }} _active={{ transform: 'translateY(2px)' }} >
-                    Excluir
-                </Button>
-            </Flex>
-            <AlertDialog motionPreset='slideInBottom' onClose={deleteDialog.onClose} isOpen={deleteDialog.isOpen} isCentered >
-                <AlertDialogOverlay />
-                <AlertDialogContent>
-                    <AlertDialogHeader>Excluir usuario?</AlertDialogHeader>
-                    <AlertDialogCloseButton />
-                    <AlertDialogBody>
-                        Você irá excluir um usuário. Tem certeza?
-                    </AlertDialogBody>
-                    <AlertDialogFooter>
-                        <Button onClick={deleteDialog.onClose}>
-                            Não
-                        </Button>
-                        <Button colorScheme='red' ml={3}>
-                            Sim
-                        </Button>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
 
-            <UpdatePass isOpen={updateDialog.isOpen} onClose={updateDialog.onClose} formData={{ ...formData }} setPassword={(newPassword) => setFormData(newPassword)} />
+            <UpdatePass isOpen={updateDialog.isOpen} onClose={updateDialog.onClose} setValue={dataEmpresa} />
         </Stack>
     )
 }

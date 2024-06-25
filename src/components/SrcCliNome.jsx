@@ -1,5 +1,5 @@
 import { Modal, ModalOverlay, ModalContent, ModalCloseButton, Stack, Flex, Text, IconButton, Input, Grid } from "@chakra-ui/react";
-import { useSearchCli } from "../context/ResearchesContext";
+import { useSearchCli } from "@/context/ResearchesContext";
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RiExpandUpDownFill } from "react-icons/ri";
