@@ -4,7 +4,7 @@ import { FormInput, FormTextarea, FormInputBtn, FormButtonSave, ButtonCancel, cr
 import { useState } from 'react';
 import { api, api2 } from '@/utils/api'
 import { MdSearch } from 'react-icons/md';
-import { userContext } from '@/context/userContext';
+import { userContext } from '@/context/UserContext';
 
 
 function PageChamados() {

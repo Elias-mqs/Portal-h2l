@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { MdOutlineSettings } from 'react-icons/md'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router';
-import { userContext } from '@/context/userContext';
+import { userContext } from '@/context/UserContext';
 import { useSearchCli } from "../context/ResearchesContext";
 
 

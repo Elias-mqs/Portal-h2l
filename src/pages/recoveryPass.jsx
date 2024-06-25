@@ -1,7 +1,7 @@
 import { VStack, Stack, Flex, Box, Image, Button, Alert, AlertIcon, useToast } from '@chakra-ui/react'
 import { FormInput, cript } from '../components'
 import { useState } from 'react';
-import api from '../utils/api';
+import { api } from '../utils/api';
 import { authenticate } from '../utils'
 import { useRouter } from 'next/router';
 
@@ -77,7 +77,7 @@ export default function RecoveryPass({ pageProps: { simpleUser } }) {
             return;
         }
 
-        if(formPass.password.trim() === '' || confirmPass.confirmPass.trim() === ''){
+        if (formPass.password.trim() === '' || confirmPass.confirmPass.trim() === '') {
             toast({ title: "Atenção!", description: "Informe uma senha para alterar.", status: 'error', duration: 2000, isClosable: true, });
             setTimeout(() => {
                 setControlSend(true);
@@ -138,7 +138,7 @@ export async function getServerSideProps({ query: { token }, res }) {
     try {
         const user = await authenticate(token);
         const simpleUser = JSON.parse(JSON.stringify(user))
-        
+
         return { props: { simpleUser } }
     } catch (err) {
         res.writeHead(302, { Location: '/login' });
