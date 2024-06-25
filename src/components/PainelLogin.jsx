@@ -30,7 +30,7 @@ import { useState, useRef } from "react"
 import { FormInputBtnL, cript } from '@/components'
 import { api } from '../utils/api'
 import Cookies from 'js-cookie'
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 
 
 export default function PainelLogin() {

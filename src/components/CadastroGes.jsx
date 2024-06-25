@@ -1,7 +1,7 @@
 import { Button, Grid, useToast, Stack, Flex, Text, ModalCloseButton, } from "@chakra-ui/react";
 import { FormInput, InputSrc, SearchEmpresa, SrcCliNome, cript } from '@/components'
 import { useForm, Controller } from 'react-hook-form';
-import { userContext } from '@/context/UserContext';
+import { userContext } from '../context/UserContext';
 import { useSearchCli } from "../context/ResearchesContext";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { MdSearch } from "react-icons/md";

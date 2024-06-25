@@ -1,10 +1,10 @@
-import { IconButtonHeader, Cadastro, DadosUser, SearchUser, CadastroAdm, CadastroOp, CadastroGestor, CadastroUser, CadastroAdmG } from '.'
-import { Menu, MenuList, MenuButton, useDisclosure, Box } from '@chakra-ui/react'
+import { IconButtonHeader, DadosUser, SearchUser, CadastroAdm, CadastroOp, CadastroGestor, CadastroUser, CadastroAdmG } from '.';
+import { Menu, MenuList, MenuButton, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { MdOutlineSettings } from 'react-icons/md'
-import Cookies from 'js-cookie'
+import { MdOutlineSettings } from 'react-icons/md';
+import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-import { userContext } from '@/context/UserContext';
+import { userContext } from '../context/UserContext';
 import { useSearchCli } from "../context/ResearchesContext";
 
 

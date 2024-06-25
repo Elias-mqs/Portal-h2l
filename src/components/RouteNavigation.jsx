@@ -4,9 +4,9 @@ import { Header, NavigationTabs, Container } from "@/components";
 import { Stack, Box, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { UserProvider } from '@/context/UserContext'
-import { AuthProvider } from '@/context/AuthContext';
-import { SearchCliProvider } from '@/context/ResearchesContext';
+import { UserProvider } from '../context/UserContext'
+import { AuthProvider } from '../context/AuthContext';
+import { SearchCliProvider } from '../context/ResearchesContext';
 
 
 export default function RouteNavigation({ children }) {
