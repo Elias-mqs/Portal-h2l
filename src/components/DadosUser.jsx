@@ -6,8 +6,7 @@ import {
     Stack,
     Flex,
     Text,
-    ModalCloseButton,
-    useDisclosure
+    ModalCloseButton
 } from "@chakra-ui/react";
 import { MdEdit } from "react-icons/md";
 import { FormInput, UpdatePass, cript } from '@/components';
@@ -17,14 +16,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSearchCli } from "@/context/ResearchesContext";
 import { userContext } from "@/context/UserContext";
-
-
-
-
-
-
-//// CRIAR LÓGICA PARA ENVIAR O FORM SOMENTE QUANDO FOR ALTERADO ALGUM CAMPO E ATIVAR E DESATIVAR OS CAMPOS
-
+import { api } from "@/utils/api";
 
 
 
@@ -37,57 +29,46 @@ const schema = z.object({
 })
 
 
-function DadosUser({ onClick }) {
+
+function DadosUser() {
 
     const toast = useToast();
     const { modal } = useSearchCli();
 
-    const { data: { data: { [0]: [dataUser], [1]: info } } } = userContext()
-
-    const { control, handleSubmit, setValue } = useForm({
+    const { data: { data: { [0]: [dataUser], [1]: info } } , data: { refetch } } = userContext();
+    
+    const { control, handleSubmit, setValue, resetField } = useForm({
         resolver: zodResolver(schema),
         defaultValues: { name: dataUser.name, email: dataUser.email, setor: dataUser.setor, username: dataUser.username, password: '' },
-    })
-    console.log(dataUser)
+    });
 
-
-    const [isFieldModified, setIsFieldModified] = useState({ name: false, email: false, setor: false, username: false, password: false });
-
-
-    const updateDialog = useDisclosure();
-    const [disableName, setDisableName] = useState(true);
-    const [disableEmail, setDisableEmail] = useState(true);
-    const [disableSetor, setDisableSetor] = useState(true);
-    const [disableUsername, setDisableUsername] = useState(true);
-
+    const [inputLock, setInputLock] = useState({ name: true, email: true, setor: true, username: true, });
 
 
 
 
     const handleForm = async (data) => {
-        console.log(data)
-        console.log('enviu form pai')
 
-        if (!Object.values(isFieldModified).some(modified => modified)) {
-            toast({ position: 'top', title: "Sem alteração!", description: "Nenhum campo foi modificado.", status: 'info', duration: 2000, isClosable: true });
-            return;
+        const newFormData = { ...data, info: info };
+
+        const formCript = cript(newFormData);
+
+        try {
+            const result = await api.post('updateDataUser', formCript);
+
+            refetch();
+
+            resetField('password');
+
+            toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, });
+
+        } catch (error) {
+            if(error.response.status === 400){
+                toast({ position: 'top', title: "Atenção!", description: 'Revise os campos.', status: 'info', duration: 2000, isClosable: true, });
+                return
+            }
+            toast({ position: 'top', title: "Atenção!", description: 'Revise as informações ou contate o suporte', status: 'info', duration: 2000, isClosable: true, });
         }
-
-        const newFormData = { ...data, info: info }
-        const formCript = cript(newFormData)
-
-        console.log('enviu form pai')
-
-        // try {
-        //     // const result = await api.post('updateDataUser', formCript)
-        //     // setFormData({ ...formData, password: `` })
-
-
-        //     toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
-
-        // } catch (error) {
-        //     toast({ position: 'top', title: "Atenção!", description: 'Revise as informações ou contate o suporte', status: 'error', duration: 2000, isClosable: true, })
-        // }
     }
 
 
@@ -98,29 +79,11 @@ function DadosUser({ onClick }) {
     }
 
 
-
-    const toggleFieldModified = (fieldName) => {
-        console.log(fieldName)
-        setIsFieldModified(prevState => ({
-            ...prevState,
-            [fieldName]: true
-        }));
-    };
-
-    const clickDisableField = (fieldName) => {
-        toggleFieldModified(fieldName);
-        // Lógica para alternar a desativação do campo aqui
-    };
-
-
-
     const dataEmpresa = (data) => {
         setValue('password', data || '');
     };
 
 
-
-    console.log('renderizando pai')
 
     return (
 
@@ -139,10 +102,9 @@ function DadosUser({ onClick }) {
                     control={control}
                     render={({ field: { value, onChange } }) => (
                         <Flex align='end'>
-                            <FormInput w='100%' value={value} variant={'flushed'} label={'Nome'} placeholder={'Nome'} onChange={(e) => { onChange(e); toggleFieldModified('name'); }}
-                            isDisabled={isFieldModified.name} />
+                            <FormInput w='100%' value={value} variant={'flushed'} label={'Nome'} placeholder={'Nome'} onChange={onChange} isDisabled={inputLock.name} />
                             {dataUser.admin === 3 &&
-                                <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={() => clickDisableField('name')} ><MdEdit size='20px' /></Button>
+                                <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={() => setInputLock({ ...inputLock, name: !inputLock.name })} ><MdEdit size='20px' /></Button>
                             }
                         </Flex>
                     )}
@@ -154,10 +116,9 @@ function DadosUser({ onClick }) {
                     control={control}
                     render={({ field: { value, onChange } }) => (
                         <Flex align='end'>
-                            <FormInput w='100%' value={value} type={'email'} variant={'flushed'} label={'Email'} placeholder={'Email'}
-                                onChange={(e) => { onChange(e); toggleFieldModified('email'); }} />
+                            <FormInput w='100%' value={value} type={'email'} variant={'flushed'} label={'Email'} placeholder={'Email'} onChange={onChange} isDisabled={inputLock.email} />
                             {dataUser.admin === 3 &&
-                                <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={() => clickDisableField('email')} ><MdEdit size='20px' /></Button>
+                                <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={() => setInputLock({ ...inputLock, email: !inputLock.email })} ><MdEdit size='20px' /></Button>
                             }
                         </Flex>
                     )}
@@ -169,10 +130,9 @@ function DadosUser({ onClick }) {
                     control={control}
                     render={({ field: { value, onChange } }) => (
                         <Flex align='end'>
-                            <FormInput w='100%' value={value} variant={'flushed'} label={'Setor'} placeholder={'Setor'} onChange={(e) => { onChange(e); toggleFieldModified('setor'); }}
-                            />
+                            <FormInput w='100%' value={value} variant={'flushed'} label={'Setor'} placeholder={'Setor'} onChange={onChange} isDisabled={inputLock.setor} />
                             {dataUser.admin === 3 &&
-                                <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={() => clickDisableField('setor')} ><MdEdit size='20px' /></Button>
+                                <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={() => setInputLock({ ...inputLock, setor: !inputLock.setor })} ><MdEdit size='20px' /></Button>
                             }
                         </Flex>
                     )}
@@ -184,10 +144,10 @@ function DadosUser({ onClick }) {
                     control={control}
                     render={({ field: { value, onChange } }) => (
                         <Flex align='end'>
-                            <FormInput name={'username'} w='100%' value={value} type={'text'} variant={'flushed'} label={'Usuário'} placeholder={'Usuário'}
-                                onChange={(e) => { onChange(e.target.value.trim().toLowerCase()); toggleFieldModified('username'); }} />
+                            <FormInput name={'username'} w='100%' value={value} type={'text'} variant={'flushed'} label={'Usuário'} placeholder={'Usuário'} autoComplete='off'
+                                onChange={(e) => onChange(e.target.value.trim().toLowerCase())} isDisabled={inputLock.username} />
                             {dataUser.admin === 3 &&
-                                <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={() => clickDisableField('username')} ><MdEdit size='20px' /></Button>
+                                <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={() => setInputLock({ ...inputLock, username: !inputLock.username })} ><MdEdit size='20px' /></Button>
                             }
                         </Flex>
                     )}
@@ -200,7 +160,7 @@ function DadosUser({ onClick }) {
                     render={({ field: { value, onChange } }) => (
                         <Flex align='end'>
                             <FormInput w='100%' value={value} type={'password'} variant={'flushed'} label={'Senha'} placeholder={'**********'} onChange={onChange}
-                                readOnly={true} pointerEvents={'none'} tabIndex={'-1'} />
+                                readOnly={true} pointerEvents={'none'} tabIndex={'-1'} autoComplete='new-password' />
                             <Button colorScheme='blue' mb={2} size='sm' onClick={modal.onOpen} >Atualizar</Button>
                         </Flex>
                     )}
@@ -209,13 +169,13 @@ function DadosUser({ onClick }) {
             </Grid>
 
 
-            <Button type='submit' bg='#6699CC' onClick={onClick} color='#FFF' w='100%' h='48px' borderRadius='4px' fontSize='lg' fontWeight='500'
+            <Button type='submit' bg='#6699CC' color='#FFF' w='100%' h='48px' borderRadius='4px' fontSize='lg' fontWeight='500'
                 _hover={{ bg: `#5c7da6`, color: `#FFF`, transform: `translateY(-2px)` }} _active={{ transform: 'translateY(2px)' }} >
                 Salvar
             </Button>
 
 
-            <UpdatePass isOpen={updateDialog.isOpen} onClose={updateDialog.onClose} setValue={dataEmpresa} />
+            <UpdatePass isOpen={modal.isOpen} onClose={modal.onClose} setValue={dataEmpresa} />
         </Stack>
     )
 }

@@ -1,12 +1,19 @@
 import { db } from '@/utils/database'
 import { hashPassword, decript } from '@/utils'
-import { NoStroller } from '@mui/icons-material';
+
+
 
 export default async function handler(req, res) {
+
     if (req.method === 'POST') {
 
+        
         const data = decript(req.body.code);
+        
+
         const { name, username, email, password, setor, info } = data;
+
+
         if (!info) {
             return res.status(404).json({ message: 'Problema no cadastro, contate um superior!' })
         }
@@ -26,26 +33,40 @@ export default async function handler(req, res) {
 
             // Verifica se pelo menos um campo foi alterado e cria um objeto com os novos valores
             const updatedFields = Object.keys(dadosUser).reduce((acc, key) => {
+
                 // Ignora a comparação de senha, pois ela é criptografada
                 if (key === 'password_hash') return acc;
+
                 // Se o valor foi alterado, adiciona ao objeto de atualização
                 const fieldName = Object.keys(nomesRemapeados).find(fieldName => nomesRemapeados[fieldName] === key);
+
                 if (dadosUser[key] !== data[fieldName]) {
                     acc[key] = data[fieldName];
                 }
+
                 return acc;
+
             }, {});
 
+
             if (Object.keys(updatedFields).length === 0 && !password) {
-                return res.status(200).json({ message: 'Por favor, altere pelo menos um campo.' });
+                return res.status(400).json({ message: 'Por favor, altere pelo menos um campo.' });
             }
 
+
+            
             // Se a senha foi alterada, adiciona ao objeto de atualização
             if (password) {
+                if(passwordHash === dadosUser.password_hash){
+                    return res.status(400).json({ message: 'Verifique os campos.' });
+                }
                 updatedFields.password_hash = passwordHash;
             }
 
+
+
             if (updatedFields.username || updatedFields.email) {
+
                 const tratandoDados = await db.selectFrom('usuarios')
                     .select(['username', 'email'])
                     .where((eb) => eb.or([
@@ -63,6 +84,8 @@ export default async function handler(req, res) {
                 }
             }
 
+
+
             await db
                 .updateTable('usuarios')
                 .set(updatedFields)
@@ -70,6 +93,8 @@ export default async function handler(req, res) {
                 .executeTakeFirst()
 
             res.status(201).json({ message: 'Informações atualizadas!' })
+
+
 
         } catch (error) {
             console.error(error)

@@ -2,24 +2,17 @@
 import {
     Button,
     useToast,
-    Text,
-    Alert,
-    AlertIcon,
-    Stack,
+    Text, Stack,
     Flex,
     Modal,
     ModalOverlay,
-    ModalContent,
-    Box,
-    ModalCloseButton,
-} from '@chakra-ui/react'
-import { useState } from 'react'
-import { FormInput } from '.'
+    ModalContent, ModalCloseButton
+} from '@chakra-ui/react';
+import { FormInput } from '.';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useSearchCli } from '@/context/ResearchesContext';
-import { CloudDone } from '@mui/icons-material';
 
 
 
@@ -39,7 +32,8 @@ const schema = z.object({
 function UpdatePass({ setValue }) {
 
 
-
+    const toast = useToast()
+    const { modal } = useSearchCli();
     const { control, handleSubmit, formState: { errors }, resetField } = useForm({
         resolver: zodResolver(schema),
         defaultValues: {
@@ -48,23 +42,27 @@ function UpdatePass({ setValue }) {
         }
     })
 
-    const toast = useToast()
-    const { modal } = useSearchCli();
-
 
 
     const handlePassUpdate = (data) => {
 
-        
         if (data.password !== data.confirmPass) {
             toast({ title: "Erro!", description: "As senhas não coincidem.", status: 'error', duration: 2000, isClosable: true, });
             return;
         }
 
         setValue(data.password);
-
         handleClose();
     }
+
+
+
+    const stopPropagation = (e) => {
+        e.stopPropagation();
+        handleSubmit(handlePassUpdate)(e);
+    }
+
+
 
     const handleClose = () => {
         resetField('password');
@@ -72,14 +70,14 @@ function UpdatePass({ setValue }) {
         modal.onClose();
     }
 
-    console.log('renderizou updatePass')
+
 
     return (
 
         <Modal isOpen={modal.isOpen} size={'2xl'} onClose={handleClose} >
             <ModalOverlay style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }} />
             <ModalContent h='auto' maxH='90vh' overflow='auto' m='auto' >
-                <Stack as='form' onSubmit={handleSubmit(handlePassUpdate)} w='100%' h='100%' maxH='auto' bg="#EDF2FF" borderRadius={{ base: '0', md: "10px" }}
+                <Stack as='form' onSubmit={stopPropagation} w='100%' h='100%' maxH='auto' bg="#EDF2FF" borderRadius={{ base: '0', md: "10px" }}
                     boxShadow="0 0 10px rgba(0, 0, 0, 0.2)" p={{ base: '35px', md: "30px 35px" }} transition={{ base: 'max-width 0.3s ease' }} gap={8} >
 
 
@@ -103,9 +101,9 @@ function UpdatePass({ setValue }) {
                             control={control}
                             render={({ field: { value, onChange } }) => (
 
-                                    <FormInput type={'password'} value={value} variant={'flushed'} label={'Confirmar Senha:'}
-                                        onChange={(e) => onChange(e.target.value.trim())} placeholder={'Confirme a nova senha'} autoComplete='new-password' />
-                       
+                                <FormInput type={'password'} value={value} variant={'flushed'} label={'Confirmar Senha:'}
+                                    onChange={(e) => onChange(e.target.value.trim())} placeholder={'Confirme a nova senha'} autoComplete='new-password' />
+
                             )}
                         />
                         {errors.confirmPass && <Text color='red' fontSize={14} pt={1} pl={2}>{errors.confirmPass.message}</Text>}

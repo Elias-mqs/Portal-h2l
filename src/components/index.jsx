@@ -28,6 +28,7 @@ import SrcCliNome from './SrcCliNome';
 import { CadastroGestor } from './CadastroGes';
 import { CadastroUser } from './CadastroUser';
 import { CadastroAdmG } from './CadastroAdmG';
+import AccountInfo from './AccountInfo'
 
 // Exporte os componentes diretamente
 export {
@@ -66,6 +67,7 @@ export {
     SrcCliNome,
     CadastroGestor,
     CadastroUser,
-    CadastroAdmG
-    
+    CadastroAdmG,
+    AccountInfo
+
 };

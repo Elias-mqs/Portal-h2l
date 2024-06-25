@@ -1,4 +1,4 @@
-import { IconButtonHeader, DadosUser, SearchUser, CadastroAdm, CadastroOp, CadastroGestor, CadastroUser, CadastroAdmG } from '.';
+import { IconButtonHeader, DadosUser, SearchUser, CadastroAdm, CadastroOp, CadastroGestor, CadastroUser, CadastroAdmG, AccountInfo } from '.';
 import { Menu, MenuList, MenuButton, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { MdOutlineSettings } from 'react-icons/md';
@@ -48,22 +48,6 @@ export default function Settings() {
     }, []);
 
 
-    const handleOpenDadosUser = () => {
-        setActiveModal('dadosUser');
-        setOriginalData({ ...formDados });
-        onOpen();
-    };
-
-
-    const handleClose = () => {
-        if (!isSaved) {
-            setFormDados({ ...originalData, password: '' });
-        }
-        setIsSaved(false);
-        modal.onClose();
-        onClose();
-    };
-
     const handleSave = () => {
         setIsSaved(true)
     };
@@ -99,13 +83,21 @@ export default function Settings() {
                     conteudo={<SearchUser formData={formDados} levelUser={levelUser} onClick={handleSave} setFormData={setFormDados} display={AllAuth} />} // COMPONENTE AQUI
                     labelBtn='Atualizar usuarios' display={AllAuth} />
 
-                <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'dadosUser'} onOpen={handleOpenDadosUser} onClose={handleClose}
-                    conteudo={<DadosUser formData={formDados} onClick={handleSave} setFormData={setFormDados} display={Ti} displayNone={displayNone} isDisabled={Gestor} />} // COMPONENTE AQUI
-                    labelBtn='Informações da conta' />
 
 
+                {dataUser.admin != 3 &&
+                    <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'infoUser'} onOpen={() => handleOpen('infoUser')} onClose={onClose}
+                        conteudo={<AccountInfo />} // COMPONENTE AQUI
+                        labelBtn='Informações do usuário' />
+                }
 
                 {/* PAINEIS DE CADASTRO ABAIXO ESTÃO PRONTOS */}
+
+                {dataUser.admin === 3 &&
+                    <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'dadosUser'} onOpen={() => handleOpen('dadosUser')} onClose={onClose}
+                        conteudo={<DadosUser />} // COMPONENTE AQUI
+                        labelBtn='Informações da conta' />
+                }
 
                 {(dataUser.admin === 3 || dataUser.admin === 2 || dataUser.admin === 4 || dataUser.admin === 1) &&
                     <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroUser'} onOpen={() => handleOpen('cadastroUser')} onClose={onClose}
