@@ -1,10 +1,13 @@
 import { Button, Grid, useToast, Stack, Flex, Text, ModalCloseButton, RadioGroup, Radio } from "@chakra-ui/react";
-import { FormInput, cript } from '@/components';
+import { FormInput, InputSrc, SearchEmpresa, SrcCliNome, cript } from '@/components';
 import { useForm, Controller } from 'react-hook-form';
 import { userContext } from '@/context/UserContext';
+import { useSearchCli } from "@/context/ResearchesContext";
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useCallback, useState } from "react";
 import { api } from '@/utils/api';
 import { z } from 'zod';
+import { MdSearch } from "react-icons/md";
 
 
 const schema = z.object({
@@ -23,18 +26,28 @@ function CadastroUser() {
 
     const toast = useToast();
 
+    const { modal, srcNomeCli } = useSearchCli();
     const { data: { data: { [0]: [dataUser], [1]: info } } } = userContext()
+    const [dataCliente, setDataCliente] = useState([])
 
-    const { control, handleSubmit, resetField, formState: { errors } } = useForm({
+    const { control, handleSubmit, resetField, formState: { errors }, setValue } = useForm({
         resolver: zodResolver(schema),
-        defaultValues: { name: '', email: '', nomeCli: dataUser.nomeCli, codCli: dataUser.codCli, loja: dataUser.loja, setor: '', username: '', typeUser: '' },
+        defaultValues: {
+            name: '',
+            email: '',
+            nomeCli: dataUser.admin === 1 ? dataUser.nomeCli : '',
+            codCli: dataUser.admin === 1 ? dataUser.codCli : '',
+            loja: dataUser.admin === 1 ? dataUser.loja : '',
+            setor: '',
+            username: '',
+            typeUser: ''
+        },
     })
 
+    
 
 
     const handleForm = async (data) => {
-
-        console.log(data)
 
         const dataCrypt = cript({ ...data, admin: '0' })
 
@@ -46,7 +59,7 @@ function CadastroUser() {
             resetField('email');
             resetField('setor');
             resetField('username');
-            resetField('typeUser')
+            resetField('typeUser');
 
             toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
 
@@ -56,6 +69,43 @@ function CadastroUser() {
         }
     }
 
+
+
+    const handleOpen = useCallback(async (e) => {
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (dataUser.admin != 3 && dataUser.admin != 2) {
+            
+            try {
+                const result = await srcNomeCli({ codCli: dataUser.codCli });
+                setDataCliente(result);
+            } catch (error) {
+                console.log(error);
+            }
+
+            modal.onOpen();
+            return;
+        }
+
+        modal.onOpen();
+
+    }, [dataCliente]);
+
+
+
+    const dataEmpresa = (data) => {
+        if (!data.codCli) {
+            setValue('nomeCli', data.nome || '');
+            setValue('codCli', dataUser.codCli || '');
+            setValue('loja', data.loja || '');
+            return;
+        }
+        setValue('nomeCli', data.nome || '');
+        setValue('codCli', data.codCli || '');
+        setValue('loja', data.loja || '');
+    };
 
 
 
@@ -98,6 +148,21 @@ function CadastroUser() {
                     />
                     {errors.email && <Text color='red' pt={1} pl={2} >{errors.email.message}</Text>}
                 </Flex>
+
+
+
+                {/* /////////////////// EMPRESA ///////////////////// */}
+                {(dataUser.admin === 3 || dataUser.admin === 2 || dataUser.admin === 4) &&
+                    <Controller
+                        name='nomeCli'
+                        control={control}
+                        render={({ field: { onChange, value } }) => (
+                            <InputSrc value={value || ''} typeBtn='button' icon={<MdSearch title='pesquisar' size='24px' color='#7B809A' />} onClick={handleOpen}
+                                variant={'flushed'} label={'Empresa'} placeholder={'Ex: (H2L Soluções para documentos )'} onChange={onChange}
+                                _placeholder={{ color: '#b0c0d4' }} readOnly={true} pointerEvents={'none'} tabIndex={'-1'} />
+                        )}
+                    />
+                }
 
 
 
@@ -165,6 +230,13 @@ function CadastroUser() {
 
             <Text pt={3} pl={2} fontSize='14' fontWeight={600} >Usuário receberá a senha no e-mail cadastrado.</Text>
 
+
+            {(dataUser.admin === 3 || dataUser.admin === 2) && modal.isOpen &&
+                <SearchEmpresa setValue={dataEmpresa} />
+            }
+            {dataUser.admin === 4 && modal.isOpen &&
+                <SrcCliNome dataCliente={dataCliente} setValue={dataEmpresa} />
+            }
 
         </Stack>
 

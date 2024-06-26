@@ -1,6 +1,6 @@
 import { useDisclosure, useToast } from '@chakra-ui/react';
 import React, { createContext, useContext } from 'react';
-import { api, api2 } from '@/utils/api'
+import { api } from '@/utils/api'
 import { cript, decript } from '@/components';
 
 const SearchCliContext = createContext();
@@ -29,14 +29,20 @@ export function SearchCliProvider({ children }) {
         }
 
         try {
-            const { data } = await api2.get('auxil_os?ccad=loja&ccliente=' + dataCli.codCli + '&cloja=' + dataCli.loja.toUpperCase());
+
+            const getUrl = cript(`auxil_os?ccad=loja&ccliente=${dataCli.codCli}&cloja=${dataCli.loja.toUpperCase()}`);
+
+            const response = await api.get(`srcNomeCliCod/${getUrl.code}`);
+
+            const data = decript(response.data.dtCli)
+
             const filialCliente = { nome: data.filiais[0].nome, codCli: dataCli.codCli, loja: dataCli.loja }
+
             return filialCliente
 
         } catch (error) {
             toast({ position: 'top', title: "", description: "Verifique os campos e tente novamente.", status: 'info', duration: 2000, isClosable: true, });
         }
-
 
     }
 
@@ -46,7 +52,7 @@ export function SearchCliProvider({ children }) {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const srcNomeCli = async (datas) => {
 
-        
+
         if (!datas || !datas.codCli) {
             toast({ position: 'top', title: "Erro", description: "Código do cliente não fornecido.", status: 'error', duration: 2000, isClosable: true });
             return;

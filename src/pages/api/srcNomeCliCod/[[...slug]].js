@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
 
-    const dataCript = req.url.split('/api/srcNomeCli/')[1];
+    const dataCript = req.url.split('/api/srcNomeCliCod/')[1];
     
     if (!dataCript) {
       return res.status(400).json({ message: 'Invalid request data' });
@@ -17,7 +17,6 @@ export default async function handler(req, res) {
 
     try {
       data = decript(dataCript);
-      
       if (!data) {
         throw new Error('Decryption failed');
       }

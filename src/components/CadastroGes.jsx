@@ -25,14 +25,14 @@ function CadastroGestor() {
 
     const toast = useToast();
 
-    const { modal, srcNomeCli } = useSearchCli()
-    const { data: { data: { [0]: [dataUser], [1]: info } } } = userContext()
-    const [dataCliente, setDataCliente] = useState([])
+    const { modal, srcNomeCli } = useSearchCli();
+    const { data: { data: { [0]: [dataUser], [1]: info } } } = userContext();
+    const [dataCliente, setDataCliente] = useState([]);
 
     const { control, handleSubmit, setValue, resetField, formState: { errors } } = useForm({
         resolver: zodResolver(schema),
         defaultValues: { name: '', email: '', nomeCli: '', codCli: '', loja: '', setor: '', username: '', },
-    })
+    });
 
 
 
@@ -61,24 +61,33 @@ function CadastroGestor() {
 
     const handleOpen = useCallback(async (e) => {
 
-        e.preventDefault()
-        e.stopPropagation()
+        e.preventDefault();
+        e.stopPropagation();
 
-        try {
-            const result = await srcNomeCli({ codCli: dataUser.codCli });
-            setDataCliente(result)
-        } catch (error) {
-            console.log(error)
+        if (dataUser.admin != 3 && dataUser.admin != 2) {
+            try {
+                const result = await srcNomeCli({ codCli: dataUser.codCli });
+                setDataCliente(result);
+            } catch (error) {
+                console.log(error);
+            }
+
+            modal.onOpen();
+            return;
         }
+        modal.onOpen();
 
-        resetField('')
-        modal.onOpen()
-
-    }, [dataCliente])
+    }, [dataCliente]);
 
 
 
     const dataEmpresa = (data) => {
+        if (!data.codCli) {
+            setValue('nomeCli', data.nome || '');
+            setValue('codCli', dataUser.codCli || '');
+            setValue('loja', data.loja || '');
+            return;
+        }
         setValue('nomeCli', data.nome || '');
         setValue('codCli', data.codCli || '');
         setValue('loja', data.loja || '');
@@ -161,7 +170,6 @@ function CadastroGestor() {
                     render={({ field: { onChange, value } }) => (
                         <FormInput w='100%' flex='1' value={value} type={'text'} variant={'flushed'} label={'Usuário'} placeholder={'Ex: (diogo.pereira)'}
                             onChange={(e) => onChange(e.target.value.trim().toLowerCase())} _placeholder={{ color: '#b0c0d4' }} />
-
                     )}
                 />
 

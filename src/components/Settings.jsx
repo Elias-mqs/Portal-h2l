@@ -79,19 +79,22 @@ export default function Settings() {
                 <MdOutlineSettings size={23} />
             </MenuButton>
             <MenuList align='center' >
-                <IconButtonHeader sizeModal='3xl' isOpen={isOpen && activeModal === 'atualizarUser'} onOpen={() => handleOpen('atualizarUser')} onClose={onClose}
-                    conteudo={<SearchUser formData={formDados} levelUser={levelUser} onClick={handleSave} setFormData={setFormDados} display={AllAuth} />} // COMPONENTE AQUI
-                    labelBtn='Atualizar usuarios' display={AllAuth} />
 
 
+                {dataUser.admin != 0 &&
+                    <IconButtonHeader sizeModal='3xl' isOpen={isOpen && activeModal === 'atualizarUser'} onOpen={() => handleOpen('atualizarUser')} onClose={onClose}
+                        conteudo={<SearchUser formData={formDados} levelUser={levelUser} onClick={handleSave} setFormData={setFormDados} />} // COMPONENTE AQUI
+                        labelBtn='Atualizar usuarios' />
+                }
+
+
+                {/* PAINEIS DE CADASTRO ABAIXO ESTÃO PRONTOS */}
 
                 {dataUser.admin != 3 &&
                     <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'infoUser'} onOpen={() => handleOpen('infoUser')} onClose={onClose}
                         conteudo={<AccountInfo />} // COMPONENTE AQUI
                         labelBtn='Informações do usuário' />
                 }
-
-                {/* PAINEIS DE CADASTRO ABAIXO ESTÃO PRONTOS */}
 
                 {dataUser.admin === 3 &&
                     <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'dadosUser'} onOpen={() => handleOpen('dadosUser')} onClose={onClose}
