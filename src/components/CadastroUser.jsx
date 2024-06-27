@@ -35,9 +35,9 @@ function CadastroUser() {
         defaultValues: {
             name: '',
             email: '',
-            nomeCli: dataUser.admin === 1 ? dataUser.nomeCli : '',
-            codCli: dataUser.admin === 1 ? dataUser.codCli : '',
-            loja: dataUser.admin === 1 ? dataUser.loja : '',
+            nomeCli: dataUser.admin === '1' ? dataUser.nomeCli : '',
+            codCli: dataUser.admin === '1' ? dataUser.codCli : '',
+            loja: dataUser.admin === '1' ? dataUser.loja : '',
             setor: '',
             username: '',
             typeUser: ''
@@ -76,7 +76,7 @@ function CadastroUser() {
         e.preventDefault();
         e.stopPropagation();
 
-        if (dataUser.admin != 3 && dataUser.admin != 2) {
+        if (dataUser.admin != '3' && dataUser.admin != '2') {
             
             try {
                 const result = await srcNomeCli({ codCli: dataUser.codCli });
@@ -152,7 +152,7 @@ function CadastroUser() {
 
 
                 {/* /////////////////// EMPRESA ///////////////////// */}
-                {(dataUser.admin === 3 || dataUser.admin === 2 || dataUser.admin === 4) &&
+                {(dataUser.admin === '3' || dataUser.admin === '2' || dataUser.admin === '4') &&
                     <Controller
                         name='nomeCli'
                         control={control}
@@ -231,10 +231,10 @@ function CadastroUser() {
             <Text pt={3} pl={2} fontSize='14' fontWeight={600} >Usuário receberá a senha no e-mail cadastrado.</Text>
 
 
-            {(dataUser.admin === 3 || dataUser.admin === 2) && modal.isOpen &&
+            {(dataUser.admin === '3' || dataUser.admin === '2') && modal.isOpen &&
                 <SearchEmpresa setValue={dataEmpresa} />
             }
-            {dataUser.admin === 4 && modal.isOpen &&
+            {dataUser.admin === '4' && modal.isOpen &&
                 <SrcCliNome dataCliente={dataCliente} setValue={dataEmpresa} />
             }
 

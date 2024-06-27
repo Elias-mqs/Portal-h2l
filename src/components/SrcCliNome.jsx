@@ -235,8 +235,8 @@ export default function SrcCliNome({ setValue, dataCliente }) {
                             )}
                         </Flex>
 
-                    </Stack>
 
+                    </Stack>
 
 
                 </Stack>

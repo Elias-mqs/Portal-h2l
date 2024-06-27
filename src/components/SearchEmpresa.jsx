@@ -14,19 +14,16 @@ const schema = z.object({
 })
 
 export default function SearchEmpresa({ setValue }) {
-
-
+    
+    
+    const { modal, handleSearch } = useSearchCli();
     const [dataCliente, setDataCliente] = useState({})
     const [isSubmitting, setIsSubmitting] = useState(false)
     const { control, handleSubmit, formState: { errors } } = useForm({
         resolver: zodResolver(schema),
-        defaultValues: {
-            codCli: '',
-            loja: '',
-        }
+        defaultValues: { codCli: '', loja: '', }
     })
 
-    const { modal, handleSearch } = useSearchCli();
 
 
 
@@ -61,13 +58,9 @@ export default function SearchEmpresa({ setValue }) {
 
 
     const handleSelect = () => {
-
         setValue(dataCliente);
-
         modal.onClose();
-
     }
-
 
 
 

@@ -40,9 +40,9 @@ export default function Settings() {
         const result = { ...userDataContext.data.data[0][0], info: userDataContext.data[1] };
 
         setFormDados({ name: result.name, username: result.username, email: result.email, password: '', setor: result.setor, info: result.info });
-        setIsGestor(result.admin === 1);
-        setIsComercial(result.admin === 2);
-        setIsTi(result.admin === 3);
+        setIsGestor(result.admin === '1');
+        setIsComercial(result.admin === '2');
+        setIsTi(result.admin === '3');
         setLevelUser(result.admin);
 
     }, []);
@@ -81,8 +81,8 @@ export default function Settings() {
             <MenuList align='center' >
 
 
-                {dataUser.admin != 0 &&
-                    <IconButtonHeader sizeModal='3xl' isOpen={isOpen && activeModal === 'atualizarUser'} onOpen={() => handleOpen('atualizarUser')} onClose={onClose}
+                {dataUser.admin != '0' &&
+                    <IconButtonHeader sizeModal={{base: '2xl', md:'4xl'}} isOpen={isOpen && activeModal === 'atualizarUser'} onOpen={() => handleOpen('atualizarUser')} onClose={onClose}
                         conteudo={<SearchUser formData={formDados} levelUser={levelUser} onClick={handleSave} setFormData={setFormDados} />} // COMPONENTE AQUI
                         labelBtn='Atualizar usuarios' />
                 }
@@ -90,43 +90,43 @@ export default function Settings() {
 
                 {/* PAINEIS DE CADASTRO ABAIXO ESTÃO PRONTOS */}
 
-                {dataUser.admin != 3 &&
+                {dataUser.admin != '3' &&
                     <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'infoUser'} onOpen={() => handleOpen('infoUser')} onClose={onClose}
                         conteudo={<AccountInfo />} // COMPONENTE AQUI
                         labelBtn='Informações do usuário' />
                 }
 
-                {dataUser.admin === 3 &&
+                {dataUser.admin === '3' &&
                     <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'dadosUser'} onOpen={() => handleOpen('dadosUser')} onClose={onClose}
                         conteudo={<DadosUser />} // COMPONENTE AQUI
                         labelBtn='Informações da conta' />
                 }
 
-                {(dataUser.admin === 3 || dataUser.admin === 2 || dataUser.admin === 4 || dataUser.admin === 1) &&
+                {(dataUser.admin === '3' || dataUser.admin === '2' || dataUser.admin === '4' || dataUser.admin === '1') &&
                     <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroUser'} onOpen={() => handleOpen('cadastroUser')} onClose={onClose}
                         conteudo={<CadastroUser />} // COMPONENTE AQUI
                         labelBtn='Cadastrar Usuário' />
                 }
 
-                {(dataUser.admin === 3 || dataUser.admin === 2 || dataUser.admin === 4) &&
+                {(dataUser.admin === '3' || dataUser.admin === '2' || dataUser.admin === '4') &&
                     <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroGestor'} onOpen={() => handleOpen('cadastroGestor')} onClose={onClose}
                         conteudo={<CadastroGestor />} // COMPONENTE AQUI
                         labelBtn='Cadastrar Gestor' />
                 }
 
-                {(dataUser.admin === 3 || dataUser.admin === 2) &&
+                {(dataUser.admin === '3' || dataUser.admin === '2') &&
                     <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroOp'} onOpen={() => handleOpen('cadastroOp')} onClose={onClose}
                         conteudo={<CadastroOp />} // COMPONENTE AQUI 
                         labelBtn='Cadastrar Operador H2L' />
                 }
 
-                {dataUser.admin === 3 &&
+                {dataUser.admin === '3' &&
                     <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroAdmB'} onOpen={() => handleOpen('cadastroAdmB')} onClose={onClose}
                         conteudo={<CadastroAdm />} // COMPONENTE AQUI 
                         labelBtn='Cadastrar Adm Básico' />
                 }
 
-                {dataUser.admin === 3 &&
+                {dataUser.admin === '3' &&
                     <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroAdmG'} onOpen={() => handleOpen('cadastroAdmG')} onClose={onClose}
                         conteudo={<CadastroAdmG />} // COMPONENTE AQUI 
                         labelBtn='Cadastrar Adm Geral' />

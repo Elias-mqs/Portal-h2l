@@ -13,16 +13,17 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: 'Invalid request data' });
     }
 
+
+
     let data;
 
     try {
       data = decript(dataCript);
 
-      console.log(data)
-
       if (!data) {
         throw new Error('Decryption failed');
       }
+
     } catch (error) {
       console.error('Decryption error:', error);
       return res.status(400).json({ message: 'Invalid request data' });
@@ -30,13 +31,14 @@ export default async function handler(req, res) {
 
 
 
-    if (data.admin === 4) {
+    if (data.admin === '4') {
+
       try {
         console.log("Iniciando consulta no banco de dados...");
 
         const userList = await db
           .selectFrom('usuarios')
-          .select(['nome as name', 'email', 'setor', 'username', 'usr_id as info'])
+          .select(['nome as name', 'email', 'setor', 'username', 'usr_nomecli as nomeCli', 'usr_typeUser as typeUser', 'usr_id as info'])
           .where('usr_codcli', '=', `${data.codCli}`)
           .where((eb) => eb.or([
             eb('admin', '=', '1'),
@@ -46,26 +48,60 @@ export default async function handler(req, res) {
 
         console.log("Consulta finalizada, resultado: ", userList);
 
-        return res.status(200).json({ message: 'tudo certo' })
+        let dados
+
+        try {
+          dados = cript(userList);
+        } catch (error) {
+          console.error('Encryption error:', error);
+          return res.status(500).json({ message: 'Internal server error' });
+        }
+
+        return res.status(200).json({ dtCli: dados.code });
 
       } catch (error) {
         console.error(error)
       }
+
+    }
+
+
+    if (data.admin === '1') {
+
+      try {
+        console.log("Iniciando consulta no banco de dados...");
+
+        const userList = await db
+          .selectFrom('usuarios')
+          .select(['nome as name', 'email', 'setor', 'username', 'usr_typeUser as typeUser', 'usr_id as info'])
+          .where('usr_codcli', '=', `${data.codCli}`)
+          .where('usr_loja', '=', `${data.loja}`)
+          .where('admin', '=', '0')
+          .execute()
+
+        console.log("Consulta finalizada, resultado: ", userList);
+
+        let dados
+
+        try {
+          dados = cript(userList);
+        } catch (error) {
+          console.error('Encryption error:', error);
+          return res.status(500).json({ message: 'Internal server error' });
+        }
+
+        return res.status(200).json({ dtCli: dados.code });
+
+      } catch (error) {
+        console.error(error)
+      }
+
     }
 
 
 
 
-    // let dados
 
-    // try {
-    //   dados = cript(userList);
-    // } catch (error) {
-    //   console.error('Encryption error:', error);
-    //   return res.status(500).json({ message: 'Internal server error' });
-    // }
-
-    // return res.status(200).json({ dtCli: dados.code });
 
 
 

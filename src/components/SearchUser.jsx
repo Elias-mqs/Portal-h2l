@@ -8,15 +8,18 @@ import {
     useDisclosure,
     Input,
     Button,
+    IconButton,
+    Grid,
+    GridItem,
 } from "@chakra-ui/react";
 import { MdSearch } from "react-icons/md";
-import { FormInputBtn, IconButtonHeader, DadosUser, cript, InputSrc } from '@/components'
+import { FormInputBtn, IconButtonHeader, DadosUser, cript, InputSrc, decript } from '@/components'
 import { api } from '@/utils/api'
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { userContext } from "@/context/UserContext";
 
-function SearchUser({ formData, setFormData, levelUser, openSrc }) {
+function SearchUser() {
 
     // NESSA TELA O MARCELO FALOU PARA QUE JÁ APAREÇA TODOS OS USUÁRIOS VINCULADOS A CONTA DO GESTOR DAQUELE DEPARTAMENTO OU 'LOJA'(NO BANCO) MAS DEIXE O CAMPO DE PESQUISA PARA
     // QUE O USUÁRIO POSSA PESQUISAR QUANDO TIVER MUITOS RESULTADOS
@@ -25,19 +28,18 @@ function SearchUser({ formData, setFormData, levelUser, openSrc }) {
 
     const { data: { data: { [0]: [dataUser], [1]: info } } } = userContext();
 
-    // console.log(dataUser)
+    console.log(dataUser)
 
 
     const toast = useToast();
-    const [searchUser, setSearchUser] = useState({ dados: '' });
     const [userResults, setUserResults] = useState([]);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [count, setCount] = useState(1)
-  
+
 
     const { control, handleSubmit } = useForm({
         defaultValues: {
-            dados: ''
+            name: '',
+            codCli: (dataUser.admin === '4' || dataUser.admin === '1') ? dataUser.codCli : '',
+            nomeCli: dataUser.admin === '1' ? dataUser.nomeCli : '',
         }
     })
 
@@ -45,183 +47,62 @@ function SearchUser({ formData, setFormData, levelUser, openSrc }) {
 
 
 
+    useLayoutEffect(() => {
+        const fetchData = async () => {
 
 
-//     useLayoutEffect(() => {
-//         const fetchData = async () => {
-// console.log('000000000000000000000000000')
-//             if(dataUser.admin === 3){
-//                 return;
-//             }
-//             if(dataUser.admin === 2){
-//                 return;
-//             }
-//             if(dataUser.admin === 4){
-//                 try {
-//                     console.log('enviando get')
-//                     // const encryptedParams = cript(`codCli=${dataUser.codCli}&admin=${dataUser.admin}`);
-//                     const encryptedParams = cript({codCli: dataUser.codCli, admin: dataUser.admin});
-//                     const getUrl = `searchUserTeste?params=${encryptedParams.code}`;
-
-//                     const response = await api.get(getUrl);
-// console.log('11111111111111111111111111111111')
-//                     console.log(response);
-//                 } catch (error) {
-//                     console.error(error);
-//                     toast({ position: 'top', title: "Atenção", description: 'Abra novamente ou contate o suporte.', status: 'info', duration: 2000, isClosable: true, })
-//                     return;
-//                 }
-//             }
-//             if(dataUser.admin === 1){
-//                 console.log('chegou aqui, useEffect if do gestor')
-//             }
-
-//             console.log('Chegou aqui, verificar useEffect')
-
-//         };
-//             fetchData();
-//     }, []);
+            if (dataUser.admin === '3' || dataUser.admin === '2') {
+                console.log('if do admg e admb')
+                return;
+            }
 
 
+            if (dataUser.admin === '4' || dataUser.admin === '1') {
 
-  // useLayoutEffect(() => {
-    //     fetchData();
-    // }, [])
+                try {
+                    console.log('enviando get');
+                    const encryptedParams = cript({ codCli: dataUser.codCli, loja: dataUser.loja, admin: dataUser.admin });
 
+                    const getUrl = `searchUserTeste?params=${encryptedParams.code}`;
 
+                    const { data: { dtCli } } = await api.get(getUrl);
 
+                    const data = decript(dtCli);
 
+                    setUserResults(data);
 
+                    return;
 
+                } catch (error) {
+                    // Erro GET
+                    toast({ position: 'top', title: "Atenção", description: 'Abra novamente ou contate o suporte.', status: 'info', duration: 2000, isClosable: true, });
+                    return;
+                }
+            }
 
-
-
-
-
-
-
-
-
-
-
-    const fetchData = useCallback(async (e) => {
-
-        e.preventDefault();
-        e.stopPropagation();
-
-        console.log('-----------------------------------------------------------------------------------------')
-
-        if (dataUser.admin === 3 || dataUser.admin === 2) {
+            toast({ position: 'top', title: "Atenção", description: 'Contate um administrador.', status: 'error', duration: 2000, isClosable: true, });
             return;
         }
 
-        if (dataUser.admin === 4) {
-            console.log('000000000000000000000000')
-            try {
-                console.log('11111111111111111111111111')
-                console.log('enviando get');
-                const encryptedParams = cript({ codCli: dataUser.codCli, admin: dataUser.admin });
-                console.log('22222222222222222222222')
-                const getUrl = `searchUserTeste?params=${encryptedParams.code}`;
-                console.log('3333333333333333333333333333333')
-
-                const response = await api.get(getUrl);
-
-                console.log('444444444444444444444444444444444444')
-                console.log(response);
-console.log('55555555555555555555555555')
-                return;
-                // setUserResults(usersGet)
-
-            } catch (error) {
-                console.error(error);
-                toast({
-                    position: 'top',
-                    title: "Atenção",
-                    description: 'Abra novamente ou contate o suporte.',
-                    status: 'info',
-                    duration: 2000,
-                    isClosable: true,
-                });
-                return;
-            }
-        }
-        console.log('6666666666666666666666666666666666666666666666')
-
-        if (dataUser.admin === 1) {
-            console.log('chegou aqui, useEffect if do gestor');
-        }
-
         console.log('Chegou aqui, verificar useEffect');
-    }, [userResults]);
 
-
-
-    // useLayoutEffect(() => {
-    //     fetchData();
-    // }, [])
-
-
-    // useEffect(() => {
-    //     fetchData();
-    // }, []);
+        fetchData();
+    }, []);
 
 
 
 
+    // MONTAR FILTRO DO OPERADOR E DO GESTOR QUE SERÁ SEM CODCLI OU LOJA 
+    const handleFilter = (e) => {
 
-
-
-
-
-
-
-
-
-
-
-
-
-    const handleSearch = async (e) => {
-        if (e) e.preventDefault();
-        setIsSubmitting(true)
-
-        if (searchUser.dados.trim() === '') {
-            toast({ position: 'top', title: "Atenção", description: 'Digite uma informação para iniciar a busca!', status: 'error', duration: 3000, isClosable: true, })
-            setTimeout(() => {
-                setIsSubmitting(false);
-            }, 1500);
-            return
-        }
-
-        const searchUserAuth = { ...searchUser, lU: levelUser }
-        const searchCript = cript(searchUserAuth)
-
-        try {
-
-            const resultSearch = await api.post('searchUser', searchCript)
-            setUserResults(resultSearch.data.user)
-            setTimeout(() => {
-                setIsSubmitting(false);
-            }, 1500);
-
-            if (resultSearch.data.user.length === 0) {
-                toast({ position: 'top', title: "Atenção", description: 'Nenhum resultado encontrado. Digite outra informação.', status: 'error', duration: 3000, isClosable: true, })
-                return
-            }
-
-
-        } catch (error) {
-            console.log(error)
-            toast({ position: 'top', title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 2000, isClosable: true, })
-        }
+        console.log(e)
     }
 
 
-    const handleFilter = (e) => {
-        e.preventDefault();
+
+    const stopPropagation = (e) => {
         e.stopPropagation();
-        console.log(e)
+        handleSubmit(handleFilter)(e);
     }
 
 
@@ -230,40 +111,103 @@ console.log('55555555555555555555555555')
 
     return (
 
-        <Stack w='100%' h='100%' maxH='auto' bg="#EDF2FF" borderRadius={{ base: '0', md: "10px" }} boxShadow="0 0 10px rgba(0, 0, 0, 0.2)" p={{ base: '35px', md: "30px 35px" }} transition={{ base: 'max-width 0.3s ease' }} >
+        <Stack w='100%' maxW='4xl' h='100%' maxH='auto' bg="#EDF2FF" borderRadius={{ base: '0', md: "10px" }} boxShadow="0 0 10px rgba(0, 0, 0, 0.2)"
+            p={{ base: '35px', md: "30px 35px" }} transition={{ base: 'max-width 0.3s ease' }} overflow='hidden' >
 
-            <ModalCloseButton m={4} />
+
+
+
+            <Flex position='relative' top='-20px' right='-20px' >
+                <ModalCloseButton m={4} />
+            </Flex>
             <Flex justify='center' borderBottom={'1px solid #858585'} pb={1} mb={5} >
                 <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} >Atualizar informações</Text>
-                <Button onClick={fetchData} >chamar</Button>
             </Flex>
 
-            <Flex as='form' onSubmit={() => console.log('teste')}>
 
-                <Controller
-                    name='dados'
-                    control={control}
-                    render={({ field: { value, onChange } }) => (
-                        <InputSrc value={value || ''} w='300px' typeBtn='submit' icon={<MdSearch title='pesquisar' size='24px' color='#7B809A' />} onClick={handleFilter} variant='filled'
-                            border='1px solid #C0C0C0' label='Pesquisar usuário:' placeholder='Nome, usuário, email, setor' onChange={onChange} bg='#ffffff8d' />
-                    )}
-                />
+
+
+            <Flex as='form' onSubmit={stopPropagation} justify='center' mb='20px' >
+
+                <Grid templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }} gap={{ base: 4, md: 4 }} >
+
+
+                    {(dataUser.admin === '3' || dataUser.admin === '2' || dataUser.admin === '4' || dataUser.admin === '1') &&
+                        <Controller
+                            name='name'
+                            control={control}
+                            render={({ field: { value, onChange } }) => (
+                                <Flex direction='column'>
+                                    <Text fontSize={14} fontWeight={500} pb={1} pl={2} >Nome:</Text>
+                                    <Input value={value} onChange={onChange} placeholder='Nome' variant='filled' border='1px solid #C0C0C0' bg='#ffffff8d' />
+                                </Flex>
+                            )}
+                        />
+                    }
+
+
+                    {(dataUser.admin === '3' || dataUser.admin === '2') &&
+                        <Controller
+                            name='codCli'
+                            control={control}
+                            render={({ field: { value, onChange } }) => (
+                                <Flex direction='column' >
+                                    <Text fontSize={14} fontWeight={500} pb={1} pl={2} >Codigo cliente:</Text>
+                                    <Input value={value} onChange={onChange} placeholder='999999' variant='filled' border='1px solid #C0C0C0' bg='#ffffff8d' />
+                                </Flex>
+                            )}
+                        />
+                    }
+
+
+                    {(dataUser.admin === '3' || dataUser.admin === '2' || dataUser.admin === '4') &&
+                        <Controller
+                            name='nomeCli'
+                            control={control}
+                            render={({ field: { value, onChange } }) => (
+                                <Flex direction='column'>
+                                    <Text fontSize={14} fontWeight={500} pb={1} pl={2} >Local/Unidade:</Text>
+                                    <Input value={value} onChange={onChange} placeholder='Ex: H2L Soluções' variant='filled' border='1px solid #C0C0C0' bg='#ffffff8d' />
+                                </Flex>
+                            )}
+                        />
+                    }
+
+                    <Button title='Buscar' type='submit' rightIcon={<MdSearch size='24px' color='#fff' />} borderRadius='3rem' w={{ base: '100%', sm: '130px' }}
+                        bg='blue.400' mt='auto' color='#FFF' _hover={{ bg: 'blue.500', transform: `translateY(-2px)`, cursor: 'pointer' }} ml={{ base: 0, md: '20px' }}
+                        _active={{ transform: 'translateY(2px)' }} >
+                        Buscar
+                    </Button>
+
+
+                </Grid>
 
             </Flex>
 
-            <Stack overflow='auto' >
-                <Flex ml='61px' >
-                    <Flex w='25%' fontWeight={500} justify='center' >Nome</Flex>
-                    <Flex w='25%' fontWeight={500} justify='center' >Usuário</Flex>
-                    <Flex w='20%' fontWeight={500} justify='center' >Setor</Flex>
-                    <Flex w='30%' fontWeight={500} justify='center' >Email</Flex>
-                </Flex>
-                {userResults.map((user, index) => (
-                    <Flex key={index} >
-                        <UserRow user={user} formData={formData} handleSearch={handleSearch} setFormData={setFormData} />
+
+
+
+            <Flex flex={1} overflow='auto' >
+                <Flex direction='column' minW='826px' gap={1} >
+
+                    <Flex ml='61px' >
+
+                        <Flex flex={2} fontWeight={500} justify='center' >Nome</Flex>
+                        <Flex flex={1} fontWeight={500} justify='center' >Setor</Flex>
+                        {(dataUser.admin === '3' || dataUser.admin === '2' || dataUser.admin === '4') &&
+                            <Flex flex={2} fontWeight={500} justify='center' >Local/Unidade</Flex>
+                        }
+
                     </Flex>
-                ))}
-            </Stack>
+
+                    {userResults.map((user, index) => (
+                        <Flex key={index} minW='826px' >
+                            <UserRow user={user} handleSearch={handleFilter} />
+                        </Flex>
+                    ))}
+
+                </Flex>
+            </Flex>
 
         </Stack>
     )
@@ -320,11 +264,10 @@ function UserRow({ user, handleSearch }) {
                 fontWeight={500} fontStyle='italic' hover={{ fontWeight: 700, color: '#000' }}
             />
 
-            <Flex w='100vw' bg='#D1D9FF' borderRadius='.5rem' >
-                <Flex name='nome' w='25%' borderLeft='2px solid #63636342' p='0 10px' align='center' overflow='hidden' borderLeftRadius='.5rem' >{user.name}</Flex>
-                <Flex name='usuario' w='25%' borderLeft='1px solid #636363a9' p='0 10px' align='center' overflow='hidden' >{user.username}</Flex>
-                <Flex name='setor' w='20%' borderLeft='1px solid #636363a9' p='0 10px' align='center' overflow='hidden' >{user.setor}</Flex>
-                <Flex name='email' w='30%' borderLeft='1px solid #636363a9' p='0 10px' align='center' overflow='hidden' >{user.email}</Flex>
+            <Flex w='100%' bg='#D1D9FF' borderRadius='.5rem' >
+                <Flex name='nome' flex={2} borderLeft='2px solid #63636342' p='0 10px' align='center' borderLeftRadius='.5rem' >{user.name}</Flex>
+                <Flex name='setor' flex={1} borderLeft='1px solid #636363a9' p='0 10px' align='center' >{user.setor}</Flex>
+                <Flex name='nomeCli' flex={2} borderLeft='1px solid #636363a9' p='0 10px' align='center' >{user.nomeCli}</Flex>
             </Flex>
         </>
     );

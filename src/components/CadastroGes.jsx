@@ -63,8 +63,7 @@ function CadastroGestor() {
 
         e.preventDefault();
         e.stopPropagation();
-
-        if (dataUser.admin != 3 && dataUser.admin != 2) {
+        if (dataUser.admin != '3' && dataUser.admin != '2') {
             try {
                 const result = await srcNomeCli({ codCli: dataUser.codCli });
                 setDataCliente(result);
@@ -187,10 +186,10 @@ function CadastroGestor() {
 
 
             {/* FAZER A RENDERIZAÇÃO DESSA FORMA */}
-            {(dataUser.admin === 3 || dataUser.admin === 2) && modal.isOpen &&
+            {(dataUser.admin === '3' || dataUser.admin === '2') && modal.isOpen &&
                 <SearchEmpresa setValue={dataEmpresa} />
             }
-            {dataUser.admin === 4 && modal.isOpen &&
+            {dataUser.admin === '4' && modal.isOpen &&
                 <SrcCliNome dataCliente={dataCliente} setValue={dataEmpresa} />
             }
 

@@ -21,6 +21,9 @@ export function generateToken(payload, secret) {
     });
 }
 
+
+
+
 ///////// AUTENTICAR TOKEN /////////
 async function authenticate(token) {
     token = token.replace('Bearer ', '')
@@ -42,6 +45,9 @@ async function authenticate(token) {
     }
 }
 
+
+
+
 ///////// HASHEAR SENHAS /////////
 function hashPassword(password) {
     try {
@@ -52,10 +58,16 @@ function hashPassword(password) {
     }
 }
 
+
+
+
 ///////// REMOVE TOKEN /////////
 function removeToken(token) {
     return Cookies.remove(token)
 }
+
+
+
 
 ///////// DESCRIPTOGRAFAR REQUISIÇÕES /////////
 function decript(dados) {
@@ -65,6 +77,9 @@ function decript(dados) {
     return decryptedData
 }
 
+
+
+
 ///////// CRIPTOGRAFAR REQUISIÇÕES /////////
 function cript(dados) {
     const passCryp = process.env.NEXT_PUBLIC_PASSCRYP
@@ -72,6 +87,9 @@ function cript(dados) {
     const data = { code: encryptedForm }
     return data
 }
+
+
+
 
 ///////// GERAR SENHAS ALEATÓRIA CONFORME REQUISITOS /////////
 function generateRandomPass() {

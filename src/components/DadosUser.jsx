@@ -1,13 +1,5 @@
 //src/components/DadosUser.jsx
-import {
-    Button,
-    Grid,
-    useToast,
-    Stack,
-    Flex,
-    Text,
-    ModalCloseButton
-} from "@chakra-ui/react";
+import { Button, Grid, useToast, Stack, Flex, Text, ModalCloseButton } from "@chakra-ui/react";
 import { MdEdit } from "react-icons/md";
 import { FormInput, UpdatePass, cript } from '@/components';
 import { useState } from "react";
@@ -35,8 +27,8 @@ function DadosUser() {
     const toast = useToast();
     const { modal } = useSearchCli();
 
-    const { data: { data: { [0]: [dataUser], [1]: info } } , data: { refetch } } = userContext();
-    
+    const { data: { data: { [0]: [dataUser], [1]: info } }, data: { refetch } } = userContext();
+
     const { control, handleSubmit, setValue, resetField } = useForm({
         resolver: zodResolver(schema),
         defaultValues: { name: dataUser.name, email: dataUser.email, setor: dataUser.setor, username: dataUser.username, password: '' },
@@ -63,7 +55,7 @@ function DadosUser() {
             toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, });
 
         } catch (error) {
-            if(error.response.status === 400){
+            if (error.response.status === 400) {
                 toast({ position: 'top', title: "Atenção!", description: 'Revise os campos.', status: 'info', duration: 2000, isClosable: true, });
                 return
             }
@@ -103,7 +95,7 @@ function DadosUser() {
                     render={({ field: { value, onChange } }) => (
                         <Flex align='end'>
                             <FormInput w='100%' value={value} variant={'flushed'} label={'Nome'} placeholder={'Nome'} onChange={onChange} isDisabled={inputLock.name} />
-                            {dataUser.admin === 3 &&
+                            {dataUser.admin === '3' &&
                                 <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={() => setInputLock({ ...inputLock, name: !inputLock.name })} ><MdEdit size='20px' /></Button>
                             }
                         </Flex>
@@ -117,7 +109,7 @@ function DadosUser() {
                     render={({ field: { value, onChange } }) => (
                         <Flex align='end'>
                             <FormInput w='100%' value={value} type={'email'} variant={'flushed'} label={'Email'} placeholder={'Email'} onChange={onChange} isDisabled={inputLock.email} />
-                            {dataUser.admin === 3 &&
+                            {dataUser.admin === '3' &&
                                 <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={() => setInputLock({ ...inputLock, email: !inputLock.email })} ><MdEdit size='20px' /></Button>
                             }
                         </Flex>
@@ -131,7 +123,7 @@ function DadosUser() {
                     render={({ field: { value, onChange } }) => (
                         <Flex align='end'>
                             <FormInput w='100%' value={value} variant={'flushed'} label={'Setor'} placeholder={'Setor'} onChange={onChange} isDisabled={inputLock.setor} />
-                            {dataUser.admin === 3 &&
+                            {dataUser.admin === '3' &&
                                 <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={() => setInputLock({ ...inputLock, setor: !inputLock.setor })} ><MdEdit size='20px' /></Button>
                             }
                         </Flex>
@@ -146,7 +138,7 @@ function DadosUser() {
                         <Flex align='end'>
                             <FormInput name={'username'} w='100%' value={value} type={'text'} variant={'flushed'} label={'Usuário'} placeholder={'Usuário'} autoComplete='off'
                                 onChange={(e) => onChange(e.target.value.trim().toLowerCase())} isDisabled={inputLock.username} />
-                            {dataUser.admin === 3 &&
+                            {dataUser.admin === '3' &&
                                 <Button title='editar' borderRadius='2rem' bg="#EDF2FF" onClick={() => setInputLock({ ...inputLock, username: !inputLock.username })} ><MdEdit size='20px' /></Button>
                             }
                         </Flex>
