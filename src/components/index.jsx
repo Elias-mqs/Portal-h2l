@@ -29,6 +29,7 @@ import { CadastroGestor } from './CadastroGes';
 import { CadastroUser } from './CadastroUser';
 import { CadastroAdmG } from './CadastroAdmG';
 import AccountInfo from './AccountInfo'
+import EditUser from './EditUser';
 
 // Exporte os componentes diretamente
 export {
@@ -68,6 +69,7 @@ export {
     CadastroGestor,
     CadastroUser,
     CadastroAdmG,
-    AccountInfo
+    AccountInfo,
+    EditUser,
 
 };

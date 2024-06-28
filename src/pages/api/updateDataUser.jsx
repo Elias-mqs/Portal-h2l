@@ -9,7 +9,6 @@ export default async function handler(req, res) {
 
         
         const data = decript(req.body.code);
-        
 
         const { name, username, email, password, setor, info } = data;
 
@@ -69,9 +68,12 @@ export default async function handler(req, res) {
 
                 const tratandoDados = await db.selectFrom('usuarios')
                     .select(['username', 'email'])
-                    .where((eb) => eb.or([
-                        eb('username', '=', username),
-                        eb('email', '=', email),
+                    .where((eb) => eb.and([
+                        eb.or([
+                            eb('username', '=', username),
+                            eb('email', '=', email),
+                        ]),
+                        eb('usr_id', '!=', info),
                     ]))
                     .executeTakeFirst();
 
@@ -92,7 +94,7 @@ export default async function handler(req, res) {
                 .where('usr_id', '=', info)
                 .executeTakeFirst()
 
-            res.status(201).json({ message: 'Informações atualizadas!' })
+            res.status(200).json({ message: 'Informações atualizadas!' })
 
 
 

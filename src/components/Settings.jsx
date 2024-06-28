@@ -81,14 +81,13 @@ export default function Settings() {
             <MenuList align='center' >
 
 
+                {/* PAINEIS DE CADASTRO ABAIXO ESTÃO PRONTOS */}
+
                 {dataUser.admin != '0' &&
                     <IconButtonHeader sizeModal={{base: '2xl', md:'4xl'}} isOpen={isOpen && activeModal === 'atualizarUser'} onOpen={() => handleOpen('atualizarUser')} onClose={onClose}
-                        conteudo={<SearchUser formData={formDados} levelUser={levelUser} onClick={handleSave} setFormData={setFormDados} />} // COMPONENTE AQUI
+                        conteudo={<SearchUser />} // COMPONENTE AQUI
                         labelBtn='Atualizar usuarios' />
                 }
-
-
-                {/* PAINEIS DE CADASTRO ABAIXO ESTÃO PRONTOS */}
 
                 {dataUser.admin != '3' &&
                     <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'infoUser'} onOpen={() => handleOpen('infoUser')} onClose={onClose}
