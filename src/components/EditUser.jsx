@@ -53,7 +53,7 @@ function EditUser({ user, onClose }) {
             onClose();
 
         } catch (error) {
-            console.log(error)
+            console.error(error)
             if (error?.response?.status === 400) {
                 toast({ position: 'top', title: "Atenção!", description: 'Revise os campos.', status: 'info', duration: 2000, isClosable: true, });
             } else {

@@ -11,7 +11,6 @@ import IconButtonHeader from './IconButtonHeader';
 import NavigationTabs from './NavigationTabs';
 import { FormInput, FormTextarea, FormInputBtn, FormInputBtnL, InputSrc } from './FormInputs';
 import { FormButtonSave, ButtonCancel } from './FormButton';
-import { Cadastro } from './Cadastro';
 import Settings from './Settings';
 import RouteNavigation from './RouteNavigation';
 import DadosUser from './DadosUser';
@@ -51,7 +50,6 @@ export {
     InputSrc,
     FormButtonSave,
     ButtonCancel,
-    Cadastro,
     Settings,
     RouteNavigation,
     DadosUser,

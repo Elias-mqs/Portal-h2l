@@ -1,76 +1,32 @@
 import { IconButtonHeader, DadosUser, SearchUser, CadastroAdm, CadastroOp, CadastroGestor, CadastroUser, CadastroAdmG, AccountInfo } from '.';
 import { Menu, MenuList, MenuButton, useDisclosure } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MdOutlineSettings } from 'react-icons/md';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import { userContext } from '@/context/UserContext';
-import { useSearchCli } from "@/context/ResearchesContext";
 
 
 
 export default function Settings() {
 
-
-    const userDataContext = userContext()
-
-    const { data: { data: { [0]: [dataUser], [1]: info } } } = userContext()
-
-
     const router = useRouter()
-    const { modal } = useSearchCli();
-
-
-
-
-
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [activeModal, setActiveModal] = useState(null);
-    const [isGestor, setIsGestor] = useState(false);
-    const [isComercial, setIsComercial] = useState(false);
-    const [isTi, setIsTi] = useState(false)
-    const [formDados, setFormDados] = useState({ name: '', username: '', email: '', password: '', setor: '', info: '' });
-    const [originalData, setOriginalData] = useState({ name: '', username: '', email: '', password: '', setor: '', info: '' });
-    const [isSaved, setIsSaved] = useState(false);
-    const [levelUser, setLevelUser] = useState(null)
+    const { data: { data: { [0]: [dataUser], [1]: info } } } = userContext()
 
-
-    useEffect(() => {
-
-        const result = { ...userDataContext.data.data[0][0], info: userDataContext.data[1] };
-
-        setFormDados({ name: result.name, username: result.username, email: result.email, password: '', setor: result.setor, info: result.info });
-        setIsGestor(result.admin === '1');
-        setIsComercial(result.admin === '2');
-        setIsTi(result.admin === '3');
-        setLevelUser(result.admin);
-
-    }, []);
-
-
-    const handleSave = () => {
-        setIsSaved(true)
-    };
 
     const handleOpen = (modalType) => {
         setActiveModal(modalType);
         onOpen();
     };
 
+
     const handleSignOut = () => {
         Cookies.remove('ssn')
         router.push('/login')
     }
 
-    const Gestor = isGestor || isTi ? 'block' : 'none';
-    const Comercial = isComercial || isTi ? 'block' : 'none';
-    const Ti = isTi ? 'block' : 'none';
-    const AllAuth = isTi || isComercial || isGestor ? 'block' : 'none';
-
-    const cadUser = true;
-    const cadGestor = true;
-    const cadComercial = true;
-    const displayNone = 'none'
 
     return (
 
@@ -81,53 +37,51 @@ export default function Settings() {
             <MenuList align='center' >
 
 
-                {/* PAINEIS DE CADASTRO ABAIXO ESTÃO PRONTOS */}
-
                 {dataUser.admin != '0' &&
                     <IconButtonHeader sizeModal={{base: '2xl', md:'4xl'}} isOpen={isOpen && activeModal === 'atualizarUser'} onOpen={() => handleOpen('atualizarUser')} onClose={onClose}
-                        conteudo={<SearchUser />} // COMPONENTE AQUI
+                        conteudo={<SearchUser />}
                         labelBtn='Atualizar usuarios' />
                 }
 
                 {dataUser.admin != '3' &&
                     <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'infoUser'} onOpen={() => handleOpen('infoUser')} onClose={onClose}
-                        conteudo={<AccountInfo />} // COMPONENTE AQUI
-                        labelBtn='Informações do usuário' />
+                        conteudo={<AccountInfo />}
+                        labelBtn='Informações da conta' />
                 }
 
                 {dataUser.admin === '3' &&
                     <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'dadosUser'} onOpen={() => handleOpen('dadosUser')} onClose={onClose}
-                        conteudo={<DadosUser />} // COMPONENTE AQUI
+                        conteudo={<DadosUser />}
                         labelBtn='Informações da conta' />
                 }
 
                 {(dataUser.admin === '3' || dataUser.admin === '2' || dataUser.admin === '4' || dataUser.admin === '1') &&
                     <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroUser'} onOpen={() => handleOpen('cadastroUser')} onClose={onClose}
-                        conteudo={<CadastroUser />} // COMPONENTE AQUI
+                        conteudo={<CadastroUser />}
                         labelBtn='Cadastrar Usuário' />
                 }
 
                 {(dataUser.admin === '3' || dataUser.admin === '2' || dataUser.admin === '4') &&
                     <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroGestor'} onOpen={() => handleOpen('cadastroGestor')} onClose={onClose}
-                        conteudo={<CadastroGestor />} // COMPONENTE AQUI
+                        conteudo={<CadastroGestor />}
                         labelBtn='Cadastrar Gestor' />
                 }
 
                 {(dataUser.admin === '3' || dataUser.admin === '2') &&
                     <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroOp'} onOpen={() => handleOpen('cadastroOp')} onClose={onClose}
-                        conteudo={<CadastroOp />} // COMPONENTE AQUI 
+                        conteudo={<CadastroOp />} 
                         labelBtn='Cadastrar Operador H2L' />
                 }
 
                 {dataUser.admin === '3' &&
                     <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroAdmB'} onOpen={() => handleOpen('cadastroAdmB')} onClose={onClose}
-                        conteudo={<CadastroAdm />} // COMPONENTE AQUI 
+                        conteudo={<CadastroAdm />} 
                         labelBtn='Cadastrar Adm Básico' />
                 }
 
                 {dataUser.admin === '3' &&
                     <IconButtonHeader sizeModal='xl' isOpen={isOpen && activeModal === 'cadastroAdmG'} onOpen={() => handleOpen('cadastroAdmG')} onClose={onClose}
-                        conteudo={<CadastroAdmG />} // COMPONENTE AQUI 
+                        conteudo={<CadastroAdmG />} 
                         labelBtn='Cadastrar Adm Geral' />
                 }
 

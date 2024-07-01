@@ -170,8 +170,9 @@ function SearchUser() {
         handleSubmit(handleFilter)(e);
     }
 
-    
 
+
+    // RECARREGA A LISTA DE USERS DO ADMIN APÓS ATUALIZAR ALGUM USER
     const refetchAdm = useCallback(async () => {
 
         if (dataUser.admin === '3' || dataUser.admin === '2') {
@@ -188,10 +189,7 @@ function SearchUser() {
             } catch (error) {
                 console.error(error)
             }
-
-
         }
-
     }, []);
 
 
@@ -207,6 +205,7 @@ function SearchUser() {
             <Flex position='relative' top='-20px' right='-20px' >
                 <ModalCloseButton m={4} />
             </Flex>
+
             <Flex justify='center' borderBottom={'1px solid #858585'} pb={1} mb={5} >
                 <Text p='20px 0 5px' w='auto' fontSize='20px' fontWeight={600} >Atualizar informações</Text>
             </Flex>
@@ -327,11 +326,15 @@ function UserRow({ user, dataUser, refetch, refetchAdm }) {
 
 
             <Flex w='100%' bg='#D1D9FF' borderRadius='.5rem' >
+
                 <Flex name='nome' flex={2} borderLeft='2px solid #63636342' p='0 10px' align='center' borderLeftRadius='.5rem' >{user.name}</Flex>
+                
                 <Flex name='setor' flex={1} borderLeft='1px solid #636363a9' p='0 10px' align='center' >{user.setor}</Flex>
+                
                 {(dataUser.admin === '3' || dataUser.admin === '2' || dataUser.admin === '4') &&
                     <Flex name='nomeCli' flex={2} borderLeft='1px solid #636363a9' p='0 10px' align='center' >{user.nomeCli}</Flex>
                 }
+                
             </Flex>
         </>
     );

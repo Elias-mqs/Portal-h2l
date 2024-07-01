@@ -87,8 +87,48 @@ export function SearchCliProvider({ children }) {
     };
 
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////// BUSCA OS DADOS DO EQUIPAMENTO PARA ABERTURA DE CHAMADO ////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    const srcDataChamado = async (serialNumber) => {
+
+        if (!serialNumber) {
+            toast({ position: 'top', title: "Atenção", description: "Número de série não fornecido.", status: 'info', duration: 2000, isClosable: true });
+            return;
+        }
+
+        try {
+
+            const getUrl = cript(`consulta?cserial=${serialNumber}`);
+
+            const response = await api.get(`srcDataChamado/${getUrl.code}`);
+
+            const { dtCli } = response.data;
+
+            const { codequi } = decript(dtCli);
+
+            return codequi[0];
+
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+
+            let errorMessage = 'Verifique os campos e tente novamente.';
+            if (error.response) {
+                // Erro de resposta do servidor
+                errorMessage = error.response.data.message || errorMessage;
+            } else if (error.request) {
+                // Erro de requisição, sem resposta
+                errorMessage = 'Erro de rede, por favor, tente novamente mais tarde.';
+            }
+
+            toast({ position: 'top', title: "Erro", description: errorMessage, status: 'error', duration: 2000, isClosable: true, });
+        }
+
+    }
+
+
     return (
-        <SearchCliContext.Provider value={{ modal: isOpenSearch, handleSearch, srcNomeCli }}>
+        <SearchCliContext.Provider value={{ modal: isOpenSearch, handleSearch, srcNomeCli, srcDataChamado }}>
             {children}
         </SearchCliContext.Provider>
     );

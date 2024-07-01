@@ -82,7 +82,7 @@ function CadastroUser() {
                 const result = await srcNomeCli({ codCli: dataUser.codCli });
                 setDataCliente(result);
             } catch (error) {
-                console.log(error);
+                console.error(error);
             }
 
             modal.onOpen();
