@@ -1,47 +1,61 @@
-import { FormInput, FormTextarea, FormInputBtn, FormButtonSave, ButtonCancel, cript } from '@/components';
-import { Box, Stack, Flex, Grid, useToast, Input } from '@chakra-ui/react'
+import { FormInput, FormTextarea, FormInputBtn, FormButtonSave, ButtonCancel } from '@/components';
+import { Box, Stack, Flex, Grid, useToast, GridItem, Text, Select } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { api, api2 } from '@/utils/api'
 import { MdSearch } from 'react-icons/md';
 import { userContext } from '@/context/UserContext';
 import { useForm, Controller } from 'react-hook-form';
 import { useSearchCli } from '@/context/ResearchesContext';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod'
+import { z } from 'zod';
+
+
 
 
 
 ////////////////////////TERMINAR EDIÇÃO DOS SCHEMAS DO FORM CHAMADOS
 const schema = z.object({
     numserie: z.coerce.string().max(50),
-    email: z.coerce.string().email('Formato de e-mail inválido').min(3, 'Mínimo de caracteres não permitido'),
-    nomeCli: z.coerce.string(),
-    codCli: z.coerce.string(),
-    loja: z.coerce.string(),
-    setor: z.coerce.string().min(3, 'Mínimo de 3 caracteres'),
-    username: z.coerce.string().min(3, 'Mínimo de 3 caracteres'),
+    model: z.coerce.string(),
+    acumulador: z.coerce.string().min(2, 'Valor mínimo: 2'),
+    nomecli: z.coerce.string(),
+    end: z.coerce.string(),
+    bairro: z.coerce.string().min(3, 'Mínimo de 3 caracteres'),
+    mun: z.coerce.string().min(3, 'Mínimo de 3 caracteres'),
+    est: z.coerce.string().min(2).max(2),
+    horario: z.coerce.string(),
+    contato: z.coerce.string().max(50),
+    tel: z.coerce.string().max(20),
+    incident: z.coerce.string(),
+    description: z.coerce.string()
 })
 
 
-function PageChamados() {
 
+
+export default function PageChamados({ pageProps: { ocorrencias } }) {
+
+
+    const incident = ocorrencias.ocorrencias.sort((a, b) =>
+        a.descricao.toLowerCase() > b.descricao.toLowerCase() ? 1 : a.descricao.toLowerCase() < b.descricao.toLowerCase() ? -1 : 0
+    );
 
     const toast = useToast()
     const router = useRouter()
-    const userDataContext = userContext()
+
+    const { data: { data: { [0]: [dataUser], [1]: info } } } = userContext();
+    console.log(dataUser)
 
     const { srcDataChamado } = useSearchCli()
 
     const { control, setValue, handleSubmit } = useForm({
         resolver: zodResolver(schema),
         defaultValues: {
-            numserie: '', model: '', acumulador: '', namecli: '', end: '', bairro: '', mun: '', est: '', horario: '',
-            contato: '', setor: '', tel: '', incident: '', description: ''
+            numserie: '', model: '', acumulador: '', nomecli: '', end: '', bairro: '', mun: '', est: '', horario: '',
+            contato: '', tel: '', incident: '', description: ''
         }
     })
 
-    
+
 
 
 
@@ -60,13 +74,29 @@ function PageChamados() {
     const searchSerial = async (serialNumber) => {
         console.log(serialNumber);
 
-        const response = await srcDataChamado(serialNumber);
+        if (!serialNumber) {
+            toast({ position: 'top', title: "", description: 'Informe um número de série', status: 'info', duration: 1500, isClosable: true, });
+            return;
+        }
 
-        setValue('numserie', response.numser);
-        setValue('model', response.desc_pro);
-        setValue('acumulador', response.acumul);
+        try {
+            const response = await srcDataChamado(serialNumber);
 
-        console.log(response)
+            setValue('numserie', response.numser);
+            setValue('model', response.desc_pro);
+            setValue('acumulador', response.acumul);
+            setValue('nomecli', response.nomcli);
+            // setValue('end', reponse.end) VAI PRECISAR DE OUTRO GET
+            setValue('contato', dataUser.name);
+            // setValue('tel') PRECISO VERIFICAR ESSE CAMPO, SE VOU PEGAR DO CADASTRO DE USUÁRIOS OU SE TEM EM ALGUMA TABELA DE CHAMADOS OU DO CLIENTE
+
+            console.log(response)
+
+        } catch (error) {
+            console.error(error);
+        }
+
+
 
         // if (numserie.trim() === '') {
         //     toast({ position: 'top', title: "Atenção!", description: 'Informe uma série.', status: 'error', duration: 1500, isClosable: true, })
@@ -129,24 +159,30 @@ function PageChamados() {
                             control={control}
                             render={({ field: { onChange, value } }) => (
                                 <FormInputBtn value={value} variant={'filled'} label={'Série do equipamento:'} placeholder={'Número de série'}
-                                    onChange={(e) => onChange(e.target.value.trim().toUpperCase())} icon={<MdSearch title='Pesquisar' size='24px' maxLenght={5}
-                                        onClick={(e) => { e.preventDefault(); searchSerial(value) }} />} required={true} />
+                                    onChange={(e) => onChange(e.target.value.trim().toUpperCase())} icon={<MdSearch title='Pesquisar' size='24px' maxLength={5}
+                                        onClick={(e) => { e.preventDefault(); searchSerial(value) }} />} required={true} border='1px solid #c0c0c0' />
                             )}
                         />
+
 
                         <Controller
                             name='model'
                             control={control}
                             render={({ field: { onChange, value } }) => (
-                                <FormInput value={value} variant={'filled'} label={'Modelo:'} placeholder={'Modelo'} onChange={onChange} readOnly pointerEvents={'none'} tabIndex={'-1'} />
+                                <GridItem colSpan={{ base: 1, sm: 2 }} >
+                                    <FormInput value={value} variant={'filled'} label={'Modelo:'} placeholder={'Modelo'} onChange={onChange} readOnly pointerEvents={'none'}
+                                        tabIndex={'-1'} border='1px solid #c0c0c0' />
+                                </GridItem>
                             )}
                         />
+
 
                         <Controller
                             name='acumulador'
                             control={control}
                             render={({ field: { onChange, value } }) => (
-                                <FormInput type='number' value={value} w={'100%'} variant={'filled'} label={'Contador:'} placeholder={'P/B'} onChange={onChange} required={false} />
+                                <FormInput type='number' value={value} w={'100%'} variant={'filled'} label={'Contador:'} placeholder={'P/B'} onChange={onChange}
+                                    required={false} border='1px solid #c0c0c0' />
                             )}
                         />
 
@@ -156,19 +192,36 @@ function PageChamados() {
                         </Flex> */}
 
 
+
+
+                        <Controller
+                            name='horario'
+                            control={control}
+                            render={({ field: { onChange, value } }) => (
+                                <FormInput value={value} variant={'filled'} label={'Funcionamento:'} placeholder={'De 00:00 à 00:00 - seg à sex'} onChange={onChange}
+                                    pointerEvents={'none'} tabIndex={'-1'} border='1px solid #c0c0c0' />
+                            )}
+                        />
+
+
                         <Controller
                             name='nomecli'
                             control={control}
                             render={({ field: { onChange, value } }) => (
-                                <FormInput value={value} variant={'filled'} label={'Cliente:'} placeholder={'Cliente'} onChange={onChange} pointerEvents={'none'} tabIndex={'-1'} />
+                                <GridItem colSpan={{ base: 1, sm: 2 }} >
+                                    <FormInput value={value} variant={'filled'} label={'Cliente:'} placeholder={'Cliente'} onChange={onChange} pointerEvents={'none'}
+                                        tabIndex={'-1'} border='1px solid #c0c0c0' />
+                                </GridItem>
                             )}
                         />
+
 
                         <Controller
                             name='end'
                             control={control}
                             render={({ field: { onChange, value } }) => (
-                                <FormInput value={value} variant={'filled'} label={'Endereço:'} placeholder={'Endereço'} onChange={onChange} pointerEvents={'none'} tabIndex={'-1'} />
+                                <FormInput value={value} variant={'filled'} label={'Endereço:'} placeholder={'Endereço'} onChange={onChange} pointerEvents={'none'}
+                                    tabIndex={'-1'} border='1px solid #c0c0c0' />
                             )}
                         />
 
@@ -177,7 +230,8 @@ function PageChamados() {
                             name='bairro'
                             control={control}
                             render={({ field: { onChange, value } }) => (
-                                <FormInput value={value} variant={'filled'} label={'Bairro:'} placeholder={'Bairro'} onChange={onChange} pointerEvents={'none'} tabIndex={'-1'} />
+                                <FormInput value={value} variant={'filled'} label={'Bairro:'} placeholder={'Bairro'} onChange={onChange} pointerEvents={'none'}
+                                    tabIndex={'-1'} border='1px solid #c0c0c0' />
                             )}
                         />
 
@@ -186,7 +240,8 @@ function PageChamados() {
                             name='mun'
                             control={control}
                             render={({ field: { onChange, value } }) => (
-                                <FormInput value={value} variant={'filled'} label={'Cidade:'} placeholder={'Cidade'} onChange={onChange} pointerEvents={'none'} tabIndex={'-1'} />
+                                <FormInput value={value} variant={'filled'} label={'Cidade:'} placeholder={'Cidade'} onChange={onChange} pointerEvents={'none'}
+                                    tabIndex={'-1'} border='1px solid #c0c0c0' />
                             )}
                         />
 
@@ -195,48 +250,47 @@ function PageChamados() {
                             name='est'
                             control={control}
                             render={({ field: { onChange, value } }) => (
-                                <FormInput value={value} variant={'filled'} label={'Estado:'} placeholder={'Estado'} onChange={onChange} pointerEvents={'none'} tabIndex={'-1'} />
+                                <FormInput value={value} variant={'filled'} label={'Estado:'} placeholder={'Estado'} onChange={onChange} pointerEvents={'none'}
+                                    tabIndex={'-1'} border='1px solid #c0c0c0' />
                             )}
                         />
 
-
-                        <Controller
-                            name='horario'
-                            control={control}
-                            render={({ field: { onChange, value } }) => (
-                                <FormInput value={value} variant={'filled'} label={'Funcionamento:'} placeholder={'De 00:00 à 00:00 - seg à sex'} onChange={onChange} pointerEvents={'none'} tabIndex={'-1'} />
-                            )}
-                        />
 
                         <Controller
                             name='contato'
                             control={control}
                             render={({ field: { onChange, value } }) => (
-                                <FormInput value={value} variant={'filled'} label={'Contato:'} placeholder={'Contato'} onChange={onChange} />
+                                <FormInput value={value} variant={'filled'} label={'Contato:'} placeholder={'Contato'} onChange={onChange} border='1px solid #c0c0c0' />
                             )}
                         />
 
-                        <Controller
-                            name='setor'
-                            control={control}
-                            render={({ field: { onChange, value } }) => (
-                                <FormInput value={value} variant={'filled'} label={'Setor:'} placeholder={'Setor'} onChange={onChange} pointerEvents={'none'} tabIndex={'-1'} />
-                            )}
-                        />
 
                         <Controller
                             name='tel'
                             control={control}
                             render={({ field: { onChange, value } }) => (
-                                <FormInput value={value} variant={'filled'} label={'Telefone:'} placeholder={'(XX) XXXXX-XXXX'} onChange={onChange} pointerEvents={'none'} tabIndex={'-1'} />
+                                <FormInput value={value} variant={'filled'} label={'Telefone:'} placeholder={'(XX) XXXXX-XXXX'} onChange={onChange} pointerEvents={'none'}
+                                    tabIndex={'-1'} border='1px solid #c0c0c0' />
                             )}
                         />
 
+
                         <Controller
-                            name='incident'
+                            name="incident"
                             control={control}
-                            render={({ field: { onChange, value } }) => (
-                                <FormInput value={value} variant={'filled'} label={'Ocorrência:'} placeholder={'Ocorrência'} onChange={onChange} required={true} />
+                            render={({ field }) => (
+                                <Flex direction='column'>
+                                    <Text pb={1} pl={2} fontSize={14} fontWeight={500}>Ocorrência:</Text>
+                                    <Select {...field} variant='filled' placeholder='Ocorrência' border='1px solid #c0c0c0' fontSize={14}>
+                                        {incident.map((desc) => (
+                                            <option key={desc.cod} value={desc.cod}
+                                                style={{ fontSize: 12, color: '#333', backgroundColor: '#f5f5f5', padding: '10px', border: '1px solid #ccc' }}>
+                                                {desc.descricao}
+                                            </option>
+                                        ))}
+                                    </Select>
+                                </Flex>
+
                             )}
                         />
 
@@ -270,4 +324,55 @@ function PageChamados() {
     )
 }
 
-export default PageChamados;
+
+
+
+
+
+
+export async function getStaticProps() {
+
+    const getUrl = process.env.URL_OCORRENCIAS;
+
+    if (!getUrl) {
+        console.error("URL_OCORRENCIAS não está definida no arquivo .env.");
+        return {
+            props: {
+                ocorrencias: [],
+                error: "URL_OCORRENCIAS não está definida.",
+            },
+        };
+    }
+
+    try {
+        const data = await fetch(getUrl);
+
+        if (!data.ok) {
+            console.error(`Erro na requisição: ${data.status} ${data.statusText}`);
+            return {
+                props: {
+                    ocorrencias: [],
+                    error: `Erro na requisição: ${data.status} ${data.statusText}`,
+                },
+            };
+        }
+
+        const result = await data.json();
+
+        return {
+            props: {
+                ocorrencias: result,
+            },
+            revalidate: 60 * 60 * 4,
+        };
+
+    } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+        return {
+            props: {
+                ocorrencias: [],
+                error: error.message,
+            },
+        };
+    }
+}

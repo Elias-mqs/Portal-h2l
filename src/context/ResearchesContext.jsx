@@ -121,7 +121,7 @@ export function SearchCliProvider({ children }) {
                 errorMessage = 'Erro de rede, por favor, tente novamente mais tarde.';
             }
 
-            toast({ position: 'top', title: "Erro", description: errorMessage, status: 'error', duration: 2000, isClosable: true, });
+            toast({ position: 'top', title: "Erro", description: errorMessage, status: 'Info', duration: 2000, isClosable: true, });
         }
 
     }
@@ -135,3 +135,12 @@ export function SearchCliProvider({ children }) {
 }
 
 export const useSearchCli = () => useContext(SearchCliContext);
+
+
+// export async function getServerSideProps() {
+
+//     const caminho = `consulta?cserial=${serialNumber}`
+//     const getUrl = process.env.URLAPI;
+//     const res = await fetch(`${getUrl}${caminho}`)
+
+// }

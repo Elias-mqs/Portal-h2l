@@ -37,8 +37,15 @@ export default async function handler(req, res) {
 
             const info = await response.json();
 
+            if (!info || !Array.isArray(info.codequi) || info.codequi.length === 0) {
+                const message = !info ? 'Informações inválidas.' :
+                    !Array.isArray(info.codequi) ? 'Informações inválidas.' :
+                        'Verifique as informações e tente novamente.';
+                return res.status(404).json({ message });
+            }
+
             let dados;
-            
+
             try {
                 dados = cript(info);
             } catch (error) {
