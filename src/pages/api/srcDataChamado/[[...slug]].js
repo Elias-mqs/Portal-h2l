@@ -9,6 +9,8 @@ export default async function handler(req, res) {
 
         const dataCript = req.url.split('/api/srcDataChamado/')[1];
 
+        console.log(dataCript)
+
         if (!dataCript) {
             return res.status(400).json({ message: 'Invalid request data' });
         }
@@ -28,7 +30,6 @@ export default async function handler(req, res) {
 
 
         try {
-
             const response = await fetch(`${getUrl}${data}`);
 
             if (!response.ok) {
@@ -37,9 +38,9 @@ export default async function handler(req, res) {
 
             const info = await response.json();
 
-            if (!info || !Array.isArray(info.codequi) || info.codequi.length === 0) {
+            if (!info || !Array.isArray(info.produtos) || info.produtos.length === 0) {
                 const message = !info ? 'Informações inválidas.' :
-                    !Array.isArray(info.codequi) ? 'Informações inválidas.' :
+                    !Array.isArray(info.produtos) ? 'Informações inválidas.' :
                         'Verifique as informações e tente novamente.';
                 return res.status(404).json({ message });
             }

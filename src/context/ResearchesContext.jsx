@@ -2,6 +2,8 @@ import { useDisclosure, useToast } from '@chakra-ui/react';
 import React, { createContext, useContext } from 'react';
 import { api } from '@/utils/api'
 import { cript, decript } from '@/components';
+import useSWR from 'swr';
+
 
 const SearchCliContext = createContext();
 
@@ -90,24 +92,21 @@ export function SearchCliProvider({ children }) {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////// BUSCA OS DADOS DO EQUIPAMENTO PARA ABERTURA DE CHAMADO ////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    const srcDataChamado = async (serialNumber) => {
+    const srcDataChamado = async (data) => {
 
-        if (!serialNumber) {
-            toast({ position: 'top', title: "Atenção", description: "Número de série não fornecido.", status: 'info', duration: 2000, isClosable: true });
-            return;
-        }
+        const { codCli, loja } = data;
 
         try {
 
-            const getUrl = cript(`consulta?cserial=${serialNumber}`);
+            const getUrl = cript(`auxil_os?ccad=produtos&ccliente=${codCli}&cloja=${loja}`);
 
             const response = await api.get(`srcDataChamado/${getUrl.code}`);
 
             const { dtCli } = response.data;
 
-            const { codequi } = decript(dtCli);
+            const { produtos } = decript(dtCli);
 
-            return codequi[0];
+            return produtos;
 
         } catch (error) {
             console.error('Erro na requisição:', error);

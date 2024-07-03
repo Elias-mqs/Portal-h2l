@@ -1,5 +1,5 @@
 import { FormInput, FormTextarea, FormInputBtn, FormButtonSave, ButtonCancel } from '@/components';
-import { Box, Stack, Flex, Grid, useToast, GridItem, Text, Select } from '@chakra-ui/react';
+import { Box, Stack, Flex, Grid, useToast, GridItem, Text, Select, Button } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { MdSearch } from 'react-icons/md';
 import { userContext } from '@/context/UserContext';
@@ -7,6 +7,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { useSearchCli } from '@/context/ResearchesContext';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useEffect, useLayoutEffect, useState } from 'react';
+import { useSrcDataChamado } from '@/cache/srcEquipamentos'
 
 
 
@@ -39,13 +41,17 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
         a.descricao.toLowerCase() > b.descricao.toLowerCase() ? 1 : a.descricao.toLowerCase() < b.descricao.toLowerCase() ? -1 : 0
     );
 
-    const toast = useToast()
-    const router = useRouter()
+    const toast = useToast();
+    const router = useRouter();
 
     const { data: { data: { [0]: [dataUser], [1]: info } } } = userContext();
     console.log(dataUser)
 
-    const { srcDataChamado } = useSearchCli()
+    const { srcData, isLoading, isError } = useSrcDataChamado({codCli: dataUser.codCli, loja: dataUser.loja})
+    console.log(srcData)
+
+    const { srcDataChamado } = useSearchCli();
+    const [arrayEquip, setArrayEquip] = useState([]);
 
     const { control, setValue, handleSubmit } = useForm({
         resolver: zodResolver(schema),
@@ -68,6 +74,17 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
     }
 
 
+    //////// FAZER A BUSCA DO ARRAY DE EQUIPAMENTOS DO USUÁRIO POIS A API ESTÁ COM DELAY DE 2s 
+    let equipamentos;
+    useEffect(() => {
+        const srcEquip = async () => {
+            const equipamentos = await srcDataChamado({ codCli: dataUser.codCli, loja: dataUser.loja });
+            return equipamentos;
+        }
+        const response = srcEquip();
+        setArrayEquip(response);
+        
+    }, [])
 
 
 
@@ -80,12 +97,14 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
         }
 
         try {
-            const response = await srcDataChamado(serialNumber);
+            // const response = await srcDataChamado({ serie: serialNumber, codCli: dataUser.codCli, loja: dataUser.loja });
+            const response = 'teste'
+            console.log(response)
 
-            setValue('numserie', response.numser);
-            setValue('model', response.desc_pro);
-            setValue('acumulador', response.acumul);
-            setValue('nomecli', response.nomcli);
+            // setValue('numserie', serialNumber);
+            setValue('model', response.p);
+            setValue('acumulador', response.ac);
+            setValue('nomecli', response.nom);
             // setValue('end', reponse.end) VAI PRECISAR DE OUTRO GET
             setValue('contato', dataUser.name);
             // setValue('tel') PRECISO VERIFICAR ESSE CAMPO, SE VOU PEGAR DO CADASTRO DE USUÁRIOS OU SE TEM EM ALGUMA TABELA DE CHAMADOS OU DO CLIENTE
@@ -150,6 +169,8 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
             sx={{ '&::-webkit-scrollbar': { display: 'none', 'msOverflowStyle': 'none', } }}
         >
             <Stack as='form' onSubmit={handleSubmit(handleSave)} gap={8} >
+
+                <Button onClick={()=> chamandoCache({ codCli: '000201', loja:'01' })} >Chamar array</Button>
 
                 <Box >
                     <Grid aria-label='boxGrid' justify='flex-end' templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }} gap={8} >
@@ -346,6 +367,7 @@ export async function getStaticProps() {
 
     try {
         const data = await fetch(getUrl);
+        const equipamentos = await fetch
 
         if (!data.ok) {
             console.error(`Erro na requisição: ${data.status} ${data.statusText}`);
