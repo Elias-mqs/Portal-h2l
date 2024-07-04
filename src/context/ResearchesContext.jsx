@@ -1,8 +1,7 @@
 import { useDisclosure, useToast } from '@chakra-ui/react';
-import React, { createContext, useContext } from 'react';
-import { api } from '@/utils/api'
+import { createContext, useContext } from 'react';
+import { api } from '@/utils/api';
 import { cript, decript } from '@/components';
-import useSWR from 'swr';
 
 
 const SearchCliContext = createContext();
@@ -89,57 +88,11 @@ export function SearchCliProvider({ children }) {
     };
 
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////// BUSCA OS DADOS DO EQUIPAMENTO PARA ABERTURA DE CHAMADO ////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    const srcDataChamado = async (data) => {
-
-        const { codCli, loja } = data;
-
-        try {
-
-            const getUrl = cript(`auxil_os?ccad=produtos&ccliente=${codCli}&cloja=${loja}`);
-
-            const response = await api.get(`srcDataChamado/${getUrl.code}`);
-
-            const { dtCli } = response.data;
-
-            const { produtos } = decript(dtCli);
-
-            return produtos;
-
-        } catch (error) {
-            console.error('Erro na requisição:', error);
-
-            let errorMessage = 'Verifique os campos e tente novamente.';
-            if (error.response) {
-                // Erro de resposta do servidor
-                errorMessage = error.response.data.message || errorMessage;
-            } else if (error.request) {
-                // Erro de requisição, sem resposta
-                errorMessage = 'Erro de rede, por favor, tente novamente mais tarde.';
-            }
-
-            toast({ position: 'top', title: "Erro", description: errorMessage, status: 'Info', duration: 2000, isClosable: true, });
-        }
-
-    }
-
-
     return (
-        <SearchCliContext.Provider value={{ modal: isOpenSearch, handleSearch, srcNomeCli, srcDataChamado }}>
+        <SearchCliContext.Provider value={{ modal: isOpenSearch, handleSearch, srcNomeCli }}>
             {children}
         </SearchCliContext.Provider>
     );
 }
 
 export const useSearchCli = () => useContext(SearchCliContext);
-
-
-// export async function getServerSideProps() {
-
-//     const caminho = `consulta?cserial=${serialNumber}`
-//     const getUrl = process.env.URLAPI;
-//     const res = await fetch(`${getUrl}${caminho}`)
-
-// }

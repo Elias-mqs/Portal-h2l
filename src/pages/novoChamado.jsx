@@ -7,9 +7,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { useSearchCli } from '@/context/ResearchesContext';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useEffect, useLayoutEffect, useState } from 'react';
-import { useSrcDataChamado } from '@/cache/srcEquipamentos'
-
+import { createEquipQuery } from '@/services/dataSearch/srcEquip'
 
 
 
@@ -32,26 +30,25 @@ const schema = z.object({
 })
 
 
-
-
 export default function PageChamados({ pageProps: { ocorrencias } }) {
 
-
-    const incident = ocorrencias.ocorrencias.sort((a, b) =>
-        a.descricao.toLowerCase() > b.descricao.toLowerCase() ? 1 : a.descricao.toLowerCase() < b.descricao.toLowerCase() ? -1 : 0
-    );
 
     const toast = useToast();
     const router = useRouter();
 
-    const { data: { data: { [0]: [dataUser], [1]: info } } } = userContext();
-    console.log(dataUser)
+    //////// CARREGANDO E ORDENANDO LISTA DE OCORRENCIAS
+    const incident = ocorrencias.ocorrencias.sort((a, b) =>
+        a.descricao.toLowerCase() > b.descricao.toLowerCase() ? 1 : a.descricao.toLowerCase() < b.descricao.toLowerCase() ? -1 : 0
+    );
 
-    const { srcData, isLoading, isError } = useSrcDataChamado({codCli: dataUser.codCli, loja: dataUser.loja})
-    console.log(srcData)
+    //////// CARREGANDO DADOS DO USUÁRIO
+    const { data: { data: { [0]: [dataUser] } } } = userContext();
 
-    const { srcDataChamado } = useSearchCli();
-    const [arrayEquip, setArrayEquip] = useState([]);
+    //////// BUSCANDO EQUIPAMENTOS AO CARREGAR A PÁGINA (ESTÁ CACHEANDO) (API ESTÁ COM DELAY DE 2s)
+    const { data } = createEquipQuery({ codCli: dataUser.codCli, loja: dataUser.loja }) || {};
+    const equipamentos = data?.produtos || [];
+    console.log(equipamentos)
+
 
     const { control, setValue, handleSubmit } = useForm({
         resolver: zodResolver(schema),
@@ -60,8 +57,6 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
             contato: '', tel: '', incident: '', description: ''
         }
     })
-
-
 
 
 
@@ -74,92 +69,32 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
     }
 
 
-    //////// FAZER A BUSCA DO ARRAY DE EQUIPAMENTOS DO USUÁRIO POIS A API ESTÁ COM DELAY DE 2s 
-    let equipamentos;
-    useEffect(() => {
-        const srcEquip = async () => {
-            const equipamentos = await srcDataChamado({ codCli: dataUser.codCli, loja: dataUser.loja });
-            return equipamentos;
-        }
-        const response = srcEquip();
-        setArrayEquip(response);
-        
-    }, [])
-
-
-
+    ////////// PREENCHER DADOS AO BUSCAR SERIE
     const searchSerial = async (serialNumber) => {
-        console.log(serialNumber);
 
         if (!serialNumber) {
             toast({ position: 'top', title: "", description: 'Informe um número de série', status: 'info', duration: 1500, isClosable: true, });
             return;
         }
 
-        try {
-            // const response = await srcDataChamado({ serie: serialNumber, codCli: dataUser.codCli, loja: dataUser.loja });
-            const response = 'teste'
-            console.log(response)
-
-            // setValue('numserie', serialNumber);
-            setValue('model', response.p);
-            setValue('acumulador', response.ac);
-            setValue('nomecli', response.nom);
-            // setValue('end', reponse.end) VAI PRECISAR DE OUTRO GET
+        if (equipamentos) {
+            const findEquip = equipamentos.find(equip => equip.s === serialNumber);
+            if (!findEquip) {
+                toast({ position: 'top', title: "", description: 'Verifique o número de série', status: 'info', duration: 2000, isClosable: true, });
+                return;
+            }
+            console.log(findEquip)
+            setValue('model', findEquip.p);
+            setValue('acumulador', findEquip.ac);
+            setValue('nomecli', findEquip.nom);
+            setValue('end', findEquip.edr);
+            setValue('bairro', findEquip.bai);
+            setValue('mun', findEquip.mun);
+            setValue('est', findEquip.est);
             setValue('contato', dataUser.name);
-            // setValue('tel') PRECISO VERIFICAR ESSE CAMPO, SE VOU PEGAR DO CADASTRO DE USUÁRIOS OU SE TEM EM ALGUMA TABELA DE CHAMADOS OU DO CLIENTE
-
-            console.log(response)
-
-        } catch (error) {
-            console.error(error);
         }
 
-
-
-        // if (numserie.trim() === '') {
-        //     toast({ position: 'top', title: "Atenção!", description: 'Informe uma série.', status: 'error', duration: 1500, isClosable: true, })
-        //     return
-        // }
-
-        // try {
-
-        //     const result = await api2.get('consulta?cserial=' + formChamado.serial);
-        //     const equipamento = result.data.codequi[0]
-        //     console.log(equipamento)
-
-        //     const result2 = await api2.get('auxil_os?ccad=loja&ccliente=' + equipamento.codcli + '&cloja=' + equipamento.loja);
-        //     const baseInstalada = result2.data.filiais[0]
-        //     console.log(baseInstalada)
-
-        //     if (!equipamento) {
-        //         toast({ position: 'top', title: "", description: 'Verifique a série', status: 'info', duration: 1500, isClosable: true, })
-        //         return
-        //     }
-
-        //     setFormChamado(prevState => ({
-        //         ...prevState,
-        //         model: equipamento.desc_pro,
-        //         countPb: equipamento.a4pb, //NÃO ATUALIZAR ESSE CAMPO AO FAZER O GET (DEIXEI SÓ PARA VER O RESULTADO DA REQ)
-        //         countCor: equipamento.a4cor, //NÃO ATUALIZAR ESSE CAMPO AO FAZER O GET (DEIXEI SÓ PARA VER O RESULTADO DA REQ)
-        //         client: equipamento.nomcli,
-        //         adress: baseInstalada.end,
-        //         // officeHours: aa3
-
-        //     }));
-
-
-        // } catch (error) {
-
-        //     if (error.response && error.response.status === 401) {
-
-        //         toast({ position: 'top', title: "Erro!", description: error?.response?.data?.message, status: 'error', duration: 1500, isClosable: true, })
-        //         router.push('/login')
-
-        //     } else {
-        //         toast({ position: 'top', title: "", description: 'Verifique a série.', status: 'info', duration: 1500, isClosable: true, })
-        //     }
-        // }
+        // setValue('tel') PRECISO VERIFICAR ESSE CAMPO, SE VOU PEGAR DO CADASTRO DE USUÁRIOS OU SE TEM EM ALGUMA TABELA DE CHAMADOS OU DO CLIENTE
     }
 
 
@@ -169,8 +104,6 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
             sx={{ '&::-webkit-scrollbar': { display: 'none', 'msOverflowStyle': 'none', } }}
         >
             <Stack as='form' onSubmit={handleSubmit(handleSave)} gap={8} >
-
-                <Button onClick={()=> chamandoCache({ codCli: '000201', loja:'01' })} >Chamar array</Button>
 
                 <Box >
                     <Grid aria-label='boxGrid' justify='flex-end' templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }} gap={8} >
@@ -286,12 +219,12 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
                         />
 
 
+                        {/* ESSE CAMPO DEVE SER OBRIGATÓRIO E PRECISO DAR UM JEITO DE O USUÁRIO CONSEGUIR DIGITAR SOMENTE O NÚMERO E JÁ FICAR FORMATADO */}
                         <Controller
                             name='tel'
                             control={control}
                             render={({ field: { onChange, value } }) => (
-                                <FormInput value={value} variant={'filled'} label={'Telefone:'} placeholder={'(XX) XXXXX-XXXX'} onChange={onChange} pointerEvents={'none'}
-                                    tabIndex={'-1'} border='1px solid #c0c0c0' />
+                                <FormInput value={value} variant={'filled'} label={'Telefone:'} placeholder={'(XX) XXXXX-XXXX'} onChange={onChange} border='1px solid #c0c0c0' />
                             )}
                         />
 
@@ -350,7 +283,8 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
 
 
 
-
+///////  REQUISIÇÃO É "REALIZADA" SEMPRE QUE O COMPONENTE CARREGA
+///////  O METHODO É HEAD E NÃO GET (BUSCA SE TEM ALTERAÇÃO, SE NÃO TIVER NÃO REFAZ A REQUISIÇÃO)
 export async function getStaticProps() {
 
     const getUrl = process.env.URL_OCORRENCIAS;
@@ -367,7 +301,6 @@ export async function getStaticProps() {
 
     try {
         const data = await fetch(getUrl);
-        const equipamentos = await fetch
 
         if (!data.ok) {
             console.error(`Erro na requisição: ${data.status} ${data.statusText}`);

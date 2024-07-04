@@ -9,8 +9,6 @@ export default async function handler(req, res) {
 
         const dataCript = req.url.split('/api/srcDataChamado/')[1];
 
-        console.log(dataCript)
-
         if (!dataCript) {
             return res.status(400).json({ message: 'Invalid request data' });
         }
