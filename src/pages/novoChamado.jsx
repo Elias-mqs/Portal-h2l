@@ -1,5 +1,5 @@
-import { FormInput, FormTextarea, FormInputBtn, FormButtonSave, ButtonCancel } from '@/components';
-import { Box, Stack, Flex, Grid, useToast, GridItem, Text, Select, Button } from '@chakra-ui/react';
+import { FormInput, FormTextarea, FormInputBtn, FormButtonSave, ButtonCancel, cript } from '@/components';
+import { Box, Stack, Flex, Grid, useToast, GridItem, Text, Select, Button, Input } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { MdSearch } from 'react-icons/md';
 import { userContext } from '@/context/UserContext';
@@ -8,25 +8,34 @@ import { useSearchCli } from '@/context/ResearchesContext';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { createEquipQuery } from '@/services/dataSearch/srcEquip'
+import { useState } from 'react';
+import { api } from '@/utils/api';
 
 
 
 
-////////////////////////TERMINAR EDIÇÃO DOS SCHEMAS DO FORM CHAMADOS
+const removeAccents = (str) => {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+};
+
 const schema = z.object({
     numserie: z.coerce.string().max(50),
     model: z.coerce.string(),
-    acumulador: z.coerce.string().min(2, 'Valor mínimo: 2'),
+    acumulador: z.coerce.string().min(2, 'Valor mínimo: 2'), // FALAR COM ADOLFO PARA TER CERTEZA DE QUAL VALOR MINIMO EU DEVO COLOCAR, SE POSSIVEL COLOCAR MAIS QUE 10
     nomecli: z.coerce.string(),
     end: z.coerce.string(),
     bairro: z.coerce.string().min(3, 'Mínimo de 3 caracteres'),
     mun: z.coerce.string().min(3, 'Mínimo de 3 caracteres'),
     est: z.coerce.string().min(2).max(2),
-    horario: z.coerce.string(),
-    contato: z.coerce.string().max(50),
-    tel: z.coerce.string().max(20),
+    hini: z.coerce.string(),
+    hfim: z.coerce.string(),
+    contato: z.coerce.string().max(50).transform((val) => removeAccents(val).toUpperCase()),
+    tel: z.coerce.string().max(13),
     incident: z.coerce.string(),
-    description: z.coerce.string()
+    description: z.coerce.string().transform((val) => removeAccents(val).toUpperCase()),
+    atend: z.coerce.string().transform((val) => removeAccents(val).toUpperCase()),
+    memo: z.coerce.string().transform((val) => removeAccents(val).toUpperCase()),
+    codProd: z.coerce.string()
 })
 
 
@@ -49,24 +58,83 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
     const equipamentos = data?.produtos || [];
     console.log(equipamentos)
 
+    //////// SETA CONTADOR NO PLACEHOLDER E AUXILIA NA VALIDAÇÃO DE ENVIO DO FORMULARIO
+    const [acumulPlaceholder, setAcumulPlaceholder] = useState('');
 
-    const { control, setValue, handleSubmit } = useForm({
+    //////// PREPARA FORMULARIO PARA PREENCHIMENTO
+    const { control, setValue, handleSubmit, reset } = useForm({
         resolver: zodResolver(schema),
         defaultValues: {
-            numserie: '', model: '', acumulador: '', nomecli: '', end: '', bairro: '', mun: '', est: '', horario: '',
-            contato: '', tel: '', incident: '', description: ''
+            numserie: '', model: '', acumulador: '', nomecli: '', end: '', bairro: '', mun: '', est: '', hini: '', hfim: '',
+            contato: '', tel: '', incident: '', description: '', atend: `AUTOATEND - ${dataUser.name}`, memo: '', codProd: ''
         }
     })
 
+    console.log('acumulador: ', acumulPlaceholder)
 
 
-    const handleSave = async (e) => {
 
-        e.preventDefault();
+    // JÁ ESTA FUNCIONANDO TUDO CERTINHO
 
-        console.log('Enviou o formulário!');
+    //////////// ABRIR NOVO CHAMADO
+    const handleSave = async (data) => {
+
+
+        console.log('testando form: ', data)
+
+        if (!data) {
+            toast({ position: 'top', title: "Atenção", description: 'Verifique os campos e tente novamente.', status: 'info', duration: 1500, isClosable: true, });
+            return;
+        }
+
+        console.log('acumulador registrado', acumulPlaceholder)
+        console.log('acumulador do data: ', data.acumulador)
+
+
+
+        ///////// INICIANDO LOGICA PARA VALIDAÇÃO DE CONTADORES /////////
+        const acumuladorValue = Number(data.acumulador);
+        const acumulPlaceholderValue = Number(acumulPlaceholder);
+
+        if (isNaN(acumuladorValue) || isNaN(acumulPlaceholderValue)) {
+            toast({ position: 'top', title: "Atenção", description: 'Valores inválidos.', status: 'info', duration: 1500, isClosable: true });
+            return;
+        }
+
+        if (acumuladorValue < acumulPlaceholderValue) {
+            toast({ position: 'top', title: "Atenção", description: 'Contador menor que o permitido.', status: 'info', duration: 1500, isClosable: true });
+            return;
+        }
+        //////////////////// FIM DA LÓGICA ////////////////////
+
+        console.log(data)
+
+        // MONTANDO CAMPO DE COMENTÁRIO DO TOTVS (ESSE CAMPO É TRANSFORMADO EM 6 CARAC. NO BANCO, POR ISSO PRECISA MONTAR)
+        const memo = `Funcionamento das ${data.hini} às ${data.hfim} => ${data.description}`;
+
+        console.log('teste de envio: ', ({ ...data, codCli: dataUser.codCli, loja: dataUser.loja, memo: memo }));
+
+        const dataCrypt = cript({ ...data, codCli: dataUser.codCli, loja: dataUser.loja, memo: memo });
+
+        try {
+
+            const result = await api.post('abrirChamado', dataCrypt)
+
+            console.log(result)
+
+            toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
+
+            reset();
+            setAcumulPlaceholder('');
+
+
+        } catch (error) {
+            toast({ position: 'top', title: "Atenção", description: 'Tente novamente ou contate um administrador.', status: 'info', duration: 2000, isClosable: true, })
+        }
 
     }
+
+
 
 
     ////////// PREENCHER DADOS AO BUSCAR SERIE
@@ -85,18 +153,21 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
             }
             console.log(findEquip)
             setValue('model', findEquip.p);
-            setValue('acumulador', findEquip.ac);
             setValue('nomecli', findEquip.nom);
             setValue('end', findEquip.edr);
             setValue('bairro', findEquip.bai);
             setValue('mun', findEquip.mun);
             setValue('est', findEquip.est);
+            setValue('codProd', findEquip.c);
             setValue('contato', dataUser.name);
+            setAcumulPlaceholder(findEquip.ac);
+
         }
 
-        // setValue('tel') PRECISO VERIFICAR ESSE CAMPO, SE VOU PEGAR DO CADASTRO DE USUÁRIOS OU SE TEM EM ALGUMA TABELA DE CHAMADOS OU DO CLIENTE
     }
 
+
+    console.log('renderizando')
 
     return (
         <Stack aria-label='container-main' bg='#FFF' w='100%' maxW={'100%'} h={'100%'} transition='max-width 1s linear' p='30px'
@@ -112,7 +183,7 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
                             name='numserie'
                             control={control}
                             render={({ field: { onChange, value } }) => (
-                                <FormInputBtn value={value} variant={'filled'} label={'Série do equipamento:'} placeholder={'Número de série'}
+                                <FormInputBtn value={value} variant={'outline'} label={'Série do equipamento:'} placeholder={'Número de série'}
                                     onChange={(e) => onChange(e.target.value.trim().toUpperCase())} icon={<MdSearch title='Pesquisar' size='24px' maxLength={5}
                                         onClick={(e) => { e.preventDefault(); searchSerial(value) }} />} required={true} border='1px solid #c0c0c0' />
                             )}
@@ -131,31 +202,41 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
                         />
 
 
+
+                        {/* VER COM MARCELO O QUE QUE ELE ACHA DE SETAR O ACUMULADOR ATUAL NO PLACEHOLDER */}
                         <Controller
                             name='acumulador'
                             control={control}
                             render={({ field: { onChange, value } }) => (
-                                <FormInput type='number' value={value} w={'100%'} variant={'filled'} label={'Contador:'} placeholder={'P/B'} onChange={onChange}
-                                    required={false} border='1px solid #c0c0c0' />
+                                <FormInput type='number' value={value} w={'100%'} variant={'outline'} label={'Contador:'} placeholder={!acumulPlaceholder ? '99999' : acumulPlaceholder}
+                                    onChange={onChange} required={false} border='1px solid #c0c0c0' />
                             )}
                         />
 
-                        {/* <Flex align={'end'} gap={3}>
-                            <FormInput name={'countPb'} type='number' value={formChamado.countPb} w={'100%'} variant={'filled'} label={'Contador:'} placeholder={'P/B'} onChange={handleSaveEdit} required={false} />
-                            <FormInput name={'countCor'} type='number' value={formChamado.countCor} w={'100%'} variant={'filled'} placeholder={'COR'} onChange={handleSaveEdit} required={false} />
-                        </Flex> */}
+                        <Flex direction='column'>
+                            <Text pb={1} pl={2} fontWeight={500} fontSize={14}>Funcionamento:</Text>
+                            <Flex>
 
+                                <Text pr={2} m='auto' fontWeight={500} fontSize={14}>De:</Text>
 
+                                <Controller
+                                    name='hini'
+                                    control={control}
+                                    render={({ field: { onChange, value } }) => (
+                                        <Input type='time' onChange={onChange} value={value || ''} step={300} variant='outline' border='1px solid #c0c0c0' required={true} />
+                                    )}
+                                />
 
-
-                        <Controller
-                            name='horario'
-                            control={control}
-                            render={({ field: { onChange, value } }) => (
-                                <FormInput value={value} variant={'filled'} label={'Funcionamento:'} placeholder={'De 00:00 à 00:00 - seg à sex'} onChange={onChange}
-                                    pointerEvents={'none'} tabIndex={'-1'} border='1px solid #c0c0c0' />
-                            )}
-                        />
+                                <Text pr={2} pl={2} m='auto' fontWeight={500} fontSize={14}>às:</Text>
+                                <Controller
+                                    name='hfim'
+                                    control={control}
+                                    render={({ field: { onChange, value } }) => (
+                                        <Input type='time' onChange={onChange} value={value || ''} step={300} variant='outline' border='1px solid #c0c0c0' required={true} />
+                                    )}
+                                />
+                            </Flex>
+                        </Flex>
 
 
                         <Controller
@@ -214,7 +295,7 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
                             name='contato'
                             control={control}
                             render={({ field: { onChange, value } }) => (
-                                <FormInput value={value} variant={'filled'} label={'Contato:'} placeholder={'Contato'} onChange={onChange} border='1px solid #c0c0c0' />
+                                <FormInput value={value} variant={'outline'} label={'Contato:'} placeholder={'Contato'} onChange={onChange} border='1px solid #c0c0c0' />
                             )}
                         />
 
@@ -224,7 +305,8 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
                             name='tel'
                             control={control}
                             render={({ field: { onChange, value } }) => (
-                                <FormInput value={value} variant={'filled'} label={'Telefone:'} placeholder={'(XX) XXXXX-XXXX'} onChange={onChange} border='1px solid #c0c0c0' />
+                                <FormInput value={value} type='tel' variant={'outline'} label={'Telefone:'} placeholder={'(XX) XXXX-XXXX'} onChange={onChange}
+                                    border='1px solid #c0c0c0' required={true} />
                             )}
                         />
 
@@ -235,7 +317,7 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
                             render={({ field }) => (
                                 <Flex direction='column'>
                                     <Text pb={1} pl={2} fontSize={14} fontWeight={500}>Ocorrência:</Text>
-                                    <Select {...field} variant='filled' placeholder='Ocorrência' border='1px solid #c0c0c0' fontSize={14}>
+                                    <Select {...field} variant='outline' placeholder='Ocorrência' border='1px solid #c0c0c0' fontSize={14} required={true} >
                                         {incident.map((desc) => (
                                             <option key={desc.cod} value={desc.cod}
                                                 style={{ fontSize: 12, color: '#333', backgroundColor: '#f5f5f5', padding: '10px', border: '1px solid #ccc' }}>
@@ -258,7 +340,8 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
                     control={control}
                     render={({ field: { onChange, value } }) => (
                         <Box pr={{ base: 0, lg: 8 }} >
-                            <FormTextarea value={value} w={{ base: '100%', lg: '50%' }} h={{ base: '100%', lg: '200px' }} label={'Descrição:'} placeholder={'Digite aqui'} onChange={onChange} required={true} />
+                            <FormTextarea value={value} w={{ base: '100%', lg: '50%' }} h={{ base: '100%', lg: '200px' }} label={'Descrição:'} placeholder={'Digite aqui'}
+                                onChange={onChange} required={true} />
                         </Box>
                     )}
                 />
