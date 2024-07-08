@@ -38,7 +38,7 @@ export default async function handler(req, res) {
 
         try {
 
-            // variavel de teste abaixo
+            ////// variavel de teste abaixo
             let response = dataJson;
             
 
@@ -59,7 +59,7 @@ export default async function handler(req, res) {
     
             // let result = await response.json();
             
-            // variavel de teste abaixo            
+            ////// variavel de teste abaixo            
             let result = response;
 
 

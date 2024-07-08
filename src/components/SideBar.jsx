@@ -17,7 +17,7 @@ const SideBar = ({ isOpen, transition, maxW }) => {
 
     const navButtons = [
         { route: '/', label: 'Pagina inicial', icon: <MdOutlineHome size='23px' />, title: 'Página inicial' },
-        { route: '/novoChamado', label: 'Chamados', icon: <SupportAgentOutlinedIcon />, title: 'Chamados' },
+        { route: '/emAndamento', label: 'Chamados', icon: <SupportAgentOutlinedIcon />, title: 'Chamados' },
         { route: '/pedidos', label: 'Pedidos', icon: <PlaylistAddIcon />, title: 'Pedidos' },
     ];
 

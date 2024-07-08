@@ -3,12 +3,12 @@ import { useRouter } from "next/router";
 
 const routeTabs = {
   '/novoChamado': [
-    { label: 'Novo', route: '/novoChamado' },
     { label: 'Em andamento', route: '/emAndamento' },
+    { label: 'Novo', route: '/novoChamado' },
   ],
   '/emAndamento': [
-    { label: 'Novo', route: '/novoChamado' },
     { label: 'Em andamento', route: '/emAndamento' },
+    { label: 'Novo', route: '/novoChamado' },
   ],
   '/': [
     { label: 'Home', route: '/' },

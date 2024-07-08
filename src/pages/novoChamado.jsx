@@ -1,13 +1,12 @@
 import { FormInput, FormTextarea, FormInputBtn, FormButtonSave, ButtonCancel, cript } from '@/components';
-import { Box, Stack, Flex, Grid, useToast, GridItem, Text, Select, Button, Input } from '@chakra-ui/react';
+import { Box, Stack, Flex, Grid, useToast, GridItem, Text, Select, Input, Button } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { MdSearch } from 'react-icons/md';
 import { userContext } from '@/context/UserContext';
 import { useForm, Controller } from 'react-hook-form';
-import { useSearchCli } from '@/context/ResearchesContext';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { createEquipQuery } from '@/services/dataSearch/srcEquip'
+import { createEquipQuery } from '@/services/dataSearch/srcEquip';
 import { useState } from 'react';
 import { api } from '@/utils/api';
 
@@ -70,26 +69,18 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
         }
     })
 
-    console.log('acumulador: ', acumulPlaceholder)
 
 
-
-    // JÁ ESTA FUNCIONANDO TUDO CERTINHO
 
     //////////// ABRIR NOVO CHAMADO
     const handleSave = async (data) => {
 
-
-        console.log('testando form: ', data)
+        console.log(data)
 
         if (!data) {
             toast({ position: 'top', title: "Atenção", description: 'Verifique os campos e tente novamente.', status: 'info', duration: 1500, isClosable: true, });
             return;
         }
-
-        console.log('acumulador registrado', acumulPlaceholder)
-        console.log('acumulador do data: ', data.acumulador)
-
 
 
         ///////// INICIANDO LOGICA PARA VALIDAÇÃO DE CONTADORES /////////
@@ -101,39 +92,33 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
             return;
         }
 
-        if (acumuladorValue < acumulPlaceholderValue) {
+        if (acumuladorValue <= acumulPlaceholderValue) {
             toast({ position: 'top', title: "Atenção", description: 'Contador menor que o permitido.', status: 'info', duration: 1500, isClosable: true });
             return;
         }
         //////////////////// FIM DA LÓGICA ////////////////////
 
-        console.log(data)
 
         // MONTANDO CAMPO DE COMENTÁRIO DO TOTVS (ESSE CAMPO É TRANSFORMADO EM 6 CARAC. NO BANCO, POR ISSO PRECISA MONTAR)
-        const memo = `Funcionamento das ${data.hini} às ${data.hfim} => ${data.description}`;
-
-        console.log('teste de envio: ', ({ ...data, codCli: dataUser.codCli, loja: dataUser.loja, memo: memo }));
+        const memo = `Funcionamento das ${data.hini} as ${data.hfim} => ${data.description}`;
 
         const dataCrypt = cript({ ...data, codCli: dataUser.codCli, loja: dataUser.loja, memo: memo });
+        
 
         try {
 
             const result = await api.post('abrirChamado', dataCrypt)
-
-            console.log(result)
 
             toast({ position: 'top', title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
 
             reset();
             setAcumulPlaceholder('');
 
-
         } catch (error) {
             toast({ position: 'top', title: "Atenção", description: 'Tente novamente ou contate um administrador.', status: 'info', duration: 2000, isClosable: true, })
         }
 
     }
-
 
 
 
@@ -166,8 +151,8 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
 
     }
 
-
     console.log('renderizando')
+    
 
     return (
         <Stack aria-label='container-main' bg='#FFF' w='100%' maxW={'100%'} h={'100%'} transition='max-width 1s linear' p='30px'
@@ -212,6 +197,7 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
                                     onChange={onChange} required={false} border='1px solid #c0c0c0' />
                             )}
                         />
+
 
                         <Flex direction='column'>
                             <Text pb={1} pl={2} fontWeight={500} fontSize={14}>Funcionamento:</Text>
@@ -297,7 +283,7 @@ export default function PageChamados({ pageProps: { ocorrencias } }) {
                             render={({ field: { onChange, value } }) => (
                                 <FormInput value={value} variant={'outline'} label={'Contato:'} placeholder={'Contato'} onChange={onChange} border='1px solid #c0c0c0' />
                             )}
-                        />
+                        /> 
 
 
                         {/* ESSE CAMPO DEVE SER OBRIGATÓRIO E PRECISO DAR UM JEITO DE O USUÁRIO CONSEGUIR DIGITAR SOMENTE O NÚMERO E JÁ FICAR FORMATADO */}

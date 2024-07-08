@@ -5,7 +5,6 @@ import {
     Stack,
     VStack,
     Text,
-    Image,
     useToast,
     Input,
     useDisclosure,
@@ -31,6 +30,8 @@ import { FormInputBtnL, cript } from '@/components'
 import { api } from '../utils/api'
 import Cookies from 'js-cookie'
 import { useAuth } from '@/context/AuthContext';
+import Image from "next/image";
+
 
 
 export default function PainelLogin() {
@@ -85,7 +86,7 @@ export default function PainelLogin() {
             setFormulario({ username: ``, password: `` })
 
             toast({ title: "Sucesso!", description: result?.data?.message, status: 'success', duration: 2000, isClosable: true, })
-            
+
             login();
             router.push('/')
 
@@ -162,7 +163,7 @@ export default function PainelLogin() {
             toast({ description: 'Se houver um e-mail cadastrado, você receberá uma mensagem com instruções de recuperação.', duration: 6000, isClosable: true, })
 
         } finally {
-            
+
             onClose()
             setIsLoadingRec(false);
         }
@@ -177,7 +178,7 @@ export default function PainelLogin() {
 
             <Stack w='100%' align='center' gap={{ base: 20, md: 12 }}>
 
-                <Image src='img/LOGO-H2L.png' fit='contain' w={{ base: '150px', md: '180px' }} />
+                <Image width={150} height={150} alt='Imagem de page sem chamados' src='/img/LOGO-H2L.png' priority={true} />
 
                 <Stack w='100%' align='center' gap={4}>
                     <Stack as='form' onSubmit={handleLogin} w='100%' maxW='100%' gap={10} >
