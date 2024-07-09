@@ -21,8 +21,6 @@ export default function chamados() {
 
     const passCryp = process.env.NEXT_PUBLIC_PASSCRYP;
 
-    const toast = useToast();
-
     const { data: { data: { [0]: [dataUser], [1]: info } } } = userContext();
     console.log(info)
     console.log(dataUser)
@@ -31,6 +29,11 @@ export default function chamados() {
 
     if (dataUser.admin === '0' || dataUser.admin === '1') {
         const { data } = listChamOsquery({ codCli: dataUser.codCli, loja: dataUser.loja, admin: dataUser.admin }) || {};
+        listChamOs = data?.ordens || [];
+    }
+
+    if (dataUser.admin === '2' || dataUser.admin === '3' || dataUser.admin === '4') {
+        const { data } = listChamOsquery({ codCli: dataUser.codCli, admin: dataUser.admin }) || {};
         listChamOs = data?.ordens || [];
     }
 
@@ -66,13 +69,14 @@ export default function chamados() {
 
     return (
 
-        // RENDERIZAR SOMENTE QUANDO TIVER CHAMADO ABERTO 
-
-
         <Stack aria-label='container-main' bg='#FFF' w='100%' maxW={'100%'} h={'100%'} transition='max-width 1s linear' p='30px' overflowY='auto'
             borderRadius={{ base: 0, md: '1rem' }} boxShadow={{ base: 'none', md: 'inset 0px 0px 3px 1px rgba(0, 0, 0, 0.2)' }} >
 
-            {listChamOs.length > 0 ? (
+            {/* {(listChamOs.status_cham === 'A' || (listChamOs.status_cham === 'E' && listChamOs.status_os !== 'F')) &&
+                listChamOs.length > 0 ? ( */}
+
+            {(listChamOs.status_cham === 'A' || (listChamOs.status_cham === 'E' && listChamOs.status_os !== 'F')) && listChamOs.length > 0 ? (
+
                 <>
                     <Stack aria-label='containerSearch' align='center' mb={4} >
                         <Flex as='form' onSubmit={handleSubmit(handleSearch)} w='100%' maxW='80em' >
@@ -100,17 +104,22 @@ export default function chamados() {
                                     <Box w='150px' align='center' textAlign='center' fontWeight={500}><Text>Status</Text></Box>
                                     <Box w='175px' align='center' textAlign='center' fontWeight={500}><Text>Série equipamento</Text></Box>
                                     <Box w='175px' align='center' textAlign='center' fontWeight={500}><Text>Ocorrência</Text></Box>
-                                    <Box w='190px' align='center' textAlign='center' fontWeight={500}><Text>Especialista atribuido</Text></Box>
-                                    <Box w='175px' align='center' textAlign='center' fontWeight={500}><Text>Data da solicitação</Text></Box>
+                                    <Box w='190px' align='center' textAlign='center' fontWeight={500}><Text>Atendente</Text></Box>
+                                    <Box w='175px' align='center' textAlign='center' fontWeight={500}><Text>Data da emissão</Text></Box>
                                 </Flex>
                             </Flex>
 
 
-                            {listChamOs.map((chamados, index) => (
-                                <Flex key={index} aria-label='chamados' direction='column' w='auto' gap={1}>
-                                    <ListaChamado chamados={chamados} />
-                                </Flex>
-                            ))}
+                            {listChamOs.map((chamados, index) => {
+                                if (chamados.status_cham === 'A' || (chamados.status_cham === 'E' && chamados.status_os && chamados.status_os.trim() !== 'F')) {
+                                    return (
+                                        <Flex key={index} aria-label='chamados' direction='column' w='auto' gap={1}>
+                                            <ListaChamado chamados={chamados} />
+                                        </Flex>
+                                    );
+                                }
+                                return null;
+                            })}
 
                         </Stack>
                     </Box >
@@ -118,6 +127,9 @@ export default function chamados() {
             ) : (
                 <>
                     <Stack align='center' justify='center' borderRadius='10rem' p={30} mt='-40px' >
+
+                        {dataUser.admin === '3'}
+
                         <Image width={700} height={700} alt='Imagem de page sem chamados' src='/img/imgEmpty.png' priority quality={90} />
                         <Text fontFamily='cursive' fontSize={20} fontWeight={600} color='#7d7d7d' >No momento, </Text>
                         <Text fontFamily='cursive' textAlign='center' fontSize={20} fontWeight={600} color='#7d7d7d' > não há chamados em andamento</Text>
