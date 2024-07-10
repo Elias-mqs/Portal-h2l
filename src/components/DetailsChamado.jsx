@@ -22,7 +22,7 @@ export default function DetailsChamado({ chamados }) {
 
     
     return (
-        <Stack w='100%' h='100%' bg='#EDF2FF' p={30}>
+        <Stack w='100%' h='100%' bg='#fff' p={30}>
             <ModalCloseButton m={3} />
 
 
@@ -51,7 +51,7 @@ export default function DetailsChamado({ chamados }) {
 
                 </Flex>
 
-                <Flex order={{ base: 1, md: 2 }} flex='2' minW='193px' justify='center' ><Text fontWeight={600} fontSize={24} >Detalhes do chamado</Text></Flex>
+                <Flex order={{ base: 1, md: 2 }} flex='2' minW='237px' justify='center' ><Text fontWeight={600} fontSize={24} >Detalhes do chamado</Text></Flex>
                 <Flex order={{ base: 3, md: 3 }} w='300px'></Flex>
 
             </Flex>

@@ -44,13 +44,15 @@ const getChamOs = async ({ queryKey }) => {
 }
 
 export const listChamOsquery = (data) => {
+    console.log("Data received:", data); // Verifique o que está sendo passado como data
     return useQuery({
-        queryKey: ['listChamOs', data],
+        queryKey: ['listChamOs', data], // Verifique se data está em um formato correto para queryKey
         queryFn: getChamOs,
-        staleTime: 1000 * 60 * 60 * 4, // TEMPO ATÉ OS DADOS FICAREM OBSOLETOS E OCORRER UM REFETCH SE REINICIAR O COMPONENTE OU A PAGE
-        gcTime: 1000 * 60 * 60 * 5, // TEMPO ATÉ OS DADOS SEREM EXCLUIDOS PERMANENTEMENTE
+        staleTime: 1000 * 60 * 60 * 4,
+        gcTime: 1000 * 60 * 60 * 5,
     });
 }
+
 
 
 
