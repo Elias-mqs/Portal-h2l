@@ -2,19 +2,19 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 const routeTabs = {
-  '/novoChamado': [
-    { label: 'Em andamento', route: '/emAndamento' },
-    { label: 'Novo', route: '/novoChamado' },
+  '/Chamados/NovoChamado': [
+    { label: 'Em andamento', route: '/Chamados/EmAndamento' },
+    { label: 'Novo Chamado', route: '/Chamados/NovoChamado' },
   ],
-  '/emAndamento': [
-    { label: 'Em andamento', route: '/emAndamento' },
-    { label: 'Novo', route: '/novoChamado' },
+  '/Chamados/EmAndamento': [
+    { label: 'Em andamento', route: '/Chamados/EmAndamento' },
+    { label: 'Novo Chamado', route: '/Chamados/NovoChamado' },
   ],
   '/': [
     { label: 'Home', route: '/' },
   ],
-  '/pedidos': [
-    { label: 'Novo Pedido', route: '/pedidos' },
+  '/Pedidos/NovoPedido': [
+    { label: 'Novo Pedido', route: '/Pedidos/NovoPedido' },
   ],
 };
 

@@ -35,8 +35,9 @@ export async function middleware(req) {
 export const config = {
     matcher: [
         '/',
-        '/novoChamado',
-        '/emAndamento',
+        '/Chamados/NovoChamado',
+        '/Chamados/EmAndamento',
+        '/Pedidos/NovoPedido',
         '/login'
     ],
 }

@@ -17,7 +17,7 @@ export default function RouteNavigation({ children }) {
     const { navTabs, activeTab } = NavigationTabs();
 
     const hideOnRoutes = ['/login', '/recoveryPass'];
-    const validRoutes = ['/novoChamado', '/teste', '/users', '/', '/emAndamento', '/pedidos', '/reqProtheus']
+    const validRoutes = ['/Chamados/NovoChamado', '/teste', '/users', '/', '/Chamados/EmAndamento', '/Pedidos/NovoPedido', '/reqProtheus']
 
     return (
         <AuthProvider>

@@ -1,7 +1,6 @@
 import Container from './Container';
 import PainelLogin from './PainelLogin';
 import SideBar from './SideBar';
-import MenuPedidos from './MenuPedidos';
 import HomePage from './HomePage';
 import PageChamados from './PageChamados';
 import Header from './Header';
@@ -38,7 +37,6 @@ export {
     Container,
     PainelLogin,
     SideBar,
-    MenuPedidos,
     HomePage,
     PageChamados,
     ButtonSidebar,

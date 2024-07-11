@@ -44,7 +44,6 @@ const getChamOs = async ({ queryKey }) => {
 }
 
 export const listChamOsquery = (data) => {
-    console.log("Data received:", data); // Verifique o que está sendo passado como data
     return useQuery({
         queryKey: ['listChamOs', data], // Verifique se data está em um formato correto para queryKey
         queryFn: getChamOs,

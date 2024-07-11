@@ -1,6 +1,6 @@
 
 // src/components/SideBar.jsx
-import { Box, Image, Stack, Center, Flex } from "@chakra-ui/react";
+import { Box, Image, Stack } from "@chakra-ui/react";
 import SupportAgentOutlinedIcon from '@mui/icons-material/SupportAgentOutlined';
 import { ButtonSidebar } from ".";
 import { useRouter } from "next/router";
@@ -17,8 +17,8 @@ const SideBar = ({ isOpen, transition, maxW }) => {
 
     const navButtons = [
         { route: '/', label: 'Pagina inicial', icon: <MdOutlineHome size='23px' />, title: 'Página inicial' },
-        { route: '/emAndamento', label: 'Chamados', icon: <SupportAgentOutlinedIcon />, title: 'Chamados' },
-        { route: '/pedidos', label: 'Pedidos', icon: <PlaylistAddIcon />, title: 'Pedidos' },
+        { route: '/Chamados/EmAndamento', label: 'Chamados', icon: <SupportAgentOutlinedIcon />, title: 'Chamados' },
+        { route: '/Pedidos/NovoPedido', label: 'Pedidos', icon: <PlaylistAddIcon />, title: 'Pedidos' },
     ];
 
     const handleImg = () => {
@@ -44,7 +44,7 @@ const SideBar = ({ isOpen, transition, maxW }) => {
 
                 <Box align='center' h={{ base: '0', md: '100%' }}>
                     <Image w='60%' m={isOpen ? '15px 0' : 0} maxW={{ base: '0', md: mdImgWidth }} onClick={handleImg} _hover={{ cursor: 'pointer' }}
-                        maxH={{ base: '0', md: maxHeight }} transition={{ base: 'all 0s linear', md: transition }} src='img/LOGO-H2L.png' alt='Logo' />
+                        maxH={{ base: '0', md: maxHeight }} transition={{ base: 'all 0s linear', md: transition }} src='/img/LOGO-H2L.png' alt='Logo' />
                 </Box>
 
                 <Box align='center'>
