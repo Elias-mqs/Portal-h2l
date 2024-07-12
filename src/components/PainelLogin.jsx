@@ -178,7 +178,7 @@ export default function PainelLogin() {
 
             <Stack w='100%' align='center' gap={{ base: 20, md: 12 }}>
 
-                <Image width={150} height={150} alt='Imagem de page sem chamados' src='/img/LOGO-H2L.png' priority={true} />
+                <Image width={150} height={150} alt='Imagem de page sem chamados' src='/img/LOGO-H2L.png' priority={true} quality={80} />
 
                 <Stack w='100%' align='center' gap={4}>
                     <Stack as='form' onSubmit={handleLogin} w='100%' maxW='100%' gap={10} >

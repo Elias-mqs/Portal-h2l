@@ -4,7 +4,7 @@ import { Header, NavigationTabs, Container } from "@/components";
 import { Stack, Box, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { UserProvider } from '@/context/UserContext'
+import { UserProvider } from '@/context/UserContext.tsx'
 import { AuthProvider } from '@/context/AuthContext';
 import { SearchCliProvider } from '@/context/ResearchesContext';
 

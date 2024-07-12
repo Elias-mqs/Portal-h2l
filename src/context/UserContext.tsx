@@ -1,12 +1,29 @@
 import { createContext, useContext, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { QueryObserverResult, useQuery } from "@tanstack/react-query";
 import { api } from '@/utils/api'
 import { decript } from "@/components";
 import { useAuth } from "@/context/AuthContext";
 
-export const DataUserContext = createContext(null)
 
-export function UserProvider({ children }) {
+export interface UserData {
+    admin: string,
+    codCli: string,
+    loja: string,
+
+}
+
+export interface DataUserContextType {
+    data: QueryObserverResult<UserData[], unknown>;
+}
+
+interface UserProviderProps {
+    children: React.ReactNode;
+}
+
+
+export const DataUserContext = createContext<DataUserContextType | null>(null)
+
+export function UserProvider({ children }: UserProviderProps) {
 
     const { isAuthenticated, setRefetchFunction } = useAuth();
     const query = useQuery({
@@ -16,7 +33,7 @@ export function UserProvider({ children }) {
 
             const data = await api.get('userData');
             const result = decript(data.data);
-            return result
+            return result as UserData[];
 
         },
         enabled: true,
@@ -51,4 +68,4 @@ export function UserProvider({ children }) {
     )
 }
 
-export const userContext = () => useContext(DataUserContext);
+export const userContext = (): DataUserContextType | null => useContext(DataUserContext);

@@ -1,12 +1,12 @@
 import { Badge, Flex, Grid, Input, ModalCloseButton, Stack, Text, Textarea, GridItem } from "@chakra-ui/react";
+import { ReactNode } from "react";
 
 
-
-export default function DetailsOs({ chamados }) {
+export default function DetailsOs({ chamados }: any) {
 
 
     ////////////////// DEFININDO TIPOS DE STATUS RETORNADOS PELA API //////////////////
-    let status = '';
+    let status: ReactNode = '';
     if (chamados.status_os === 'L') { status = <Badge p='2px 10px' borderRadius='.5rem' colorScheme="blue"   >Aberto                </Badge>; }
     if (chamados.status_os === 'T') { status = <Badge p='2px 10px' borderRadius='.5rem' colorScheme="yellow" >Em trânsito           </Badge>; }
     if (chamados.status_os === 'C') { status = <Badge p='2px 10px' borderRadius='.5rem' colorScheme="orange" >No local              </Badge>; }
@@ -17,7 +17,7 @@ export default function DetailsOs({ chamados }) {
 
 
     ////////////////// FORMATANDO DATA //////////////////
-    const formatarData = (data) => {
+    const formatarData = (data: string) => {
         const ano = data.slice(0, 4);
         const mes = data.slice(4, 6);
         const dia = data.slice(6, 8);

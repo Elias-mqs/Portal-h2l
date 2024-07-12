@@ -18,13 +18,38 @@ const schema = z.object({
     // loja: z.coerce.string(),
 })
 
+interface ListChamOs {
+    Atendente_ab1: string,
+    atendente_os: string,
+    chamado: string,
+    codCli: string,
+    contador_cham: number,
+    contato_cham: string,
+    descri_cham: string,
+    descri_pro: string,
+    emissao_cham: string,
+    emissao_os: string,
+    loja: string,
+    motivo_cham: string,
+    'nome_ tec': string,
+    nome_cli: string
+    num_os: string
+    serial: string
+    status_cham: string,
+    status_os: string,
+    tipo: string,
+}
+
+
+
 
 export default function EmAndamento() {
 
 
     const router = useRouter();
-    const [filteredChamOs, setFilteredChamOs] = useState([]);
-    const { data: { data: { [0]: [dataUser] } } } = userContext();
+    const [filteredChamOs, setFilteredChamOs] = useState<ListChamOs[]>([]);
+    const { data: { data: { [0]: [dataUser] } } }: any = userContext();
+    console.log(dataUser)
 
 
     // CAMPOS RETIRADOS TEMPORARIAMENTE
@@ -38,7 +63,7 @@ export default function EmAndamento() {
     })
 
 
-    let listChamOs = [];
+    let listChamOs: ListChamOs[] = [];
 
     if (dataUser.admin === '0' || dataUser.admin === '1') {
         const { data } = listChamOsquery({ codCli: dataUser.codCli, loja: dataUser.loja, admin: dataUser.admin }) || {};
@@ -47,7 +72,7 @@ export default function EmAndamento() {
 
 
     // AO RENDERIZAR A TELA ESTA SENDO CHAMADO TODOS OS CHAMADOS DE TODAS AS LOJAS DO CLIENTE DO USUÁRIO ADMIN 2, 3 E 4,
-    // NÃO CONSIGO RESOLVER ESSE PROBLEMA POIS A API NÃO TEM OPÇÃO DE FILTRAR E ELA PUXA SOMENTE 150 CHAMADOS 
+    // NÃO CONSIGO RESOLVER ESSE PROBLEMA POIS A API NÃO TEM OPÇÃO DE FILTRAR E ELA PUXA SOMENTE 150 CHAMADOS
     if (dataUser.admin === '2' || dataUser.admin === '3' || dataUser.admin === '4') {
         const { data } = listChamOsquery({ codCli: dataUser.codCli, admin: dataUser.admin }) || {};
         listChamOs = data?.ordens || [];
@@ -56,7 +81,7 @@ export default function EmAndamento() {
 
 
 
-    const handleSearch = (dataSrc) => {
+    const handleSearch = (dataSrc: { numChamado: string }) => {
 
         router.push({
             pathname: '/Chamados/EmAndamento',
@@ -74,10 +99,10 @@ export default function EmAndamento() {
             const { numCham } = router.query;
             console.log(numCham)
 
-            if (numCham && numCham !== '') {
+            if (typeof numCham === 'string' && numCham !== '') {
                 console.log('passou aqui dentro')
                 setFilteredChamOs(listChamOs.filter((list) => list.chamado.includes(numCham)));
-            }else{
+            } else {
                 console.log('aqui também')
                 setFilteredChamOs([]);
             }
@@ -88,7 +113,7 @@ export default function EmAndamento() {
 
 
 
-console.log('teste: ',listChamOs)
+    console.log('teste: ', listChamOs)
 
 
 
@@ -119,8 +144,8 @@ console.log('teste: ',listChamOs)
 
 
 
-                            {/* 
-                             ATÉ EU RESOLVER O PROBLEMA DA RENDERIZAÇÃO FILTRADA VOU DEIXAR SEM ESSES CAMPOS ABAIXO 
+                            {/*
+                             ATÉ EU RESOLVER O PROBLEMA DA RENDERIZAÇÃO FILTRADA VOU DEIXAR SEM ESSES CAMPOS ABAIXO
                              {(dataUser.admin === '3' || dataUser.admin === '2') &&
                                 <>
                                     <Controller
@@ -157,42 +182,42 @@ console.log('teste: ',listChamOs)
 
                             <Flex aria-label='flex1' borderBottom='2px solid #818181' ml='85px' >
                                 <Flex aria-label='flex2' w='auto' pb={2} >
-                                    <Box w='80px' align='center' textAlign='center' fontWeight={500}><Text>OS</Text></Box>
-                                    <Box w='175px' align='center' textAlign='center' fontWeight={500}><Text>Chamado</Text></Box>
-                                    <Box w='150px' align='center' textAlign='center' fontWeight={500}><Text>Status</Text></Box>
-                                    <Box w='175px' align='center' textAlign='center' fontWeight={500}><Text>Série equipamento</Text></Box>
-                                    <Box w='175px' align='center' textAlign='center' fontWeight={500}><Text>Ocorrência</Text></Box>
-                                    <Box w='190px' align='center' textAlign='center' fontWeight={500}><Text>Atendente</Text></Box>
-                                    <Box w='175px' align='center' textAlign='center' fontWeight={500}><Text>Data da emissão</Text></Box>
+                                    <Box w='80px' textAlign='center' fontWeight={500}><Text>OS</Text></Box>
+                                    <Box w='175px' textAlign='center' fontWeight={500}><Text>Chamado</Text></Box>
+                                    <Box w='150px' textAlign='center' fontWeight={500}><Text>Status</Text></Box>
+                                    <Box w='175px' textAlign='center' fontWeight={500}><Text>Série equipamento</Text></Box>
+                                    <Box w='175px' textAlign='center' fontWeight={500}><Text>Ocorrência</Text></Box>
+                                    <Box w='190px' textAlign='center' fontWeight={500}><Text>Atendente</Text></Box>
+                                    <Box w='175px' textAlign='center' fontWeight={500}><Text>Data da emissão</Text></Box>
                                 </Flex>
                             </Flex>
 
 
                             {filteredChamOs.length > 0 ? (
-                                
-                                    filteredChamOs.map((chamados, index) => {
-                                        if (chamados.status_cham === 'A' || (chamados.status_cham === 'E' && chamados.status_os && chamados.status_os.trim() !== 'F')) {
-                                            return (
-                                                <Flex key={index} aria-label='chamados' direction='column' w='auto' gap={1}>
-                                                    <ListaChamado chamados={chamados} />
-                                                </Flex>
-                                            );
-                                        }
-                                        return null;
-                                    })
 
-                            ) : (   
+                                filteredChamOs.map((chamados, index) => {
+                                    if (chamados.status_cham === 'A' || (chamados.status_cham === 'E' && chamados.status_os && chamados.status_os.trim() !== 'F')) {
+                                        return (
+                                            <Flex key={index} aria-label='chamados' direction='column' w='auto' gap={1}>
+                                                <ListaChamado chamados={chamados} />
+                                            </Flex>
+                                        );
+                                    }
+                                    return null;
+                                })
 
-                                    listChamOs.map((chamados, index) => {
-                                        if (chamados.status_cham === 'A' || (chamados.status_cham === 'E' && chamados.status_os && chamados.status_os.trim() !== 'F')) {
-                                            return (
-                                                <Flex key={index} aria-label='chamados' direction='column' w='auto' gap={1}>
-                                                    <ListaChamado chamados={chamados} />
-                                                </Flex>
-                                            );
-                                        }
-                                        return null;
-                                    })
+                            ) : (
+
+                                listChamOs.map((chamados, index) => {
+                                    if (chamados.status_cham === 'A' || (chamados.status_cham === 'E' && chamados.status_os && chamados.status_os.trim() !== 'F')) {
+                                        return (
+                                            <Flex key={index} aria-label='chamados' direction='column' w='auto' gap={1}>
+                                                <ListaChamado chamados={chamados} />
+                                            </Flex>
+                                        );
+                                    }
+                                    return null;
+                                })
 
                             )}
 
