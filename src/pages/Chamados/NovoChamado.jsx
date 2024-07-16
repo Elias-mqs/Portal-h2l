@@ -30,6 +30,7 @@ const schema = z.object({
     hfim: z.coerce.string(),
     contato: z.coerce.string().max(50).transform((val) => removeAccents(val).toUpperCase()),
     tel: z.coerce.string().max(13),
+    whats: z.coerce.string().max(13),
     incident: z.coerce.string(),
     description: z.coerce.string().transform((val) => removeAccents(val).toUpperCase()),
     atend: z.coerce.string().transform((val) => removeAccents(val).toUpperCase()),
@@ -52,6 +53,8 @@ export default function NovoChamado({ pageProps: { ocorrencias } }) {
     //////// CARREGANDO DADOS DO USUÁRIO
     const { data: { data: { [0]: [dataUser] } } } = userContext();
 
+    console.log(dataUser)
+
     //////// BUSCANDO EQUIPAMENTOS AO CARREGAR A PÁGINA (ESTÁ CACHEANDO) (API ESTÁ COM DELAY DE 2s)
     const { data } = createEquipQuery({ codCli: dataUser.codCli, loja: dataUser.loja }) || {};
     const equipamentos = data?.produtos || [];
@@ -64,7 +67,7 @@ export default function NovoChamado({ pageProps: { ocorrencias } }) {
         resolver: zodResolver(schema),
         defaultValues: {
             numserie: '', model: '', acumulador: '', nomecli: '', end: '', bairro: '', mun: '', est: '', hini: '', hfim: '',
-            contato: '', tel: '', incident: '', description: '', atend: `AUTOATEND - ${dataUser.name}`, memo: '', codProd: ''
+            contato: '', tel: '', whats: '', incident: '', description: '', atend: `AUTO - ${dataUser.name}`, memo: '', codProd: ''
         }
     })
 
@@ -149,6 +152,8 @@ export default function NovoChamado({ pageProps: { ocorrencias } }) {
 
     }
 
+
+    //PENSAR EM UMA FORMA DE CRIAR O ASTERISCO EM CAMPOS OBRIGATÓRIOS.
 
     return (
         <Stack aria-label='container-main' bg='#FFF' w='100%' maxW={'100%'} h={'100%'} transition='max-width 1s linear' p='30px'
@@ -282,12 +287,22 @@ export default function NovoChamado({ pageProps: { ocorrencias } }) {
                         />
 
 
-                        {/* ESSE CAMPO DEVE SER OBRIGATÓRIO E PRECISO DAR UM JEITO DE O USUÁRIO CONSEGUIR DIGITAR SOMENTE O NÚMERO E JÁ FICAR FORMATADO */}
+                        {/* ESSES DOIS CAMPOS DEVEM SER OBRIGATÓRIOS E PRECISO DAR UM JEITO DE O USUÁRIO CONSEGUIR DIGITAR SOMENTE O NÚMERO E JÁ FICAR FORMATADO */}
                         <Controller
                             name='tel'
                             control={control}
                             render={({ field: { onChange, value } }) => (
                                 <FormInput value={value} type='tel' variant={'outline'} label={'Telefone:'} placeholder={'(XX) XXXX-XXXX'} onChange={onChange}
+                                    border='1px solid #c0c0c0' required={true} />
+                            )}
+                        />
+
+
+                        <Controller
+                            name='whats'
+                            control={control}
+                            render={({ field: { onChange, value } }) => (
+                                <FormInput value={value} type='tel' variant={'outline'} label={'Whatsapp:'} placeholder={'(XX) XXXX-XXXX'} onChange={onChange}
                                     border='1px solid #c0c0c0' required={true} />
                             )}
                         />
